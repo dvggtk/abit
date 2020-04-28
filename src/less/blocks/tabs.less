@@ -1,5 +1,7 @@
 .tabs {
   border: 1px solid red;
+  display: flex;
+  flex-direction: column;
 }
 
 .tabs__controller {
@@ -8,23 +10,34 @@
 
 .tabs__panel {
   display: none;
-}
-
-.tabs__panel--open {
-  display: block;
+  order: 1;
 }
 
 .tabs__btn-panel {
   display: flex;
   border-bottom: 1px solid silver;
+  order: 0;
 }
 
 .tabs__btn {
   display: block;
   padding: 10px;
   cursor: pointer;
+  border: 1px solid silver;
+
+  text-decoration: none;
 }
 
-.tabs__btn input[type=radio]:checked + .tabs__btn-label {
+.tabs__btn + .tabs__btn {
+  margin-left: -1px;
+}
+
+.tabs__panel:target {
+  display: block;
+}
+
+#tab-abits.tabs__panel:target ~ .tabs__btn-panel .tabs__btn[href="#tab-abits"],
+#tab-edu-progs.tabs__panel:target ~ .tabs__btn-panel .tabs__btn[href="#tab-edu-progs"] {
   border-bottom: 3px solid green;
+  cursor: default;
 }

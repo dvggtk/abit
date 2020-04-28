@@ -7,14 +7,10 @@ import DBApi from "./api/pouchdb-api";
 import EduProgsListController from "./controllers/edu-progs-list-controller";
 import AbitsListController from "./controllers/abits-list-controller";
 
-import TabsController from "./controllers/tabs-controller";
-
 const eduProgsListContainer = document.querySelector(
   `.edu-progs__list-container`
 );
 const abitsListContainer = document.querySelector(`.abits__list-container`);
-
-const tabsController = new TabsController();
 
 const api = new DBApi();
 
