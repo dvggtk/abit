@@ -1,0 +1,113 @@
+.edu-prog-form {
+  padding: 5px;
+}
+
+.edu-prog-form--mode-edit {
+  box-shadow: 0 0 10px 10px darkseagreen;
+}
+
+.edu-prog-form--mode-add {
+  box-shadow: 0 0 10px 10px cornflowerblue;
+
+  & .edu-prog-form__btn--delete {
+    display: none;
+  }
+
+  & .edu-prog-form__btn--clone {
+    display: none;
+  }
+}
+
+.edu-prog-form__data {
+  display: flex;
+  flex-direction: column;
+}
+
+.edu-prog-form__data-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.edu-prog-form__panel {
+  display: flex;
+  flex-direction: row;
+
+  margin-top: 10px;
+  border-top: 1px solid silver;
+}
+
+.edu-prog-form__btn-container {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  justify-content: space-between;
+
+  // outline: 1px dashed green;
+}
+
+.edu-prog-form__btn {
+  margin: 5px;
+}
+
+.edu-prog-form__btn--submit {
+  margin: 5px;
+  margin-left: auto;
+}
+
+.edu-prog-form__control {
+  font-size: 14px;
+  padding: 5px;
+}
+
+.edu-prog-form__input {
+  width: 100%;
+}
+
+.edu-prog-form__textarea {
+  width: 100%;
+}
+
+.edu-prog-form__select {
+  width: 100%;
+}
+
+.edu-prog-form__control--code {
+  width: 12ch;
+}
+
+.edu-prog-form__control--speciality {
+  flex-shrink: 1;
+  flex-grow: 1;
+}
+
+.edu-prog-form__control--qualification {
+  width: 25ch;
+  flex-shrink: 1;
+  flex-grow: 1;
+}
+
+.edu-prog-form__control--edu-form {
+  width: 16ch;
+}
+
+.edu-prog-form__control--base-edu-level {
+  width: 16ch;
+}
+
+.edu-prog-form__control--duration {
+  width: 20ch;
+}
+
+.edu-prog-form__control--fin-source {
+  width: 16ch;
+}
+
+.edu-prog-form__control--places-number {
+  width: 16ch;
+}
+
+.edu-prog-form__input--places-number {
+  text-align: end;
+}

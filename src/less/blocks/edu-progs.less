@@ -1,0 +1,44 @@
+.edu-progs {
+  padding: 10px;
+}
+
+.edu-progs__list {
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  counter-reset: item;
+
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.edu-progs__item {
+  list-style: none;
+  position: relative;
+  padding: 5px;
+  padding-left: 5ch;
+
+  // outline: 1px solid red;
+}
+
+.edu-progs__item + .edu-progs__item {
+  border-top: 1px solid silver;
+}
+
+.edu-progs__item:before {
+  counter-increment: item;
+  content: counter(item);
+  display: block;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  bottom: 0;
+  width: 3ch;
+}
+
+.edu-progs__item--active:before {
+  background-color: pink;
+}

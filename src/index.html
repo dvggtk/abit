@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Учет абитуриентов. ДВГГТК</title>
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <main>
+      <div class="tabs">
+        <div class="tabs__btn-panel">
+          <label class="tabs__btn">
+            <input
+              class="visually-hidden"
+              type="radio"
+              name="tabs-btn"
+              data-panel-id="abit"
+              checked
+            />
+            <span class="tabs__btn-label">Абитуриенты</span>
+          </label>
+          <label class="tabs__btn">
+            <input
+              class="visually-hidden"
+              type="radio"
+              name="tabs-btn"
+              data-panel-id="edu-progs"
+            />
+            <span class="tabs__btn-label">Образовательные программы</span>
+          </label>
+        </div>
+        <div class="tabs__panel-list">
+          <div class="tabs__panel" data-panel-id="edu-progs">
+            <article class="edu-progs">
+              <h2 class="edu-progs__title">Образовательные программы</h2>
+              <div class="edu-progs__list-container"></div>
+            </article>
+          </div>
+          <div class="tabs__panel" data-panel-id="abit">
+            <article class="abits">
+              <h2 class="abits__title">Абитуриенты</h2>
+              <div class="abits__list-container"></div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="bundle.js"></script>
+  </body>
+</html>

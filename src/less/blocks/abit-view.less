@@ -1,0 +1,72 @@
+.abit-view {
+  display: flex;
+  flex-direction: column;
+  outline: 1px dashed red;
+}
+
+.abit-view__row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.abit-view__field {
+  margin: 3px;
+  padding: 2px;
+  background-color: cornsilk;
+}
+
+.abit-view__field--reg-date {
+  width: 10ch;
+  flex-shrink: 0;
+}
+
+.abit-view__field--cert-score {
+  font-weight: normal;
+}
+
+.abit-view__field--extra-score {
+  font-weight: normal;
+}
+
+.abit-view__field--total-score {
+  font-weight: normal;
+}
+
+.abit-view__field--total-score::before {
+  content: "=";
+}
+
+.abit-view__field--tel::before {
+  content: @tel-symbol;
+}
+
+.abit-view__field--address {
+  margin-right: auto;
+}
+
+.abit-view__field-container--score {
+  display: flex;
+  border: 1px solid cornflowerblue;
+}
+
+.abit-view__field--school {
+  margin-right: auto;
+}
+
+.abit-view__field--fio {
+  margin-right: auto;
+}
+
+[data-gender="ж"].abit-view__field--fio::before {
+  content: "♀"
+}
+
+[data-gender="м"].abit-view__field--fio::before {
+  content: "♂️"
+}
+
+.abit-view__field--need-dorm::before {
+  content: "🏨 ";
+}

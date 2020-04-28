@@ -1,0 +1,200 @@
+extends common/layout
+
+mixin has-doc (name, text)
+  div(class="abit__field abit__field--"+name)
+    .checkbox(data-checked="true")
+      span.checkbox__indicator
+      span=text
+
+mixin has-doc-edit (name, text)
+  div(class="form__control form__control--"+name)
+    label.checkbox
+      input.visually-hidden(
+        type="checkbox"
+        name=name
+        value=name
+        checked)
+      span.checkbox__indicator
+      span=text
+
+mixin application(eduProg)
+  .application
+    label.application__edu-prog
+      select
+        each val in ["ЗИО", "СЭЗИС", "БУ", "ТОРАТ", "ПСО"]
+          if val === eduProg
+            option(value=val selected)= val
+          else
+            option(value=val)= val
+
+    label.application__grade
+      input(size="1", pattern="[12345]")
+    label.application__hasEduCertOriginal
+      input(type="checkbox")
+      span приоритет
+    label.application__active
+      input(type="checkbox")
+      span показывать?
+    button.application__btn-delete(type="button") удалить
+
+
+mixin abit-view
+  article.abit-view
+    h3.visually-hidden просмотр абитуриента
+    .abit-view__row
+      .abit-view__field.abit-view__field--reg-date 2020-04-14
+      .abit-view__field.abit-view__field--fio(data-gender="ж") Иванова Юлия Евгеньевна
+      .abit-view__field-container.abit-view__field-container--score
+        .abit-view__field.abit-view__field--cert-score 3,172
+        .abit-view__field.abit-view__field--extra-score 0,8
+        .abit-view__field.abit-view__field--total-score 3,972
+    .abit-view__row
+      +has-doc('has-cert-original', 'подлинник аттестата')
+      +has-doc('has-medical-cert', 'медицинская справка')
+      +has-doc('has-fluoro', 'флюорография')
+      +has-doc('has-vaccine', 'прививки')
+    .abit-view__row
+      .abit-view__field.abit-view__field--address с. Черниговка, ул. Партизанская, 94-15
+      .abit-view__field.abit-view__field--tel: a(href="tel:89149764169") 89149764169
+    .abit-view__row
+      .abit-view__field.abit-view__field--need-dorm требуется
+      .abit-view__field.abit-view__field--school-year 2020
+      .abit-view__field.abit-view__field--school МБОУ СОШ №2 пгт Кировский
+      .abit-view__field.abit-view__field--memo портфолио, коммерция
+
+mixin abit-form (mode)
+  article.abit-form
+    h3.visually-hidden Форма редактирования абитуриента
+    form(class="form form--mode-"+mode)
+      section.form__data
+        h4.visually-hidden Данные абитуриента
+        .form__data-row
+          label.form__control.form__control--reg-date
+            span.form__label.form__label--reg-date Дата регистрации
+            input.form__input.form__input--reg-date(
+              type="text"
+              name="reg-date"
+              placeholder="дд.мм.гггг"
+              value="")
+          label.form__control.form__control--fio
+            span.form__label.form__label--fio ФИО
+            input.form__input.form__input--fio(
+                type="text"
+                name="fio"
+                placeholder="Фамилия Имя Отчество"
+                value="Иванова Юлия Евгеньевна")
+          label.form__control.form__control--gender
+            span.form__label.form__label--gender пол
+            select.form__select.form__select--gender(name="gender")
+              option(value="м" selected) м
+              option(value="ж") ж
+          label.form__control.form__control--cert-score
+            span.form__label.form__label--cert-score Средний балл аттестата
+            input.form__input.form__input--cert-score(
+              type="text"
+              name="cert-score"
+              placeholder="0,00000"
+              value="3,172")
+          label.form__control.form__control--extra-score
+            span.form__label.form__label--extra-score Дополнительные баллы
+            input.form__input.form__input--extra-score(
+              type="text"
+              name="extra-score"
+              placeholder="0,0"
+              value="0,8")
+          label.form__control.form__control--total-score
+            span.form__label.form__label--total-score Итоговый конкурсный балл
+            input.form__input.form__input--total-score(
+              type="text"
+              name="total-score"
+              placeholder="0,00000"
+              value="3,972"
+              readonly
+              disabled)
+        .form__data-row
+          +has-doc-edit('has-cert-original', 'подлинник аттестата')
+          +has-doc-edit('has-medical-cert', 'медицинская справка')
+          +has-doc-edit('has-fluoro', 'флюорография')
+          +has-doc-edit('has-vaccine', 'прививки')
+        .form__data-row
+          label.form__control.form__control--address
+            span.form__label.form__label--address Адрес
+            input.form__input.form__input--address(
+              type="text"
+              name="address"
+              placeholder="адрес"
+              value="с. Черниговка, ул. Партизанская, 94-15")
+          label.form__control.form__control--tel
+            span.form__label.form__label--tel Телефон
+            input.form__input.form__input--tel(
+              type="text"
+              name="tel"
+              placeholder="телефон"
+              value="89149764169")
+        .form__data-row
+          label.form__control.form__control--need-dorm
+            span.form__label.form__label--need-dorm Общежитие
+            select.form__select.form__select--need-dorm(name="need-dorm")
+              option(value="0") не требуется
+              option(value="1") требуется
+              option(value="2") приоритетное
+          label.form__control.form__control--school-year
+            span.form__label.form__label--school-year Год окончания школы
+            input.form__input.form__input--school-year(
+              type="text"
+              name="school-year"
+              placeholder="гггг"
+              value="2020")
+          label.form__control.form__control--school
+            span.form__label.form__label--school Школа
+            input.form__input.form__input--school(
+              type="text"
+              name="school"
+              placeholder="гггг"
+              value="МБОУ СОШ №2 пгт Кировский")
+        .form__data-row
+          label.form__control.form__control--memo
+            span.form__label.form__label--memo Примечания
+            input.form__input.form__input--memo(
+              type="text"
+              name="school"
+              placeholder="примечания"
+              value="портфолио, коммерция")
+        .form__data-row
+          section.applications
+            h5.visually-hidden Заявления абитуриента
+            .applications__list-container
+              ul.applications-list
+                li.applications-list__item
+                  +application("СЭЗИС")
+                li.applications-list__item
+                  +application("ЗИО")
+                li.applications-list__item
+                  +application("ТОРАТ")
+            button.application__btn-add(type="button") добавить заявление
+
+
+      section.form__panel
+        .form__btn-container
+          button.form__btn.form__btn--delete(type="button") Удалить
+          button.form__btn.form__btn--clone(type="button") Дублировать
+          button.form__btn.form__btn--submit(type="submit") Сохранить
+          button.form__btn.form__btn--cancel(type="button") Отмена
+
+
+block content
+  main.abits
+    h2.abits__title Абитуриенты
+    ul.abits-list
+      li.abits-list__item
+        +abit-form("edit")
+      li.abits-list__item
+        +abit-view()
+      li.abits-list__item
+        +abit-form("add")
+      li.abits-list__item
+        +abit-view()
+      li.abits-list__item
+        +abit-view()
+      li.abits-list__item
+        +abit-view()

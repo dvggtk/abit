@@ -1,0 +1,30 @@
+.tabs {
+  border: 1px solid red;
+}
+
+.tabs__controller {
+  background-color: transparent;
+}
+
+.tabs__panel {
+  display: none;
+}
+
+.tabs__panel--open {
+  display: block;
+}
+
+.tabs__btn-panel {
+  display: flex;
+  border-bottom: 1px solid silver;
+}
+
+.tabs__btn {
+  display: block;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.tabs__btn input[type=radio]:checked + .tabs__btn-label {
+  border-bottom: 3px solid green;
+}
