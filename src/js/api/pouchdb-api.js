@@ -11,13 +11,17 @@ import {
   detailedDiff
 } from "deep-object-diff";
 
-let defaultDocs = [];
-defaultDocs = defaultDocs.concat(
-  eduProgs.map((el) => Object.assign({type: `edu-prog`}, el))
-);
-defaultDocs = defaultDocs.concat(
-  getAbits(500).map((el) => Object.assign({type: `abit`}, el))
-);
+const getDefaultDocs = () => {
+  let defaultDocs = [];
+  defaultDocs = defaultDocs.concat(
+    eduProgs.map((el) => Object.assign({type: `edu-prog`}, el))
+  );
+  defaultDocs = defaultDocs.concat(
+    getAbits(5).map((el) => Object.assign({type: `abit`}, el))
+  );
+
+  return defaultDocs;
+};
 
 const createEduProgsView = (db) => {
   debug(`createEduProgsView`);
@@ -68,15 +72,15 @@ class PouchDBApi extends AbstractApi {
       {
         this._db = new PouchDB(`abit`);
 
-        await this._db.destroy();
-        this._db = new PouchDB(`abit`);
+        // await this._db.destroy();
+        // this._db = new PouchDB(`abit`);
 
         const info = await this._db.info();
         debug(`db.info %o`, info);
 
         if (info.doc_count === 0) {
           debug(`пустая база данных, загружаю данные по умолчанию`);
-          await this._db.bulkDocs(defaultDocs);
+          await this._db.bulkDocs(getDefaultDocs());
           await Promise.all([
             createAbitsView(this._db),
             createEduProgsView(this._db)
