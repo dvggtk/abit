@@ -60,7 +60,7 @@ class AbitForm extends AbstractComponent {
     return `<li class="abits-list__item">
     <article class="abit-form">
       <h3 class="visually-hidden">Форма редактирования абитуриента</h3>
-      <form class="form form--mode-edit">
+      <form class="form form--mode-${this._formMode}">
         <section class="form__data">
           <h4 class="visually-hidden">Данные абитуриента</h4>
           <div class="form__data-row">
