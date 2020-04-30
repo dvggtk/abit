@@ -1,9 +1,6 @@
-const debug = require("debug")("abit:list-model");
+const debug = require("debug")("abit:list-model/item");
 
-import AbstractModel from "./abstract-model";
-import {clone, ModelItemMode} from "../utils";
-
-const nop = () => {};
+import {clone, ModelItemMode} from "../../utils";
 
 class Item {
   constructor({listModel, mode, data}) {
@@ -21,6 +18,15 @@ class Item {
     this._listModel._items = this._listModel._items.filter(
       (item) => item !== this
     );
+    this._deleted = true;
+  }
+
+  get index() {
+    return this._listModel._items.indexOf(this);
+  }
+
+  get deleted() {
+    return Boolean(this._deleted);
   }
 
   set mode(newMode) {
@@ -28,17 +34,28 @@ class Item {
       throw Error();
     }
 
+    const itemsChangeMode = [];
+
     this._listModel._items.forEach((item) => {
       if (item._mode === ModelItemMode.ADD) {
         item._deleteSelf();
+        itemsChangeMode.push(item);
       } else if (item._mode === ModelItemMode.EDIT) {
         item._mode = ModelItemMode.VIEW;
+        itemsChangeMode.push(item);
       }
     });
 
-    this._mode = newMode;
-    this._listModel.onItemChangeMode(this);
-    this._listModel.onChangeView();
+    if (this._mode !== newMode) {
+      this._mode = newMode;
+      itemsChangeMode.push(this);
+    }
+
+    const removeDuplicates = (a) => Array.from(new Set(a));
+
+    if (itemsChangeMode.length > 0) {
+      this._listModel.onItemChangeMode(removeDuplicates(itemsChangeMode));
+    }
   }
   get mode() {
     return this._mode;
@@ -57,13 +74,15 @@ class Item {
     if (typeof newState !== `boolean`) {
       throw Error();
     }
+
+    //FIXME переделать, сейчас неправильно перерисовывает, не снимает метку активности
     this._listModel._items.forEach((item) => {
       item._isActive = false;
     });
 
     this._isActive = newState;
 
-    this._listModel.onChangeView();
+    this._listModel.onChangeView(this);
   }
   get isActive() {
     return this._isActive;
@@ -72,11 +91,12 @@ class Item {
   cancelEdit() {
     if (this._mode === ModelItemMode.ADD) {
       this._deleteSelf();
-    } else {
-      this._mode = ModelItemMode.VIEW;
+      this._listModel.onChangeView(this);
+      return;
     }
 
-    this._listModel.onChangeView();
+    this._mode = ModelItemMode.VIEW;
+    this._listModel.onItemChangeMode(this);
   }
 
   submit(newData, callback) {
@@ -100,7 +120,7 @@ class Item {
           this._data = res;
           this._mode = ModelItemMode.VIEW;
 
-          this._listModel.onChangeView();
+          this._listModel.onChangeView(this);
           callback(null);
         }
       );
@@ -111,89 +131,41 @@ class Item {
         this._data = res;
         this._mode = ModelItemMode.VIEW;
 
-        this._listModel.onChangeView();
+        this._listModel.onChangeView(this);
         callback(null);
       });
     }
   }
 
   clone() {
-    this._listModel._items.forEach((item) => {
-      item._mode = ModelItemMode.VIEW;
-    });
+    debug(`clone, item %O`, this);
+    const changedModeItems = [];
+    for (const item of this._listModel._items) {
+      if (item._mode !== ModelItemMode.VIEW) {
+        item._mode = ModelItemMode.VIEW;
+        changedModeItems.push(item);
+      }
+    }
+    this._listModel.onItemChangeMode(changedModeItems);
 
-    const idx = this._listModel._items.findIndex((item) => this === item);
+    const idx = this.index;
     const data = this._data;
-    this._listModel.createItem(data, idx + 1);
+    const newItem = this._listModel.createItem(data, idx + 1);
 
-    this._listModel.onChangeView();
+    this._listModel.onChangeView(newItem);
   }
 
   delete(callback) {
+    debug(`delete item: %O`, this);
     this._listModel._api.delete(this._data, (err) => {
       if (err) return callback(err);
 
       this._deleteSelf();
 
-      this._listModel.onChangeView();
+      this._listModel.onChangeView(this);
       callback(null);
     });
   }
 }
 
-class ListModel extends AbstractModel {
-  constructor(defalutItemData, api) {
-    super();
-
-    this._defaultItemData = defalutItemData;
-    this._api = api;
-
-    this.onItemChangeMode = nop;
-    this.onChangeView = nop;
-
-    this._items = [];
-
-    this.type = null;
-  }
-
-  get items() {
-    return this._items;
-  }
-
-  init(callback) {
-    throw Error(`abstarct method invoked`);
-  }
-
-  bulkCreate(itemDataArray) {
-    if (itemDataArray.length > 0) {
-      this._items = itemDataArray.map((el) => {
-        const data = clone(el);
-        if (this._type !== null) {
-          data.type = this._type;
-        }
-        return new Item({
-          listModel: this,
-          mode: ModelItemMode.VIEW,
-          data
-        });
-      });
-      this._currenItemIdx = 0;
-    }
-  }
-
-  createItem(newData, newIdx) {
-    const idx = newIdx === null ? 0 : newIdx;
-
-    const data = newData ? clone(newData) : clone(this._defaultItemData);
-    if (this._type !== null) {
-      data.type = this._type;
-    }
-    const newItem = new Item({listModel: this, mode: ModelItemMode.ADD, data});
-
-    this._items.splice(idx, 0, newItem);
-
-    return newItem;
-  }
-}
-
-export default ListModel;
+export default Item;
