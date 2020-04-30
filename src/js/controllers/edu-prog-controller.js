@@ -10,6 +10,7 @@ import {
   ModelItemMode
 } from "../utils";
 
+//FIXME не работает, сделать как AbitController
 class EduProgController {
   constructor(container, item) {
     this._item = item;
@@ -45,13 +46,6 @@ class EduProgController {
   bind() {
     this._eduProgView.getElement().addEventListener(`dblclick`, () => {
       this._item.mode = ModelItemMode.EDIT;
-      // this._item.isActive = !this._item.isActive;
-
-      // this._eduProgView.getElement().replaceWith(this._eduProgForm.getElement());
-      // this._eduProgForm.getElement()
-      //   .querySelector(`.edu-prog-form__control--speciality`).focus();
-
-      // document.addEventListener(`keydown`, this._onEscKeyDownWithCtx);
     });
 
     this._eduProgForm.getElement().addEventListener(`submit`, (event) => {
@@ -73,12 +67,6 @@ class EduProgController {
       .querySelector(`button.edu-prog-form__btn--cancel`)
       .addEventListener(`click`, () => {
         this._item.cancelEdit();
-
-        // if (this._formMode === FormMode.EDIT) {
-        //   this._eduProgForm.getElement().replaceWith(this._eduProgView.getElement());
-        // } else {
-        //   this._eduProgForm.removeElement();
-        // }
 
         this.unbind();
       });
