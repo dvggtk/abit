@@ -81,10 +81,10 @@ const render = (container, element, place) => {
       container.append(element);
       break;
     case Position.AFTEREND:
-      container.insertAdjacentElement(Position.AFTEREND, element);
+      container.after(element);
       break;
     case Position.BEFOREBEGIN:
-      container.insertAdjacentElement(Position.BEFOREBEGIN, element);
+      container.before(element);
       break;
     default:
       throw Error();
