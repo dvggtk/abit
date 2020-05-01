@@ -7,7 +7,7 @@ module.exports = function html() {
     gulp
       .src(`src/**/*.html`)
       // .pipe(htmlValidator())
-      .pipe(bemValidator())
+      // .pipe(bemValidator())
       .pipe(gulp.dest(`public`))
   );
 };

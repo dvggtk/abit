@@ -19,7 +19,7 @@ module.exports = function pug2html() {
         })
       )
       // .pipe(htmlValidator())
-      .pipe(bemValidator())
+      // .pipe(bemValidator())
       .pipe(gulp.dest("public/markup"))
   );
 };

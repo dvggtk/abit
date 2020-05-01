@@ -7,11 +7,11 @@ const html = require(`./gulp/html`);
 const pug2html = require(`./gulp/pug2html`);
 const style = require(`./gulp/style`);
 const script = require(`./gulp/script`);
-const validateHTML = require(`./gulp/validate`);
+const validateHTML = require(`./gulp/validate-html`);
 
 const build = gulp.series(clean, copy, html, pug2html, style, script);
 const start = gulp.series(build, validateHTML, serve);
-const validate = gulp.series(build, validateHTML);
+const validate = gulp.series(clean, copy, html, pug2html, validateHTML);
 
 module.exports = {
   start,
