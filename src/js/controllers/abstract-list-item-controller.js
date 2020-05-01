@@ -33,13 +33,7 @@ class AbstractListController {
       throw Error();
     }
 
-    this._formMode =
-      this._item.mode === ModelItemMode.ADD
-        ? ModelItemMode.ADD
-        : ModelItemMode.EDIT;
-
     this._container = container;
-    this._abitData = this._item.data;
 
     this.initComponents();
 
@@ -51,6 +45,11 @@ class AbstractListController {
   }
 
   initComponents() {
+    this._formMode =
+      this._item.mode === ModelItemMode.ADD
+        ? ModelItemMode.ADD
+        : ModelItemMode.EDIT;
+
     if (this._item.deleted) {
       this._deleted = true;
       this._view = null;
