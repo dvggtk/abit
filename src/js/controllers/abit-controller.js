@@ -1,6 +1,6 @@
 const debug = require("debug")("abit:abit-controller");
 
-import ListController from "./abstract-list-controller";
+import ListController from "./abstract-list-item-controller";
 import AbitView from "../components/abit-view";
 import AbitForm from "../components/abit-form";
 

@@ -5,193 +5,98 @@ import {
   unrender,
   Position,
   Key,
+  ModelItemMode,
+  ShowMode,
   toCamelCase,
-  toKebabCase,
-  clone,
-  ModelItemMode
+  clone
 } from "../utils";
 
-function getElementIndex(element) {
-  let el = element;
-  let index = 0;
-  while (el.previousElementSibling) {
-    index++;
-    el = el.previousElementSibling;
-  }
-  return index;
-}
-
-class AbitController {
-  constructor(container, item, View, Form) {
-    debug(`constructor, item: %O`, item);
-
-    this._View = View;
-    this._Form = Form;
-
-    this._item = item;
-    if (!Object.values(ModelItemMode).includes(this._item.mode)) {
-      throw Error();
-    }
-
-    this._formMode =
-      this._item.mode === ModelItemMode.ADD
-        ? ModelItemMode.ADD
-        : ModelItemMode.EDIT;
-
+class ListController {
+  constructor(container, model, ListComponent, ItemController) {
+    debug(`constructor`);
     this._container = container;
-    this._abitData = this._item.data;
 
-    this.initComponents();
+    this._ListComponent = ListComponent;
+    this._ItemController = ItemController;
 
-    this.create();
+    this._listComponent = new this._ListComponent();
+
+    this._model = model;
+
+    this._itemControllers = [];
   }
 
-  get item() {
-    return this._item;
-  }
+  _refreshListItems(items) {
+    if (!items) throw Error();
 
-  initComponents() {
-    if (this._item.deleted) {
-      this._deleted = true;
-      this._view = null;
-      this._form = null;
-      this._element = null;
-      return;
+    const refreshItem = (item) => {
+      const foundItemController = this._itemControllers.find(
+        (itemController) => itemController.item === item
+      );
+
+      if (!foundItemController) {
+        const itemController = this._renderItem(item);
+        itemController.refresh();
+        return;
+      }
+
+      foundItemController.refresh();
+    };
+
+    if (Array.isArray(items)) {
+      items.forEach(refreshItem);
+    } else {
+      refreshItem(items);
     }
-
-    this._view = new this._View(this._item.data, this._item.isActive);
-    this._form = new this._Form(this._item.data, this._formMode);
-
-    switch (this._item.mode) {
-      case ModelItemMode.VIEW:
-        this._element = this._view.getElement();
-        break;
-      case ModelItemMode.EDIT:
-      case ModelItemMode.ADD:
-        this._element = this._form.getElement();
-        break;
-      default:
-        throw Error();
-    }
   }
 
-  _getEntryFromForm() {
-    const formData = new FormData(
-      this._form.getElement().querySelector(`form`)
+  init() {
+    debug(`init`);
+    this._renderList();
+
+    this._model.onChangeView = (items) => {
+      debug(`_model.onChangeView`);
+
+      if (!items) {
+        this._renderList();
+        return;
+      }
+
+      this._refreshListItems(items);
+    };
+
+    this._model.onItemChangeMode = (items) => {
+      debug(`_model.onItemChangeMode items: %O`, items);
+      this._refreshListItems(items);
+    };
+  }
+
+  _renderList() {
+    unrender(this._listComponent.getElement());
+    this._listComponent.removeElement();
+
+    render(
+      this._container,
+      this._listComponent.getElement(),
+      Position.BEFOREEND
+    );
+    this._itemControllers = [];
+
+    this._model.items.forEach((item) => this._renderItem(item));
+  }
+
+  _renderItem(item) {
+    debug(`_renderItem, this._ListComponent %O`, this._listComponent);
+
+    const itemController = new this._ItemController(
+      this._listComponent.getElement(),
+      item
     );
 
-    const entry = Array.from(formData.entries()).reduce((acc, cur) => {
-      acc[toCamelCase(cur[0])] = cur[1];
-      return acc;
-    }, {});
+    this._itemControllers.push(itemController);
 
-    return entry;
-  }
-
-  bind() {
-    this._view.getElement().addEventListener(`dblclick`, (event) => {
-      this._item.mode = ModelItemMode.EDIT;
-    });
-
-    this._form
-      .getElement()
-      .querySelector(`form`)
-      .addEventListener(`submit`, (e) => {
-        debug(`submit`);
-        event.preventDefault();
-
-        this._form.getElement().style.backgroundColor = `tomato`;
-        7;
-        const entry = this._getEntryFromForm();
-        debug(`submitted entry %o`, entry);
-
-        this._item.submit(entry, (err) => {
-          this._form.getElement().style.backgroundColor = ``;
-          if (err) {
-            return console.error(err.message);
-          }
-
-          this.unbind();
-        });
-      });
-
-    this._form
-      .getElement()
-      .querySelector(`.form__btn--cancel`)
-      .addEventListener(`click`, () => {
-        this._item.cancelEdit();
-
-        this.unbind();
-      });
-
-    if (this._formMode === ModelItemMode.EDIT) {
-      this._form
-        .getElement()
-        .querySelector(`.form__btn--delete`)
-        .addEventListener(`click`, () => {
-          this._item.delete((err) => {
-            if (err) {
-              return console.error(err.message);
-            }
-            this.unbind();
-          });
-        });
-
-      this._form
-        .getElement()
-        .querySelector(`.form__btn--clone`)
-        .addEventListener(`click`, () => {
-          this._item.clone();
-
-          this.unbind();
-        });
-    }
-  }
-
-  unbind() {}
-
-  refresh() {
-    debug(`refresh %O`, this);
-    this.unbind();
-
-    const oldElement = this._element;
-    this.initComponents();
-
-    if (this._deleted) {
-      unrender(oldElement);
-      return;
-    }
-
-    this.bind();
-
-    oldElement.replaceWith(this._element);
-
-    const elementIndex = getElementIndex(this._element);
-    if (elementIndex !== this._item.index) {
-      const baseElement = this._container.children[this._item.index];
-      baseElement.before(this._element);
-    }
-  }
-
-  create(index) {
-    debug(`create, index: %O`, index);
-    this.bind();
-
-    if (index !== undefined) {
-      if (!Number.isInteger(index)) throw Error();
-
-      render(this._container, this._element, Position.BEFOREEND);
-      return;
-    }
-
-    const baseElement = this._container.children[index];
-    if (!baseElement) {
-      render(this._container, this._element, Position.BEFOREEND);
-      return;
-    }
-
-    render(baseElement, this._element, Position.BEFOREBEGIN);
+    return itemController;
   }
 }
 
-export default AbitController;
+export default ListController;

@@ -25,7 +25,7 @@ class EduProgsModel extends ListModel {
       if (err) return callback(err);
 
       this.bulkCreate(res);
-      callback(null);
+      callback(null, res);
     });
   }
 }
