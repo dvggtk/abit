@@ -6,6 +6,7 @@ import AbitsModel from "./models/abits-model";
 import DBApi from "./api/pouchdb-api";
 import EduProgsListController from "./controllers/edu-progs-list-controller";
 import AbitsListController from "./controllers/abits-list-controller";
+import DebugPanelController from "./controllers/debug-panel-controller";
 
 const eduProgsListContainer = document.querySelector(
   `.edu-progs__list-container`
@@ -49,5 +50,7 @@ api.init((err) => {
       abitsModel
     );
     abitsListController.init();
+
+    const debugPanelController = new DebugPanelController(api);
   })().catch((err) => console.error(err));
 });

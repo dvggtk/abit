@@ -11,18 +11,6 @@ import {
   detailedDiff
 } from "deep-object-diff";
 
-const getDefaultDocs = () => {
-  let defaultDocs = [];
-  defaultDocs = defaultDocs.concat(
-    eduProgs.map((el) => Object.assign({type: `edu-prog`}, el))
-  );
-  defaultDocs = defaultDocs.concat(
-    getAbits(5).map((el) => Object.assign({type: `abit`}, el))
-  );
-
-  return defaultDocs;
-};
-
 const createEduProgsView = (db) => {
   debug(`createEduProgsView`);
   const eduProgs = {
@@ -65,6 +53,17 @@ class PouchDBApi extends AbstractApi {
     debug(`constructor PouchDBApi`);
   }
 
+  clear(callback) {
+    (async () => {
+      debug(`clear`);
+
+      await this._db.destroy();
+      this._db = new PouchDB(`abit`);
+
+      callback(null);
+    })().catch((err) => callback(err));
+  }
+
   init(callback) {
     debug(`init`);
 
@@ -72,15 +71,11 @@ class PouchDBApi extends AbstractApi {
       {
         this._db = new PouchDB(`abit`);
 
-        // await this._db.destroy();
-        // this._db = new PouchDB(`abit`);
-
         const info = await this._db.info();
         debug(`db.info %o`, info);
 
         if (info.doc_count === 0) {
-          debug(`пустая база данных, загружаю данные по умолчанию`);
-          await this._db.bulkDocs(getDefaultDocs());
+          debug(`пустая база данных, создаю view`);
           await Promise.all([
             createAbitsView(this._db),
             createEduProgsView(this._db)
@@ -155,6 +150,28 @@ class PouchDBApi extends AbstractApi {
       const abits = res.rows.map((row) => row.doc);
       callback(null, abits);
     });
+  }
+
+  addFakeAbits(count, callback) {
+    (async () => {
+      const abits = getAbits(count).map((el) =>
+        Object.assign({type: `abit`}, el)
+      );
+
+      await this._db.bulkDocs(abits);
+
+      callback(null);
+    })().catch((err) => callback(err));
+  }
+
+  addFakeEduProgs(callback) {
+    (async () => {
+      await this._db.bulkDocs(
+        eduProgs.map((el) => Object.assign({type: `edu-prog`}, el))
+      );
+
+      callback(null);
+    })().catch((err) => callback(err));
   }
 }
 
