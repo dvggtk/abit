@@ -1,10 +1,11 @@
 extends common/layout
 
 mixin has-doc (name, text)
-  div(class="abit__field abit__field--"+name)
+  div(class="abit-view__field abit-view__field--"+name)
     .checkbox(data-checked="true")
       span.checkbox__indicator
       span=text
+  // abit-view__field
 
 mixin has-doc-edit (name, text)
   div(class="form__control form__control--"+name)
@@ -16,6 +17,7 @@ mixin has-doc-edit (name, text)
         checked)
       span.checkbox__indicator
       span=text
+  // form__control
 
 mixin application(eduProg)
   .application
@@ -23,9 +25,9 @@ mixin application(eduProg)
       select
         each val in ["ЗИО", "СЭЗИС", "БУ", "ТОРАТ", "ПСО"]
           if val === eduProg
-            option(value=val selected)= val
+            option(value=val selected)=val
           else
-            option(value=val)= val
+            option(value=val)=val
 
     label.application__grade
       input(size="1", pattern="[12345]")
@@ -35,8 +37,8 @@ mixin application(eduProg)
     label.application__active
       input(type="checkbox")
       span показывать?
-    button.application__btn-delete(type="button") удалить
-
+    button.application__btn.application__btn--delete(type="button") удалить
+  // application
 
 mixin abit-view
   article.abit-view
@@ -61,6 +63,7 @@ mixin abit-view
       .abit-view__field.abit-view__field--school-year 2020
       .abit-view__field.abit-view__field--school МБОУ СОШ №2 пгт Кировский
       .abit-view__field.abit-view__field--memo портфолио, коммерция
+  // abit-view
 
 mixin abit-form (mode)
   article.abit-form
@@ -171,16 +174,17 @@ mixin abit-form (mode)
                   +application("ЗИО")
                 li.applications-list__item
                   +application("ТОРАТ")
-            button.application__btn-add(type="button") добавить заявление
-
+            button.applications__btn.applications__btn--add(type="button") добавить заявление
 
       section.form__panel
+        h5.visually-hidden Кнопочная панель
         .form__btn-container
           button.form__btn.form__btn--delete(type="button") Удалить
           button.form__btn.form__btn--clone(type="button") Дублировать
           button.form__btn.form__btn--submit(type="submit") Сохранить
           button.form__btn.form__btn--cancel(type="button") Отмена
-
+      // form__panel
+  // abit-form
 
 block content
   main.abits
@@ -198,3 +202,4 @@ block content
         +abit-view()
       li.abits-list__item
         +abit-view()
+  // abits
