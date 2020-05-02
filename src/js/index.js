@@ -1,13 +1,14 @@
 if (!localStorage.debug) {
   localStorage.debug = `abit:*`;
 }
-console.log(`localStorage.debug: "${localStorage.debug}"`);
+console.log(`localStorage.debug = "${localStorage.debug}"`);
 
 import EduProgsModel from "./models/edu-progs-model";
 import AbitsModel from "./models/abits-model";
 import DBApi from "./api/pouchdb-api";
 import EduProgsListController from "./controllers/edu-progs-list-controller";
 import AbitsListController from "./controllers/abits-list-controller";
+import AbitsFilterController from "./controllers/abits-filter-controller";
 import DebugPanelController from "./controllers/debug-panel-controller";
 
 const eduProgsListContainer = document.querySelector(
@@ -52,6 +53,8 @@ api.init((err) => {
       abitsModel
     );
     abitsListController.init();
+
+    const abitsFilterController = new AbitsFilterController(abitsModel);
 
     const debugPanelController = new DebugPanelController(api);
   })().catch((err) => console.error(err));
