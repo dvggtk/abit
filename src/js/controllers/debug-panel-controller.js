@@ -38,6 +38,9 @@ class DebugPanelController {
   _btnOnClick(event) {
     debug(`btnOnClick click, event %O`, event);
 
+    // FIXME сделать обновление компонентов без перезагрузки страницы window.location.reload()
+    // потому что при перезагрузке сбрасывается seedrandom
+
     if (event.target.classList.contains(`debug-panel__btn--clear`)) {
       this._api.clear((err) => {
         if (err) return console.error(err);
