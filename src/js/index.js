@@ -1,5 +1,7 @@
-localStorage.debug = `abit:*`;
-console.log(`localStorage.debug = ${localStorage.debug}`);
+if (!localStorage.debug) {
+  localStorage.debug = `abit:*`;
+}
+console.log(`localStorage.debug: "${localStorage.debug}"`);
 
 import EduProgsModel from "./models/edu-progs-model";
 import AbitsModel from "./models/abits-model";
