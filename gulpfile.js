@@ -9,9 +9,13 @@ const style = require(`./gulp/style`);
 const script = require(`./gulp/script`);
 const validateHTML = require(`./gulp/validate-html`);
 
+const ghPages = require(`./gulp/deploy-to-gh-pages`);
+
 const build = gulp.series(clean, copy, html, pug2html, style, script);
 const start = gulp.series(build, validateHTML, serve);
 const validate = gulp.series(clean, copy, html, pug2html, validateHTML);
+
+const deploy = gulp.series(build, ghPages);
 
 module.exports = {
   start,
@@ -23,5 +27,6 @@ module.exports = {
   pug2html,
   style,
   script,
-  serve
+  serve,
+  deploy
 };
