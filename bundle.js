@@ -15638,6 +15638,57 @@ class AbitController extends _abstract_list_item_controller__WEBPACK_IMPORTED_MO
 
 /***/ }),
 
+/***/ "./src/js/controllers/abits-filter-controller.js":
+/*!*******************************************************!*\
+  !*** ./src/js/controllers/abits-filter-controller.js ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+const debug = __webpack_require__(/*! debug */ "./node_modules/debug/src/browser.js")("abit:abits-filter-controller");
+
+class AbitsFilterController {
+  constructor(model) {
+    debug(`constructor`);
+
+    this._model = model;
+    this._onFioChange = this._onFioChange.bind(this);
+
+    this.init();
+  }
+
+  init() {
+    this._element = document.querySelector(`.abits__filter-panel`);
+
+    this.bind();
+  }
+
+  _onFioChange(event) {
+    debug(`_onFioChange`);
+    const filterFio = event.target.value.toLowerCase();
+
+    this._model.filterFn = ({data}) => {
+      return data.fio.toLowerCase().startsWith(filterFio);
+    };
+  }
+
+  bind() {
+    const fioElement = this._element.querySelector(`.abits__filter-fio`);
+    fioElement.addEventListener(`change`, this._onFioChange);
+  }
+
+  unbind() {
+    fioElement.removeEventListener(this._onFioChange);
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (AbitsFilterController);
+
+
+/***/ }),
+
 /***/ "./src/js/controllers/abits-list-controller.js":
 /*!*****************************************************!*\
   !*** ./src/js/controllers/abits-list-controller.js ***!
@@ -17525,11 +17576,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _api_pouchdb_api__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./api/pouchdb-api */ "./src/js/api/pouchdb-api.js");
 /* harmony import */ var _controllers_edu_progs_list_controller__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./controllers/edu-progs-list-controller */ "./src/js/controllers/edu-progs-list-controller.js");
 /* harmony import */ var _controllers_abits_list_controller__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./controllers/abits-list-controller */ "./src/js/controllers/abits-list-controller.js");
-/* harmony import */ var _controllers_debug_panel_controller__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./controllers/debug-panel-controller */ "./src/js/controllers/debug-panel-controller.js");
+/* harmony import */ var _controllers_abits_filter_controller__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./controllers/abits-filter-controller */ "./src/js/controllers/abits-filter-controller.js");
+/* harmony import */ var _controllers_debug_panel_controller__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./controllers/debug-panel-controller */ "./src/js/controllers/debug-panel-controller.js");
 if (!localStorage.debug) {
   localStorage.debug = `abit:*`;
 }
-console.log(`localStorage.debug: "${localStorage.debug}"`);
+console.log(`localStorage.debug = "${localStorage.debug}"`);
+
 
 
 
@@ -17581,7 +17634,9 @@ api.init((err) => {
     );
     abitsListController.init();
 
-    const debugPanelController = new _controllers_debug_panel_controller__WEBPACK_IMPORTED_MODULE_5__["default"](api);
+    const abitsFilterController = new _controllers_abits_filter_controller__WEBPACK_IMPORTED_MODULE_5__["default"](abitsModel);
+
+    const debugPanelController = new _controllers_debug_panel_controller__WEBPACK_IMPORTED_MODULE_6__["default"](api);
   })().catch((err) => console.error(err));
 });
 
@@ -17933,6 +17988,7 @@ const nop = () => {};
 
 class ListModel extends _abstract_model__WEBPACK_IMPORTED_MODULE_0__["default"] {
   constructor(defalutItemData, api) {
+    debug(`constructor`);
     super();
 
     this._defaultItemData = defalutItemData;
@@ -17944,10 +18000,22 @@ class ListModel extends _abstract_model__WEBPACK_IMPORTED_MODULE_0__["default"] 
     this._items = [];
 
     this.type = null;
+
+    this._filterFn = (item) => true;
   }
 
   get items() {
-    return this._items;
+    debug(
+      `get items, _filterFn(_items[0]): %O`,
+      this._filterFn(this._items[0])
+    );
+    return this._items.filter(this._filterFn);
+  }
+
+  set filterFn(fn) {
+    debug(`set filterFn`);
+    this._filterFn = fn;
+    this.onChangeView(null);
   }
 
   init(callback) {
