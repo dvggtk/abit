@@ -1,0 +1,15 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="150"
+  height="150"
+  viewBox="0 0 150 150"
+>
+  <path
+    id="check"
+    fill="none"
+    stroke="green"
+    stroke-width="30"
+    stroke-linecap="round"
+    d="M20,50 l30,50 l80,-80"
+  />
+</svg>

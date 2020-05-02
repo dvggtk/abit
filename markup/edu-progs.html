@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Учет абитуриентов. ДВГГТК</title>
+    <link rel="stylesheet" href="../css/normalize.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
+    <main class="edu-progs">
+      <h2 class="edu-progs__title">Образовательные программы</h2>
+      <ul class="edu-progs__list">
+        <li class="edu-progs__item">
+          <form class="edu-prog-form edu-prog-form--mode-edit">
+            <h3 class="visually-hidden">Форма редактирования образовательной программ</h3>
+            <section class="edu-prog-form__data">
+              <h4 class="visually-hidden">Данные образовательной программы</h4>
+              <div class="edu-prog-form__data-row">
+                <label
+                  class="edu-prog-form__control edu-prog-form__control--code"
+                >
+                  <span class="edu-prog-form__label edu-prog-form__label--code"
+                    >Код ОП</span
+                  >
+                  <input
+                    type="text"
+                    name="code"
+                    placeholder="код ОП"
+                    value="СЭЗИС"
+                    class="edu-prog-form__input edu-prog-form__input--code"
+                  />
+                </label>
+                <label
+                  class="edu-prog-form__control edu-prog-form__control--speciality"
+                >
+                  <span
+                    class="edu-prog-form__label edu-prog-form__label--speciality"
+                    >Специальность</span
+                  >
+                  <input
+                    type="text"
+                    name="speciality"
+                    placeholder="специальность"
+                    value="08.02.01 Строительство и эксплуатация зданий и сооружений"
+                    class="edu-prog-form__input edu-prog-form__input--speciality"
+                  />
+                </label>
+              </div>
+              <div class="edu-prog-form__data-row">
+                <label
+                  class="edu-prog-form__control edu-prog-form__control--qualification"
+                >
+                  <span
+                    class="edu-prog-form__label edu-prog-form__label--qualification"
+                    >Квалификация</span
+                  >
+                  <input
+                    type="text"
+                    name="qualification"
+                    placeholder="квалификация"
+                    value="техник"
+                    class="edu-prog-form__input edu-prog-form__input--qualification"
+                  />
+                </label>
+                <label
+                  class="edu-prog-form__control edu-prog-form__control--edu-form"
+                >
+                  <span
+                    class="edu-prog-form__label edu-prog-form__label--edu-form"
+                    >Форма обучения</span
+                  >
+                  <select
+                    name="edu-form"
+                    class="edu-prog-form__select edu-prog-form__select--edu-form"
+                  >
+                    <option value="очная" selected>очная</option>
+                    <option value="заочная">заочная</option>
+                  </select>
+                </label>
+                <label
+                  class="edu-prog-form__control edu-prog-form__control--base-edu-level"
+                >
+                  <span
+                    class="edu-prog-form__label edu-prog-form__label--base-edu-level"
+                    >Базовое образование</span
+                  >
+                  <select
+                    name="base-edu-level"
+                    class="edu-prog-form__select edu-prog-form__select--base-edu-level"
+                  >
+                    <option value="11 классов" selected
+                      >11 классов</option
+                    >
+                    <option value="9 классов">9 классов</option>
+                  </select>
+                </label>
+                <label
+                  class="edu-prog-form__control edu-prog-form__control--duration"
+                >
+                  <span
+                    class="edu-prog-form__label edu-prog-form__label--duration"
+                    >Продолжительность</span
+                  >
+                  <input
+                    type="text"
+                    name="duration"
+                    placeholder="продолжительность"
+                    value="2 года 10 месяцев"
+                    class="edu-prog-form__input edu-prog-form__input--duration"
+                  />
+                </label>
+                <label
+                  class="edu-prog-form__control edu-prog-form__control--fin-source"
+                >
+                  <span
+                    class="edu-prog-form__label edu-prog-form__label--fin-source"
+                    >Источник финансирования</span
+                  >
+                  <select
+                    name="fin-source"
+                    class="edu-prog-form__select edu-prog-form__select--fin-source"
+                  >
+                    <option value="Бюджет" selected>Бюджет</option>
+                    <option value="Внебюджет">Внебюджет</option>
+                  </select>
+                </label>
+                <label
+                  class="edu-prog-form__control edu-prog-form__control--places-number"
+                >
+                  <span
+                    class="edu-prog-form__label edu-prog-form__label--places-number"
+                    >Количество мест</span
+                  >
+                  <input
+                    type="text"
+                    name="places-number"
+                    placeholder="количество мест"
+                    value="25"
+                    class="edu-prog-form__input edu-prog-form__input--places-number"
+                  />
+                </label>
+              </div>
+            </section>
+            <section class="edu-prog-form__panel">
+              <h4 class="visually-hidden">Кнопочная панель</h4>
+              <div class="edu-prog-form__btn-container">
+                <button
+                  type="button"
+                  class="edu-prog-form__btn edu-prog-form__btn--delete"
+                >
+                  Удалить
+                </button>
+                <button
+                  type="button"
+                  class="edu-prog-form__btn edu-prog-form__btn--clone"
+                >
+                  Дублировать
+                </button>
+                <button
+                  type="submit"
+                  class="edu-prog-form__btn edu-prog-form__btn--submit"
+                >
+                  Сохранить
+                </button>
+                <button
+                  type="button"
+                  class="edu-prog-form__btn edu-prog-form__btn--cancel"
+                >
+                  Отмена
+                </button>
+              </div>
+            </section>
+          </form>
+        </li>
+        <li class="edu-progs__item">
+          <form class="edu-prog-form edu-prog-form--mode-add">
+            <h3 class="visually-hidden">Форма добавления образовательной программ</h3>
+            <section class="edu-prog-form__data">
+              <h3 class="visually-hidden">Данные образовательной программы</h3>
+              <div class="edu-prog-form__data-row">
+                <label
+                  class="edu-prog-form__control edu-prog-form__control--code"
+                >
+                  <span class="edu-prog-form__label edu-prog-form__label--code"
+                    >Код ОП</span
+                  >
+                  <input
+                    type="text"
+                    name="code"
+                    placeholder="код ОП"
+                    value="СЭЗИС"
+                    class="edu-prog-form__input edu-prog-form__input--code"
+                  />
+                </label>
+                <label
+                  class="edu-prog-form__control edu-prog-form__control--speciality"
+                >
+                  <span
+                    class="edu-prog-form__label edu-prog-form__label--speciality"
+                    >Специальность</span
+                  >
+                  <input
+                    type="text"
+                    name="speciality"
+                    placeholder="специальность"
+                    value="08.02.01 Строительство и эксплуатация зданий и сооружений"
+                    class="edu-prog-form__input edu-prog-form__input--speciality"
+                  />
+                </label>
+              </div>
+              <div class="edu-prog-form__data-row">
+                <label
+                  class="edu-prog-form__control edu-prog-form__control--qualification"
+                >
+                  <span
+                    class="edu-prog-form__label edu-prog-form__label--qualification"
+                    >Квалификация</span
+                  >
+                  <input
+                    type="text"
+                    name="qualification"
+                    placeholder="квалификация"
+                    value="техник"
+                    class="edu-prog-form__input edu-prog-form__input--qualification"
+                  />
+                </label>
+                <label
+                  class="edu-prog-form__control edu-prog-form__control--edu-form"
+                >
+                  <span
+                    class="edu-prog-form__label edu-prog-form__label--edu-form"
+                    >Форма обучения</span
+                  >
+                  <select
+                    name="edu-form"
+                    class="edu-prog-form__select edu-prog-form__select--edu-form"
+                  >
+                    <option value="очная" selected>очная</option>
+                    <option value="заочная">заочная</option>
+                  </select>
+                </label>
+                <label
+                  class="edu-prog-form__control edu-prog-form__control--base-edu-level"
+                >
+                  <span
+                    class="edu-prog-form__label edu-prog-form__label--base-edu-level"
+                    >Базовое образование</span
+                  >
+                  <select
+                    name="base-edu-level"
+                    class="edu-prog-form__select edu-prog-form__select--base-edu-level"
+                  >
+                    <option value="11 классов" selected
+                      >11 классов</option
+                    >
+                    <option value="9 классов">9 классов</option>
+                  </select>
+                </label>
+                <label
+                  class="edu-prog-form__control edu-prog-form__control--duration"
+                >
+                  <span
+                    class="edu-prog-form__label edu-prog-form__label--duration"
+                    >Продолжительность</span
+                  >
+                  <input
+                    type="text"
+                    name="duration"
+                    placeholder="продолжительность"
+                    value="2 года 10 месяцев"
+                    class="edu-prog-form__input edu-prog-form__input--duration"
+                  />
+                </label>
+                <label
+                  class="edu-prog-form__control edu-prog-form__control--fin-source"
+                >
+                  <span
+                    class="edu-prog-form__label edu-prog-form__label--fin-source"
+                    >Источник финансирования</span
+                  >
+                  <select
+                    name="fin-source"
+                    class="edu-prog-form__select edu-prog-form__select--fin-source"
+                  >
+                    <option value="Бюджет" selected>Бюджет</option>
+                    <option value="Внебюджет">Внебюджет</option>
+                  </select>
+                </label>
+                <label
+                  class="edu-prog-form__control edu-prog-form__control--places-number"
+                >
+                  <span
+                    class="edu-prog-form__label edu-prog-form__label--places-number"
+                    >Количество мест</span
+                  >
+                  <input
+                    type="text"
+                    name="places-number"
+                    placeholder="количество мест"
+                    value="25"
+                    class="edu-prog-form__input edu-prog-form__input--places-number"
+                  />
+                </label>
+              </div>
+            </section>
+            <section class="edu-prog-form__panel">
+              <h4 class="visually-hidden">Кнопочная панель</h4>
+              <div class="edu-prog-form__btn-container">
+                <button
+                  type="button"
+                  class="edu-prog-form__btn edu-prog-form__btn--delete"
+                >
+                  Удалить
+                </button>
+                <button
+                  type="button"
+                  class="edu-prog-form__btn edu-prog-form__btn--clone"
+                >
+                  Дублировать
+                </button>
+                <button
+                  type="submit"
+                  class="edu-prog-form__btn edu-prog-form__btn--submit"
+                >
+                  Сохранить
+                </button>
+                <button
+                  type="button"
+                  class="edu-prog-form__btn edu-prog-form__btn--cancel"
+                >
+                  Отмена
+                </button>
+              </div>
+            </section>
+          </form>
+        </li>
+        <li class="edu-progs__item edu-progs__item--active">
+          <article class="edu-prog">
+            <h3 class="visually-hidden">Просмотр образовательной программы</h3>
+            <div class="edu-prog__field edu-prog__field--code">СЭЗИС</div>
+            <div class="edu-prog__field edu-prog__field--speciality">
+              08.02.01 Строительство и эксплуатация зданий и сооружений
+            </div>
+            <div class="edu-prog__field edu-prog__field--qualification">
+              техник
+            </div>
+            <div class="edu-prog__field edu-prog__field--edu-form">очная</div>
+            <div class="edu-prog__field edu-prog__field--edu-base-level">
+              11 классов
+            </div>
+            <div class="edu-prog__field edu-prog__field--duration">
+              2 года 10 месяцев
+            </div>
+            <div class="edu-prog__field edu-prog__field--fin-source">
+              Бюджет
+            </div>
+            <div class="edu-prog__field edu-prog__field--places-number">25</div>
+          </article>
+        </li>
+        <li class="edu-progs__item">
+          <article class="edu-prog">
+            <h3 class="visually-hidden">Просмотр образовательной программы</h3>
+            <div class="edu-prog__field edu-prog__field--code">СЭЗИСк</div>
+            <div class="edu-prog__field edu-prog__field--speciality">
+              08.02.01 Строительство и эксплуатация зданий и сооружений
+            </div>
+            <div class="edu-prog__field edu-prog__field--qualification">
+              техник
+            </div>
+            <div class="edu-prog__field edu-prog__field--edu-form">очная</div>
+            <div class="edu-prog__field edu-prog__field--edu-base-level">
+              11 классов
+            </div>
+            <div class="edu-prog__field edu-prog__field--duration">
+              2 года 10 месяцев
+            </div>
+            <div class="edu-prog__field edu-prog__field--fin-source">
+              Внебюджет
+            </div>
+            <div class="edu-prog__field edu-prog__field--places-number">5</div>
+          </article>
+        </li>
+        <li class="edu-progs__item">
+          <article class="edu-prog">
+            <h3 class="visually-hidden">Просмотр образовательной программы</h3>
+            <div class="edu-prog__field edu-prog__field--code">СЭЗИС9</div>
+            <div class="edu-prog__field edu-prog__field--speciality">
+              08.02.01 Строительство и эксплуатация зданий и сооружений
+            </div>
+            <div class="edu-prog__field edu-prog__field--qualification">
+              техник
+            </div>
+            <div class="edu-prog__field edu-prog__field--edu-form">очная</div>
+            <div class="edu-prog__field edu-prog__field--edu-base-level">
+              11 классов
+            </div>
+            <div class="edu-prog__field edu-prog__field--duration">
+              3 года 10 месяцев
+            </div>
+            <div class="edu-prog__field edu-prog__field--fin-source">
+              Бюджет
+            </div>
+            <div class="edu-prog__field edu-prog__field--places-number">25</div>
+          </article>
+        </li>
+        <li class="edu-progs__item">
+          <article class="edu-prog">
+            <h3 class="visually-hidden">Просмотр образовательной программы</h3>
+            <div class="edu-prog__field edu-prog__field--code">СЭЗИС9к</div>
+            <div class="edu-prog__field edu-prog__field--speciality">
+              08.02.01 Строительство и эксплуатация зданий и сооружений
+            </div>
+            <div class="edu-prog__field edu-prog__field--qualification">
+              техник
+            </div>
+            <div class="edu-prog__field edu-prog__field--edu-form">очная</div>
+            <div class="edu-prog__field edu-prog__field--edu-base-level">
+              9 классов
+            </div>
+            <div class="edu-prog__field edu-prog__field--duration">
+              3 года 10 месяцев
+            </div>
+            <div class="edu-prog__field edu-prog__field--fin-source">
+              Внебюджет
+            </div>
+            <div class="edu-prog__field edu-prog__field--places-number">5</div>
+          </article>
+        </li>
+        <li class="edu-progs__item">
+          <article class="edu-prog">
+            <h3 class="visually-hidden">Просмотр образовательной программы</h3>
+            <div class="edu-prog__field edu-prog__field--code">СЭЗИСзк</div>
+            <div class="edu-prog__field edu-prog__field--speciality">
+              08.02.01 Строительство и эксплуатация зданий и сооружений
+            </div>
+            <div class="edu-prog__field edu-prog__field--qualification">
+              техник
+            </div>
+            <div class="edu-prog__field edu-prog__field--edu-form">заочная</div>
+            <div class="edu-prog__field edu-prog__field--edu-base-level">
+              11 классов
+            </div>
+            <div class="edu-prog__field edu-prog__field--duration">
+              3 года 10 месяцев
+            </div>
+            <div class="edu-prog__field edu-prog__field--fin-source">
+              Внебюджет
+            </div>
+            <div class="edu-prog__field edu-prog__field--places-number">20</div>
+          </article>
+        </li>
+        <li class="edu-progs__item">
+          <article class="edu-prog">
+            <h3 class="visually-hidden">Просмотр образовательной программы</h3>
+            <div class="edu-prog__field edu-prog__field--code">ЗИО</div>
+            <div class="edu-prog__field edu-prog__field--speciality">
+              21.02.05 Земельно-имущественные отношения
+            </div>
+            <div class="edu-prog__field edu-prog__field--qualification">
+              специалист по земельно-имущественным отношениям
+            </div>
+            <div class="edu-prog__field edu-prog__field--edu-form">очная</div>
+            <div class="edu-prog__field edu-prog__field--edu-base-level">
+              11 классов
+            </div>
+            <div class="edu-prog__field edu-prog__field--duration">
+              1 год 10 месяцев
+            </div>
+            <div class="edu-prog__field edu-prog__field--fin-source">
+              Бюджет
+            </div>
+            <div class="edu-prog__field edu-prog__field--places-number">25</div>
+          </article>
+        </li>
+        <li class="edu-progs__item">
+          <article class="edu-prog">
+            <h3 class="visually-hidden">Просмотр образовательной программы</h3>
+            <div class="edu-prog__field edu-prog__field--code">ЗИОк</div>
+            <div class="edu-prog__field edu-prog__field--speciality">
+              21.02.05 Земельно-имущественные отношения
+            </div>
+            <div class="edu-prog__field edu-prog__field--qualification">
+              специалист по земельно-имущественным отношениям
+            </div>
+            <div class="edu-prog__field edu-prog__field--edu-form">очная</div>
+            <div class="edu-prog__field edu-prog__field--edu-base-level">
+              11 классов
+            </div>
+            <div class="edu-prog__field edu-prog__field--duration">
+              1 год 10 месяцев
+            </div>
+            <div class="edu-prog__field edu-prog__field--fin-source">
+              Внебюджет
+            </div>
+            <div class="edu-prog__field edu-prog__field--places-number">5</div>
+          </article>
+        </li>
+        <li class="edu-progs__item">
+          <article class="edu-prog">
+            <h3 class="visually-hidden">Просмотр образовательной программы</h3>
+            <div class="edu-prog__field edu-prog__field--code">ЗИО9</div>
+            <div class="edu-prog__field edu-prog__field--speciality">
+              21.02.05 Земельно-имущественные отношения
+            </div>
+            <div class="edu-prog__field edu-prog__field--qualification">
+              специалист по земельно-имущественным отношениям
+            </div>
+            <div class="edu-prog__field edu-prog__field--edu-form">очная</div>
+            <div class="edu-prog__field edu-prog__field--edu-base-level">
+              9 классов
+            </div>
+            <div class="edu-prog__field edu-prog__field--duration">
+              2 года 10 месяцев
+            </div>
+            <div class="edu-prog__field edu-prog__field--fin-source">
+              Бюджет
+            </div>
+            <div class="edu-prog__field edu-prog__field--places-number">25</div>
+          </article>
+        </li>
+        <li class="edu-progs__item">
+          <article class="edu-prog">
+            <h3 class="visually-hidden">Просмотр образовательной программы</h3>
+            <div class="edu-prog__field edu-prog__field--code">ЗИО9к</div>
+            <div class="edu-prog__field edu-prog__field--speciality">
+              21.02.05 Земельно-имущественные отношения
+            </div>
+            <div class="edu-prog__field edu-prog__field--qualification">
+              специалист по земельно-имущественным отношениям
+            </div>
+            <div class="edu-prog__field edu-prog__field--edu-form">очная</div>
+            <div class="edu-prog__field edu-prog__field--edu-base-level">
+              9 классов
+            </div>
+            <div class="edu-prog__field edu-prog__field--duration">
+              2 года 10 месяцев
+            </div>
+            <div class="edu-prog__field edu-prog__field--fin-source">
+              Внебюджет
+            </div>
+            <div class="edu-prog__field edu-prog__field--places-number">5</div>
+          </article>
+        </li>
+        <li class="edu-progs__item">
+          <article class="edu-prog">
+            <h3 class="visually-hidden">Просмотр образовательной программы</h3>
+            <div class="edu-prog__field edu-prog__field--code">ЗИО9зк</div>
+            <div class="edu-prog__field edu-prog__field--speciality">
+              21.02.05 Земельно-имущественные отношения
+            </div>
+            <div class="edu-prog__field edu-prog__field--qualification">
+              специалист по земельно-имущественным отношениям
+            </div>
+            <div class="edu-prog__field edu-prog__field--edu-form">очная</div>
+            <div class="edu-prog__field edu-prog__field--edu-base-level">
+              11 классов
+            </div>
+            <div class="edu-prog__field edu-prog__field--duration">
+              2 года 10 месяцев
+            </div>
+            <div class="edu-prog__field edu-prog__field--fin-source">
+              Внебюджет
+            </div>
+            <div class="edu-prog__field edu-prog__field--places-number">20</div>
+          </article>
+        </li>
+      </ul>
+    </main>
+  </body>
+</html>

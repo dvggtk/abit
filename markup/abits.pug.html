@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <title>Абитуриенты ДВГГТК</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link rel="stylesheet" href="../css/style.css">
+  </head>
+  <body>
+    <header>
+      <p>Header</p>
+    </header>
+    <main class="abits">
+      <h2 class="abits__title">Абитуриенты</h2>
+      <ul class="abits-list">
+        <li class="abits-list__item">
+          <article class="abit-form">
+            <h3 class="visually-hidden">Форма редактирования абитуриента</h3>
+            <form class="form form--mode-edit">
+              <section class="form__data">
+                <h4 class="visually-hidden">Данные абитуриента</h4>
+                <div class="form__data-row">
+                  <label class="form__control form__control--reg-date"><span class="form__label form__label--reg-date">Дата регистрации</span>
+                    <input class="form__input form__input--reg-date" type="text" name="reg-date" placeholder="дд.мм.гггг" value=""/>
+                  </label>
+                  <label class="form__control form__control--fio"><span class="form__label form__label--fio">ФИО</span>
+                    <input class="form__input form__input--fio" type="text" name="fio" placeholder="Фамилия Имя Отчество" value="Иванова Юлия Евгеньевна"/>
+                  </label>
+                  <label class="form__control form__control--gender"><span class="form__label form__label--gender">пол</span>
+                    <select class="form__select form__select--gender" name="gender">
+                      <option value="м" selected="selected">м</option>
+                      <option value="ж">ж</option>
+                    </select>
+                  </label>
+                  <label class="form__control form__control--cert-score"><span class="form__label form__label--cert-score">Средний балл аттестата</span>
+                    <input class="form__input form__input--cert-score" type="text" name="cert-score" placeholder="0,00000" value="3,172"/>
+                  </label>
+                  <label class="form__control form__control--extra-score"><span class="form__label form__label--extra-score">Дополнительные баллы</span>
+                    <input class="form__input form__input--extra-score" type="text" name="extra-score" placeholder="0,0" value="0,8"/>
+                  </label>
+                  <label class="form__control form__control--total-score"><span class="form__label form__label--total-score">Итоговый конкурсный балл</span>
+                    <input class="form__input form__input--total-score" type="text" name="total-score" placeholder="0,00000" value="3,972" readonly="readonly" disabled="disabled"/>
+                  </label>
+                </div>
+                <div class="form__data-row">
+                  <div class="form__control form__control--has-cert-original">
+                    <label class="checkbox">
+                      <input class="visually-hidden" type="checkbox" name="has-cert-original" value="has-cert-original" checked="checked"/><span class="checkbox__indicator"></span><span>подлинник аттестата</span>
+                    </label>
+                  </div>
+                  <!-- form__control-->
+                  <div class="form__control form__control--has-medical-cert">
+                    <label class="checkbox">
+                      <input class="visually-hidden" type="checkbox" name="has-medical-cert" value="has-medical-cert" checked="checked"/><span class="checkbox__indicator"></span><span>медицинская справка</span>
+                    </label>
+                  </div>
+                  <!-- form__control-->
+                  <div class="form__control form__control--has-fluoro">
+                    <label class="checkbox">
+                      <input class="visually-hidden" type="checkbox" name="has-fluoro" value="has-fluoro" checked="checked"/><span class="checkbox__indicator"></span><span>флюорография</span>
+                    </label>
+                  </div>
+                  <!-- form__control-->
+                  <div class="form__control form__control--has-vaccine">
+                    <label class="checkbox">
+                      <input class="visually-hidden" type="checkbox" name="has-vaccine" value="has-vaccine" checked="checked"/><span class="checkbox__indicator"></span><span>прививки</span>
+                    </label>
+                  </div>
+                  <!-- form__control-->
+                </div>
+                <div class="form__data-row">
+                  <label class="form__control form__control--address"><span class="form__label form__label--address">Адрес</span>
+                    <input class="form__input form__input--address" type="text" name="address" placeholder="адрес" value="с. Черниговка, ул. Партизанская, 94-15"/>
+                  </label>
+                  <label class="form__control form__control--tel"><span class="form__label form__label--tel">Телефон</span>
+                    <input class="form__input form__input--tel" type="text" name="tel" placeholder="телефон" value="89149764169"/>
+                  </label>
+                </div>
+                <div class="form__data-row">
+                  <label class="form__control form__control--need-dorm"><span class="form__label form__label--need-dorm">Общежитие</span>
+                    <select class="form__select form__select--need-dorm" name="need-dorm">
+                      <option value="0">не требуется</option>
+                      <option value="1">требуется</option>
+                      <option value="2">приоритетное</option>
+                    </select>
+                  </label>
+                  <label class="form__control form__control--school-year"><span class="form__label form__label--school-year">Год окончания школы</span>
+                    <input class="form__input form__input--school-year" type="text" name="school-year" placeholder="гггг" value="2020"/>
+                  </label>
+                  <label class="form__control form__control--school"><span class="form__label form__label--school">Школа</span>
+                    <input class="form__input form__input--school" type="text" name="school" placeholder="гггг" value="МБОУ СОШ №2 пгт Кировский"/>
+                  </label>
+                </div>
+                <div class="form__data-row">
+                  <label class="form__control form__control--memo"><span class="form__label form__label--memo">Примечания</span>
+                    <input class="form__input form__input--memo" type="text" name="school" placeholder="примечания" value="портфолио, коммерция"/>
+                  </label>
+                </div>
+                <div class="form__data-row">
+                  <section class="applications">
+                    <h5 class="visually-hidden">Заявления абитуриента</h5>
+                    <div class="applications__list-container">
+                      <ul class="applications-list">
+                        <li class="applications-list__item">
+                          <div class="application">
+                            <label class="application__edu-prog">
+                              <select>
+                                <option value="ЗИО">ЗИО</option>
+                                <option value="СЭЗИС" selected="selected">СЭЗИС</option>
+                                <option value="БУ">БУ</option>
+                                <option value="ТОРАТ">ТОРАТ</option>
+                                <option value="ПСО">ПСО</option>
+                              </select>
+                            </label>
+                            <label class="application__grade">
+                              <input size="1" pattern="[12345]"/>
+                            </label>
+                            <label class="application__hasEduCertOriginal">
+                              <input type="checkbox"/><span>приоритет</span>
+                            </label>
+                            <label class="application__active">
+                              <input type="checkbox"/><span>показывать?</span>
+                            </label>
+                            <button class="application__btn application__btn--delete" type="button">удалить</button>
+                          </div>
+                          <!-- application-->
+                        </li>
+                        <li class="applications-list__item">
+                          <div class="application">
+                            <label class="application__edu-prog">
+                              <select>
+                                <option value="ЗИО" selected="selected">ЗИО</option>
+                                <option value="СЭЗИС">СЭЗИС</option>
+                                <option value="БУ">БУ</option>
+                                <option value="ТОРАТ">ТОРАТ</option>
+                                <option value="ПСО">ПСО</option>
+                              </select>
+                            </label>
+                            <label class="application__grade">
+                              <input size="1" pattern="[12345]"/>
+                            </label>
+                            <label class="application__hasEduCertOriginal">
+                              <input type="checkbox"/><span>приоритет</span>
+                            </label>
+                            <label class="application__active">
+                              <input type="checkbox"/><span>показывать?</span>
+                            </label>
+                            <button class="application__btn application__btn--delete" type="button">удалить</button>
+                          </div>
+                          <!-- application-->
+                        </li>
+                        <li class="applications-list__item">
+                          <div class="application">
+                            <label class="application__edu-prog">
+                              <select>
+                                <option value="ЗИО">ЗИО</option>
+                                <option value="СЭЗИС">СЭЗИС</option>
+                                <option value="БУ">БУ</option>
+                                <option value="ТОРАТ" selected="selected">ТОРАТ</option>
+                                <option value="ПСО">ПСО</option>
+                              </select>
+                            </label>
+                            <label class="application__grade">
+                              <input size="1" pattern="[12345]"/>
+                            </label>
+                            <label class="application__hasEduCertOriginal">
+                              <input type="checkbox"/><span>приоритет</span>
+                            </label>
+                            <label class="application__active">
+                              <input type="checkbox"/><span>показывать?</span>
+                            </label>
+                            <button class="application__btn application__btn--delete" type="button">удалить</button>
+                          </div>
+                          <!-- application-->
+                        </li>
+                      </ul>
+                    </div>
+                    <button class="applications__btn applications__btn--add" type="button">добавить заявление</button>
+                  </section>
+                </div>
+              </section>
+              <section class="form__panel">
+                <h5 class="visually-hidden">Кнопочная панель</h5>
+                <div class="form__btn-container">
+                  <button class="form__btn form__btn--delete" type="button">Удалить</button>
+                  <button class="form__btn form__btn--clone" type="button">Дублировать</button>
+                  <button class="form__btn form__btn--submit" type="submit">Сохранить</button>
+                  <button class="form__btn form__btn--cancel" type="button">Отмена</button>
+                </div>
+              </section>
+              <!-- form__panel-->
+            </form>
+          </article>
+          <!-- abit-form-->
+        </li>
+        <li class="abits-list__item">
+          <article class="abit-view">
+            <h3 class="visually-hidden">просмотр абитуриента</h3>
+            <div class="abit-view__row">
+              <div class="abit-view__field abit-view__field--reg-date">2020-04-14</div>
+              <div class="abit-view__field abit-view__field--fio" data-gender="ж">Иванова Юлия Евгеньевна</div>
+              <div class="abit-view__field-container abit-view__field-container--score">
+                <div class="abit-view__field abit-view__field--cert-score">3,172</div>
+                <div class="abit-view__field abit-view__field--extra-score">0,8</div>
+                <div class="abit-view__field abit-view__field--total-score">3,972</div>
+              </div>
+            </div>
+            <div class="abit-view__row">
+              <div class="abit-view__field abit-view__field--has-cert-original">
+                <div class="checkbox" data-checked="true"><span class="checkbox__indicator"></span><span>подлинник аттестата</span></div>
+              </div>
+              <!-- abit-view__field-->
+              <div class="abit-view__field abit-view__field--has-medical-cert">
+                <div class="checkbox" data-checked="true"><span class="checkbox__indicator"></span><span>медицинская справка</span></div>
+              </div>
+              <!-- abit-view__field-->
+              <div class="abit-view__field abit-view__field--has-fluoro">
+                <div class="checkbox" data-checked="true"><span class="checkbox__indicator"></span><span>флюорография</span></div>
+              </div>
+              <!-- abit-view__field-->
+              <div class="abit-view__field abit-view__field--has-vaccine">
+                <div class="checkbox" data-checked="true"><span class="checkbox__indicator"></span><span>прививки</span></div>
+              </div>
+              <!-- abit-view__field-->
+            </div>
+            <div class="abit-view__row">
+              <div class="abit-view__field abit-view__field--address">с. Черниговка, ул. Партизанская, 94-15</div>
+              <div class="abit-view__field abit-view__field--tel"><a href="tel:89149764169">89149764169</a></div>
+            </div>
+            <div class="abit-view__row">
+              <div class="abit-view__field abit-view__field--need-dorm">требуется</div>
+              <div class="abit-view__field abit-view__field--school-year">2020</div>
+              <div class="abit-view__field abit-view__field--school">МБОУ СОШ №2 пгт Кировский</div>
+              <div class="abit-view__field abit-view__field--memo">портфолио, коммерция</div>
+            </div>
+          </article>
+          <!-- abit-view-->
+        </li>
+        <li class="abits-list__item">
+          <article class="abit-form">
+            <h3 class="visually-hidden">Форма редактирования абитуриента</h3>
+            <form class="form form--mode-add">
+              <section class="form__data">
+                <h4 class="visually-hidden">Данные абитуриента</h4>
+                <div class="form__data-row">
+                  <label class="form__control form__control--reg-date"><span class="form__label form__label--reg-date">Дата регистрации</span>
+                    <input class="form__input form__input--reg-date" type="text" name="reg-date" placeholder="дд.мм.гггг" value=""/>
+                  </label>
+                  <label class="form__control form__control--fio"><span class="form__label form__label--fio">ФИО</span>
+                    <input class="form__input form__input--fio" type="text" name="fio" placeholder="Фамилия Имя Отчество" value="Иванова Юлия Евгеньевна"/>
+                  </label>
+                  <label class="form__control form__control--gender"><span class="form__label form__label--gender">пол</span>
+                    <select class="form__select form__select--gender" name="gender">
+                      <option value="м" selected="selected">м</option>
+                      <option value="ж">ж</option>
+                    </select>
+                  </label>
+                  <label class="form__control form__control--cert-score"><span class="form__label form__label--cert-score">Средний балл аттестата</span>
+                    <input class="form__input form__input--cert-score" type="text" name="cert-score" placeholder="0,00000" value="3,172"/>
+                  </label>
+                  <label class="form__control form__control--extra-score"><span class="form__label form__label--extra-score">Дополнительные баллы</span>
+                    <input class="form__input form__input--extra-score" type="text" name="extra-score" placeholder="0,0" value="0,8"/>
+                  </label>
+                  <label class="form__control form__control--total-score"><span class="form__label form__label--total-score">Итоговый конкурсный балл</span>
+                    <input class="form__input form__input--total-score" type="text" name="total-score" placeholder="0,00000" value="3,972" readonly="readonly" disabled="disabled"/>
+                  </label>
+                </div>
+                <div class="form__data-row">
+                  <div class="form__control form__control--has-cert-original">
+                    <label class="checkbox">
+                      <input class="visually-hidden" type="checkbox" name="has-cert-original" value="has-cert-original" checked="checked"/><span class="checkbox__indicator"></span><span>подлинник аттестата</span>
+                    </label>
+                  </div>
+                  <!-- form__control-->
+                  <div class="form__control form__control--has-medical-cert">
+                    <label class="checkbox">
+                      <input class="visually-hidden" type="checkbox" name="has-medical-cert" value="has-medical-cert" checked="checked"/><span class="checkbox__indicator"></span><span>медицинская справка</span>
+                    </label>
+                  </div>
+                  <!-- form__control-->
+                  <div class="form__control form__control--has-fluoro">
+                    <label class="checkbox">
+                      <input class="visually-hidden" type="checkbox" name="has-fluoro" value="has-fluoro" checked="checked"/><span class="checkbox__indicator"></span><span>флюорография</span>
+                    </label>
+                  </div>
+                  <!-- form__control-->
+                  <div class="form__control form__control--has-vaccine">
+                    <label class="checkbox">
+                      <input class="visually-hidden" type="checkbox" name="has-vaccine" value="has-vaccine" checked="checked"/><span class="checkbox__indicator"></span><span>прививки</span>
+                    </label>
+                  </div>
+                  <!-- form__control-->
+                </div>
+                <div class="form__data-row">
+                  <label class="form__control form__control--address"><span class="form__label form__label--address">Адрес</span>
+                    <input class="form__input form__input--address" type="text" name="address" placeholder="адрес" value="с. Черниговка, ул. Партизанская, 94-15"/>
+                  </label>
+                  <label class="form__control form__control--tel"><span class="form__label form__label--tel">Телефон</span>
+                    <input class="form__input form__input--tel" type="text" name="tel" placeholder="телефон" value="89149764169"/>
+                  </label>
+                </div>
+                <div class="form__data-row">
+                  <label class="form__control form__control--need-dorm"><span class="form__label form__label--need-dorm">Общежитие</span>
+                    <select class="form__select form__select--need-dorm" name="need-dorm">
+                      <option value="0">не требуется</option>
+                      <option value="1">требуется</option>
+                      <option value="2">приоритетное</option>
+                    </select>
+                  </label>
+                  <label class="form__control form__control--school-year"><span class="form__label form__label--school-year">Год окончания школы</span>
+                    <input class="form__input form__input--school-year" type="text" name="school-year" placeholder="гггг" value="2020"/>
+                  </label>
+                  <label class="form__control form__control--school"><span class="form__label form__label--school">Школа</span>
+                    <input class="form__input form__input--school" type="text" name="school" placeholder="гггг" value="МБОУ СОШ №2 пгт Кировский"/>
+                  </label>
+                </div>
+                <div class="form__data-row">
+                  <label class="form__control form__control--memo"><span class="form__label form__label--memo">Примечания</span>
+                    <input class="form__input form__input--memo" type="text" name="school" placeholder="примечания" value="портфолио, коммерция"/>
+                  </label>
+                </div>
+                <div class="form__data-row">
+                  <section class="applications">
+                    <h5 class="visually-hidden">Заявления абитуриента</h5>
+                    <div class="applications__list-container">
+                      <ul class="applications-list">
+                        <li class="applications-list__item">
+                          <div class="application">
+                            <label class="application__edu-prog">
+                              <select>
+                                <option value="ЗИО">ЗИО</option>
+                                <option value="СЭЗИС" selected="selected">СЭЗИС</option>
+                                <option value="БУ">БУ</option>
+                                <option value="ТОРАТ">ТОРАТ</option>
+                                <option value="ПСО">ПСО</option>
+                              </select>
+                            </label>
+                            <label class="application__grade">
+                              <input size="1" pattern="[12345]"/>
+                            </label>
+                            <label class="application__hasEduCertOriginal">
+                              <input type="checkbox"/><span>приоритет</span>
+                            </label>
+                            <label class="application__active">
+                              <input type="checkbox"/><span>показывать?</span>
+                            </label>
+                            <button class="application__btn application__btn--delete" type="button">удалить</button>
+                          </div>
+                          <!-- application-->
+                        </li>
+                        <li class="applications-list__item">
+                          <div class="application">
+                            <label class="application__edu-prog">
+                              <select>
+                                <option value="ЗИО" selected="selected">ЗИО</option>
+                                <option value="СЭЗИС">СЭЗИС</option>
+                                <option value="БУ">БУ</option>
+                                <option value="ТОРАТ">ТОРАТ</option>
+                                <option value="ПСО">ПСО</option>
+                              </select>
+                            </label>
+                            <label class="application__grade">
+                              <input size="1" pattern="[12345]"/>
+                            </label>
+                            <label class="application__hasEduCertOriginal">
+                              <input type="checkbox"/><span>приоритет</span>
+                            </label>
+                            <label class="application__active">
+                              <input type="checkbox"/><span>показывать?</span>
+                            </label>
+                            <button class="application__btn application__btn--delete" type="button">удалить</button>
+                          </div>
+                          <!-- application-->
+                        </li>
+                        <li class="applications-list__item">
+                          <div class="application">
+                            <label class="application__edu-prog">
+                              <select>
+                                <option value="ЗИО">ЗИО</option>
+                                <option value="СЭЗИС">СЭЗИС</option>
+                                <option value="БУ">БУ</option>
+                                <option value="ТОРАТ" selected="selected">ТОРАТ</option>
+                                <option value="ПСО">ПСО</option>
+                              </select>
+                            </label>
+                            <label class="application__grade">
+                              <input size="1" pattern="[12345]"/>
+                            </label>
+                            <label class="application__hasEduCertOriginal">
+                              <input type="checkbox"/><span>приоритет</span>
+                            </label>
+                            <label class="application__active">
+                              <input type="checkbox"/><span>показывать?</span>
+                            </label>
+                            <button class="application__btn application__btn--delete" type="button">удалить</button>
+                          </div>
+                          <!-- application-->
+                        </li>
+                      </ul>
+                    </div>
+                    <button class="applications__btn applications__btn--add" type="button">добавить заявление</button>
+                  </section>
+                </div>
+              </section>
+              <section class="form__panel">
+                <h5 class="visually-hidden">Кнопочная панель</h5>
+                <div class="form__btn-container">
+                  <button class="form__btn form__btn--delete" type="button">Удалить</button>
+                  <button class="form__btn form__btn--clone" type="button">Дублировать</button>
+                  <button class="form__btn form__btn--submit" type="submit">Сохранить</button>
+                  <button class="form__btn form__btn--cancel" type="button">Отмена</button>
+                </div>
+              </section>
+              <!-- form__panel-->
+            </form>
+          </article>
+          <!-- abit-form-->
+        </li>
+        <li class="abits-list__item">
+          <article class="abit-view">
+            <h3 class="visually-hidden">просмотр абитуриента</h3>
+            <div class="abit-view__row">
+              <div class="abit-view__field abit-view__field--reg-date">2020-04-14</div>
+              <div class="abit-view__field abit-view__field--fio" data-gender="ж">Иванова Юлия Евгеньевна</div>
+              <div class="abit-view__field-container abit-view__field-container--score">
+                <div class="abit-view__field abit-view__field--cert-score">3,172</div>
+                <div class="abit-view__field abit-view__field--extra-score">0,8</div>
+                <div class="abit-view__field abit-view__field--total-score">3,972</div>
+              </div>
+            </div>
+            <div class="abit-view__row">
+              <div class="abit-view__field abit-view__field--has-cert-original">
+                <div class="checkbox" data-checked="true"><span class="checkbox__indicator"></span><span>подлинник аттестата</span></div>
+              </div>
+              <!-- abit-view__field-->
+              <div class="abit-view__field abit-view__field--has-medical-cert">
+                <div class="checkbox" data-checked="true"><span class="checkbox__indicator"></span><span>медицинская справка</span></div>
+              </div>
+              <!-- abit-view__field-->
+              <div class="abit-view__field abit-view__field--has-fluoro">
+                <div class="checkbox" data-checked="true"><span class="checkbox__indicator"></span><span>флюорография</span></div>
+              </div>
+              <!-- abit-view__field-->
+              <div class="abit-view__field abit-view__field--has-vaccine">
+                <div class="checkbox" data-checked="true"><span class="checkbox__indicator"></span><span>прививки</span></div>
+              </div>
+              <!-- abit-view__field-->
+            </div>
+            <div class="abit-view__row">
+              <div class="abit-view__field abit-view__field--address">с. Черниговка, ул. Партизанская, 94-15</div>
+              <div class="abit-view__field abit-view__field--tel"><a href="tel:89149764169">89149764169</a></div>
+            </div>
+            <div class="abit-view__row">
+              <div class="abit-view__field abit-view__field--need-dorm">требуется</div>
+              <div class="abit-view__field abit-view__field--school-year">2020</div>
+              <div class="abit-view__field abit-view__field--school">МБОУ СОШ №2 пгт Кировский</div>
+              <div class="abit-view__field abit-view__field--memo">портфолио, коммерция</div>
+            </div>
+          </article>
+          <!-- abit-view-->
+        </li>
+        <li class="abits-list__item">
+          <article class="abit-view">
+            <h3 class="visually-hidden">просмотр абитуриента</h3>
+            <div class="abit-view__row">
+              <div class="abit-view__field abit-view__field--reg-date">2020-04-14</div>
+              <div class="abit-view__field abit-view__field--fio" data-gender="ж">Иванова Юлия Евгеньевна</div>
+              <div class="abit-view__field-container abit-view__field-container--score">
+                <div class="abit-view__field abit-view__field--cert-score">3,172</div>
+                <div class="abit-view__field abit-view__field--extra-score">0,8</div>
+                <div class="abit-view__field abit-view__field--total-score">3,972</div>
+              </div>
+            </div>
+            <div class="abit-view__row">
+              <div class="abit-view__field abit-view__field--has-cert-original">
+                <div class="checkbox" data-checked="true"><span class="checkbox__indicator"></span><span>подлинник аттестата</span></div>
+              </div>
+              <!-- abit-view__field-->
+              <div class="abit-view__field abit-view__field--has-medical-cert">
+                <div class="checkbox" data-checked="true"><span class="checkbox__indicator"></span><span>медицинская справка</span></div>
+              </div>
+              <!-- abit-view__field-->
+              <div class="abit-view__field abit-view__field--has-fluoro">
+                <div class="checkbox" data-checked="true"><span class="checkbox__indicator"></span><span>флюорография</span></div>
+              </div>
+              <!-- abit-view__field-->
+              <div class="abit-view__field abit-view__field--has-vaccine">
+                <div class="checkbox" data-checked="true"><span class="checkbox__indicator"></span><span>прививки</span></div>
+              </div>
+              <!-- abit-view__field-->
+            </div>
+            <div class="abit-view__row">
+              <div class="abit-view__field abit-view__field--address">с. Черниговка, ул. Партизанская, 94-15</div>
+              <div class="abit-view__field abit-view__field--tel"><a href="tel:89149764169">89149764169</a></div>
+            </div>
+            <div class="abit-view__row">
+              <div class="abit-view__field abit-view__field--need-dorm">требуется</div>
+              <div class="abit-view__field abit-view__field--school-year">2020</div>
+              <div class="abit-view__field abit-view__field--school">МБОУ СОШ №2 пгт Кировский</div>
+              <div class="abit-view__field abit-view__field--memo">портфолио, коммерция</div>
+            </div>
+          </article>
+          <!-- abit-view-->
+        </li>
+        <li class="abits-list__item">
+          <article class="abit-view">
+            <h3 class="visually-hidden">просмотр абитуриента</h3>
+            <div class="abit-view__row">
+              <div class="abit-view__field abit-view__field--reg-date">2020-04-14</div>
+              <div class="abit-view__field abit-view__field--fio" data-gender="ж">Иванова Юлия Евгеньевна</div>
+              <div class="abit-view__field-container abit-view__field-container--score">
+                <div class="abit-view__field abit-view__field--cert-score">3,172</div>
+                <div class="abit-view__field abit-view__field--extra-score">0,8</div>
+                <div class="abit-view__field abit-view__field--total-score">3,972</div>
+              </div>
+            </div>
+            <div class="abit-view__row">
+              <div class="abit-view__field abit-view__field--has-cert-original">
+                <div class="checkbox" data-checked="true"><span class="checkbox__indicator"></span><span>подлинник аттестата</span></div>
+              </div>
+              <!-- abit-view__field-->
+              <div class="abit-view__field abit-view__field--has-medical-cert">
+                <div class="checkbox" data-checked="true"><span class="checkbox__indicator"></span><span>медицинская справка</span></div>
+              </div>
+              <!-- abit-view__field-->
+              <div class="abit-view__field abit-view__field--has-fluoro">
+                <div class="checkbox" data-checked="true"><span class="checkbox__indicator"></span><span>флюорография</span></div>
+              </div>
+              <!-- abit-view__field-->
+              <div class="abit-view__field abit-view__field--has-vaccine">
+                <div class="checkbox" data-checked="true"><span class="checkbox__indicator"></span><span>прививки</span></div>
+              </div>
+              <!-- abit-view__field-->
+            </div>
+            <div class="abit-view__row">
+              <div class="abit-view__field abit-view__field--address">с. Черниговка, ул. Партизанская, 94-15</div>
+              <div class="abit-view__field abit-view__field--tel"><a href="tel:89149764169">89149764169</a></div>
+            </div>
+            <div class="abit-view__row">
+              <div class="abit-view__field abit-view__field--need-dorm">требуется</div>
+              <div class="abit-view__field abit-view__field--school-year">2020</div>
+              <div class="abit-view__field abit-view__field--school">МБОУ СОШ №2 пгт Кировский</div>
+              <div class="abit-view__field abit-view__field--memo">портфолио, коммерция</div>
+            </div>
+          </article>
+          <!-- abit-view-->
+        </li>
+      </ul>
+    </main>
+    <!-- abits-->
+    <footer>
+      <p>Footer</p>
+    </footer>
+  </body>
+</html>

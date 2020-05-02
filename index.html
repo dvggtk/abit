@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Учет абитуриентов. ДВГГТК</title>
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <header>
+      <article class="debug-panel">
+        <h2 class="visually-hidden">Отладочная панель</h2>
+        <button class ="debug-panel__btn debug-panel__btn--clear" type="button">
+          Очистить базу данных
+        </button>
+        <button class ="debug-panel__btn debug-panel__btn--add-edu-progs" type="button">
+          Добавить образовательные программы
+        </button>
+        <button class ="debug-panel__btn debug-panel__btn--add-abits" type="button">
+          Добавить 5 абитуриентов
+        </button>
+      </article>
+    </header>
+    <main>
+      <div class="tabs">
+        <div class="tabs__panel" id="tab-edu-progs">
+          <article class="edu-progs">
+            <h2 class="edu-progs__title">Образовательные программы</h2>
+            <div class="edu-progs__list-container"></div>
+          </article>
+        </div>
+        <div class="tabs__panel" id="tab-abits">
+          <article class="abits">
+            <h2 class="abits__title">Абитуриенты</h2>
+            <div class="abits__list-container"></div>
+          </article>
+        </div>
+        <div class="tabs__btn-panel">
+          <a class="tabs__btn" href="#tab-abits">Абитуриенты</a>
+          <a class="tabs__btn" href="#tab-edu-progs">Образовательные программы</a>
+        </div>
+      </div>
+    </main>
+    <script src="bundle.js"></script>
+  </body>
+</html>
