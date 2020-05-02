@@ -16,6 +16,17 @@ class DebugPanelController {
       el.addEventListener(`click`, this._btnOnClick);
       this._bindedElements.push(el);
     }
+
+    this._element
+      .querySelector(`.debug-panel__abit-count`)
+      .addEventListener(`change`, (event) => {
+        const btnAddAbits = this._element.querySelector(
+          `.debug-panel__btn--add-abits`
+        );
+        btnAddAbits.textContent = btnAddAbits.textContent
+          .trim()
+          .replace(/\d+/, event.target.value);
+      });
   }
 
   unbind() {
