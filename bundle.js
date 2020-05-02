@@ -16006,6 +16006,17 @@ class DebugPanelController {
       el.addEventListener(`click`, this._btnOnClick);
       this._bindedElements.push(el);
     }
+
+    this._element
+      .querySelector(`.debug-panel__abit-count`)
+      .addEventListener(`change`, (event) => {
+        const btnAddAbits = this._element.querySelector(
+          `.debug-panel__btn--add-abits`
+        );
+        btnAddAbits.textContent = btnAddAbits.textContent
+          .trim()
+          .replace(/\d+/, event.target.value);
+      });
   }
 
   unbind() {
@@ -16016,6 +16027,9 @@ class DebugPanelController {
 
   _btnOnClick(event) {
     debug(`btnOnClick click, event %O`, event);
+
+    // FIXME сделать обновление компонентов без перезагрузки страницы window.location.reload()
+    // потому что при перезагрузке сбрасывается seedrandom
 
     if (event.target.classList.contains(`debug-panel__btn--clear`)) {
       this._api.clear((err) => {
@@ -16131,27 +16145,22 @@ class EduProgsListController extends _abstract_list_controller__WEBPACK_IMPORTED
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAbits", function() { return getAbits; });
-/* harmony import */ var seedrandom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! seedrandom */ "./node_modules/seedrandom/index.js");
-/* harmony import */ var seedrandom__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(seedrandom__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _applications__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./applications */ "./src/js/data/applications.js");
-/* harmony import */ var _fio__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./fio */ "./src/js/data/fio/index.js");
-/* harmony import */ var _schools__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./schools */ "./src/js/data/schools.js");
-/* harmony import */ var _addresses__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./addresses */ "./src/js/data/addresses.js");
-/* harmony import */ var _tel_codes__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./tel-codes */ "./src/js/data/tel-codes.js");
-/* harmony import */ var _memos__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./memos */ "./src/js/data/memos.js");
+/* harmony import */ var _applications__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./applications */ "./src/js/data/applications.js");
+/* harmony import */ var _fio__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fio */ "./src/js/data/fio/index.js");
+/* harmony import */ var _schools__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./schools */ "./src/js/data/schools.js");
+/* harmony import */ var _addresses__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./addresses */ "./src/js/data/addresses.js");
+/* harmony import */ var _tel_codes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./tel-codes */ "./src/js/data/tel-codes.js");
+/* harmony import */ var _memos__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./memos */ "./src/js/data/memos.js");
 const debug = __webpack_require__(/*! debug */ "./node_modules/debug/src/browser.js")("abit:fake-data/abit");
 
 
-const rng = seedrandom__WEBPACK_IMPORTED_MODULE_0___default()(`1`);
 
 
 
 
 
 
-
-
-const randomDate = (fromDate, toDate) => {
+const randomDate = (rng, fromDate, toDate) => {
   const d1 = new Date(fromDate);
   const d2 = new Date(toDate);
 
@@ -16170,11 +16179,11 @@ const randomDate = (fromDate, toDate) => {
   return rd.toISOString().slice(0, 10);
 };
 
-function getAbits(n) {
+function getAbits(rng, n) {
   const abits = [];
   for (let i = 0; i < n; i++) {
     const gender = rng() < 0.35 ? `ж` : `м`;
-    const fio = Object(_fio__WEBPACK_IMPORTED_MODULE_2__["getFio"])(gender);
+    const fio = Object(_fio__WEBPACK_IMPORTED_MODULE_1__["getFio"])(rng, gender);
     let certScore = Math.floor((rng() * 5 + 1) * 1e4) * 1e-4;
     if (certScore > 5) {
       certScore = 5;
@@ -16183,7 +16192,7 @@ function getAbits(n) {
     const abit = {
       fio, // ФИО (личный код, в случае полных тезок добавить к ФИО город или другой идентификатор для отличия тезок)
       gender,
-      regDate: randomDate(`2020-03-01`, `2020-08-15`), // дата регистрации в приемной комиссии
+      regDate: randomDate(rng, `2020-03-01`, `2020-08-15`), // дата регистрации в приемной комиссии
       certScore: certScore.toFixed(4), // средний балл аттестата
       extraScore: (Math.floor(rng() * 10) / 10).toFixed(1), // дополнительный балл
       totalScore: null, // конкурсный балл
@@ -16192,21 +16201,21 @@ function getAbits(n) {
       hasFluoro: rng() < 0.8, // наличие флюорограммы
       hasVaccine: rng() < 0.7, // наличие прививок
       needDorm: Math.floor(rng() * 3), // требуется общежитие
-      address: _addresses__WEBPACK_IMPORTED_MODULE_4__["default"][Math.floor(rng() * _addresses__WEBPACK_IMPORTED_MODULE_4__["default"].length)], // адрес
+      address: _addresses__WEBPACK_IMPORTED_MODULE_3__["default"][Math.floor(rng() * _addresses__WEBPACK_IMPORTED_MODULE_3__["default"].length)], // адрес
       tel:
         `8` +
-        _tel_codes__WEBPACK_IMPORTED_MODULE_5__["default"][Math.floor(rng() * _tel_codes__WEBPACK_IMPORTED_MODULE_5__["default"].length)] +
+        _tel_codes__WEBPACK_IMPORTED_MODULE_4__["default"][Math.floor(rng() * _tel_codes__WEBPACK_IMPORTED_MODULE_4__["default"].length)] +
         `0000000`.replace(/0/g, () => String(Math.floor(rng() * 10))), // телефон
-      school: _schools__WEBPACK_IMPORTED_MODULE_3__["default"][Math.floor(rng() * _schools__WEBPACK_IMPORTED_MODULE_3__["default"].length)], // школа
+      school: _schools__WEBPACK_IMPORTED_MODULE_2__["default"][Math.floor(rng() * _schools__WEBPACK_IMPORTED_MODULE_2__["default"].length)], // школа
       schoolYear: 2020 - Math.floor(rng() + 0.1) - Math.floor(rng() + 0.1), // год окончания школы
-      memo: rng() < 0.5 ? _memos__WEBPACK_IMPORTED_MODULE_6__["default"][Math.floor(rng() * _memos__WEBPACK_IMPORTED_MODULE_6__["default"].length)] : ``
+      memo: rng() < 0.5 ? _memos__WEBPACK_IMPORTED_MODULE_5__["default"][Math.floor(rng() * _memos__WEBPACK_IMPORTED_MODULE_5__["default"].length)] : ``
     };
 
     abit.totalScore = (
       Number(abit.certScore) + Number(abit.extraScore)
     ).toFixed(4);
 
-    abit.applications = Object(_applications__WEBPACK_IMPORTED_MODULE_1__["getApplications"])(3);
+    abit.applications = Object(_applications__WEBPACK_IMPORTED_MODULE_0__["getApplications"])(3);
 
     abits.push(abit);
   }
@@ -16623,8 +16632,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _female_first_names__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./female-first-names */ "./src/js/data/fio/female-first-names.js");
 /* harmony import */ var _female_middle_names__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./female-middle-names */ "./src/js/data/fio/female-middle-names.js");
 /* harmony import */ var _female_last_names__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./female-last-names */ "./src/js/data/fio/female-last-names.js");
-/* harmony import */ var seedrandom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! seedrandom */ "./node_modules/seedrandom/index.js");
-/* harmony import */ var seedrandom__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(seedrandom__WEBPACK_IMPORTED_MODULE_6__);
 
 
 
@@ -16633,10 +16640,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-const rng = seedrandom__WEBPACK_IMPORTED_MODULE_6___default()(`1`);
-
-function getFio(gender) {
+function getFio(rng, gender) {
   if (!/^[мж]$/.test(gender)) {
     throw Error(`неизвестный пол: ${gender}`);
   }
@@ -17308,14 +17312,20 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAbits", function() { return getAbits; });
 /* harmony import */ var _edu_progs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./edu-progs */ "./src/js/data/edu-progs.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "eduProgs", function() { return _edu_progs__WEBPACK_IMPORTED_MODULE_0__["default"]; });
 
 /* harmony import */ var _abits__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./abits */ "./src/js/data/abits.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getAbits", function() { return _abits__WEBPACK_IMPORTED_MODULE_1__["getAbits"]; });
+/* harmony import */ var seedrandom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! seedrandom */ "./node_modules/seedrandom/index.js");
+/* harmony import */ var seedrandom__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(seedrandom__WEBPACK_IMPORTED_MODULE_2__);
 
 
 
+
+const rng = seedrandom__WEBPACK_IMPORTED_MODULE_2___default()(`1`);
+
+const getAbits = (n) => Object(_abits__WEBPACK_IMPORTED_MODULE_1__["getAbits"])(rng, n);
 
 
 
@@ -17516,8 +17526,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _controllers_edu_progs_list_controller__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./controllers/edu-progs-list-controller */ "./src/js/controllers/edu-progs-list-controller.js");
 /* harmony import */ var _controllers_abits_list_controller__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./controllers/abits-list-controller */ "./src/js/controllers/abits-list-controller.js");
 /* harmony import */ var _controllers_debug_panel_controller__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./controllers/debug-panel-controller */ "./src/js/controllers/debug-panel-controller.js");
-localStorage.debug = `abit:*`;
-console.log(`localStorage.debug = ${localStorage.debug}`);
+if (!localStorage.debug) {
+  localStorage.debug = `abit:*`;
+}
+console.log(`localStorage.debug: "${localStorage.debug}"`);
 
 
 
