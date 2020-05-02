@@ -6,10 +6,7 @@ import femaleFirstNames from "./female-first-names";
 import femaleMiddleNames from "./female-middle-names";
 import femaleLastNames from "./female-last-names";
 
-import seedrandom from "seedrandom";
-const rng = seedrandom(`1`);
-
-function getFio(gender) {
+function getFio(rng, gender) {
   if (!/^[мж]$/.test(gender)) {
     throw Error(`неизвестный пол: ${gender}`);
   }

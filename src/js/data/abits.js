@@ -1,8 +1,5 @@
 const debug = require("debug")("abit:fake-data/abit");
 
-import seedrandom from "seedrandom";
-const rng = seedrandom(`1`);
-
 import {getApplications} from "./applications";
 import {getFio} from "./fio";
 import schools from "./schools";
@@ -10,7 +7,7 @@ import addresses from "./addresses";
 import telCodes from "./tel-codes";
 import memos from "./memos";
 
-const randomDate = (fromDate, toDate) => {
+const randomDate = (rng, fromDate, toDate) => {
   const d1 = new Date(fromDate);
   const d2 = new Date(toDate);
 
@@ -29,11 +26,11 @@ const randomDate = (fromDate, toDate) => {
   return rd.toISOString().slice(0, 10);
 };
 
-function getAbits(n) {
+function getAbits(rng, n) {
   const abits = [];
   for (let i = 0; i < n; i++) {
     const gender = rng() < 0.35 ? `ж` : `м`;
-    const fio = getFio(gender);
+    const fio = getFio(rng, gender);
     let certScore = Math.floor((rng() * 5 + 1) * 1e4) * 1e-4;
     if (certScore > 5) {
       certScore = 5;
@@ -42,7 +39,7 @@ function getAbits(n) {
     const abit = {
       fio, // ФИО (личный код, в случае полных тезок добавить к ФИО город или другой идентификатор для отличия тезок)
       gender,
-      regDate: randomDate(`2020-03-01`, `2020-08-15`), // дата регистрации в приемной комиссии
+      regDate: randomDate(rng, `2020-03-01`, `2020-08-15`), // дата регистрации в приемной комиссии
       certScore: certScore.toFixed(4), // средний балл аттестата
       extraScore: (Math.floor(rng() * 10) / 10).toFixed(1), // дополнительный балл
       totalScore: null, // конкурсный балл
