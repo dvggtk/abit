@@ -1,4 +1,29 @@
 .abits-list {
   list-style: none;
+  counter-reset: item;
   padding: 0;
+}
+
+.abits-list__item {
+  position: relative;
+  padding-left: 50px;
+
+  border: 1px dotted green;
+}
+
+.abits-list__item:before {
+  counter-increment: item;
+  content: counter(item);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  bottom: 5px;
+  width: 40px;
+
+  background-color: silver;
 }
