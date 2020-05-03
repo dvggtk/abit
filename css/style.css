@@ -197,6 +197,37 @@ input[type="radio"].visually-hidden {
   background-size: calc(1.4em - 2px) calc(1.4em - 2px);
   background-position: 0 0;
 }
+.list {
+  position: relative;
+  list-style: none;
+  counter-reset: item;
+  padding: 0;
+}
+.list__item {
+  position: relative;
+  padding-left: 50px;
+  border: 1px dotted green;
+  min-height: 60px;
+}
+.list__item::before {
+  counter-increment: item;
+  content: counter(item);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  bottom: 5px;
+  width: 40px;
+  background-color: silver;
+}
+.list__btn--edit {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  width: 40px;
+}
 .edu-progs {
   padding: 10px;
 }
@@ -477,29 +508,6 @@ input[type="radio"].visually-hidden {
 }
 .abit-view__field--need-dorm::before {
   content: "🏨 ";
-}
-.abits-list {
-  list-style: none;
-  counter-reset: item;
-  padding: 0;
-}
-.abits-list__item {
-  position: relative;
-  padding-left: 50px;
-  border: 1px dotted green;
-}
-.abits-list__item:before {
-  counter-increment: item;
-  content: counter(item);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  bottom: 5px;
-  width: 40px;
-  background-color: silver;
 }
 .application {
   width: fit-content;

@@ -15004,7 +15004,7 @@ class AbitForm extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["default
 
   getTemplate() {
     // prettier-ignore
-    return `<li class="abits-list__item">
+    return `<li class="list__item">
     <article class="abit-form">
       <h3 class="visually-hidden">Форма редактирования абитуриента</h3>
       <form class="form form--mode-${this._formMode}">
@@ -15161,7 +15161,8 @@ class AbitView extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["default
   }
 
   getTemplate() {
-    return `<li class="abits-list__item">
+    return `<li class="abits-list__item list__item">
+    <button class="list__btn list__btn--edit" type="button">✏️</button>
     <article class="abit">
       <h3 class="visually-hidden">просмотр абитуриента</h3>
       <div class="abit__row">
@@ -15245,7 +15246,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class AbitsList extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["default"] {
   getTemplate() {
-    return `<ul class="abits-list"></ul>`;
+    return `<ul class="abits-list list"></ul>`;
   }
 }
 
@@ -15416,7 +15417,7 @@ class EduProgForm extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["defa
 
   getTemplate() {
     // prettier-ignore
-    return `<li class="edu-progs__item"><form class="edu-prog-form edu-prog-form--mode-${this._formMode} form form--mode-${this._formMode}">
+    return `<li class="list__item"><form class="edu-prog-form edu-prog-form--mode-${this._formMode} form form--mode-${this._formMode}">
     <section class="edu-prog-form__data">
         <div class="edu-prog-form__data-row">
             <label class="edu-prog-form__control edu-prog-form__control--code">
@@ -15495,19 +15496,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class EduProgView extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["default"] {
-  constructor(
-    {
-      code,
-      speciality,
-      qualification,
-      eduForm,
-      baseEduLevel,
-      duration,
-      finSource,
-      placesNumber
-    },
-    isActive
-  ) {
+  constructor({
+    code,
+    speciality,
+    qualification,
+    eduForm,
+    baseEduLevel,
+    duration,
+    finSource,
+    placesNumber
+  }) {
     super();
 
     this._code = code;
@@ -15518,38 +15516,24 @@ class EduProgView extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["defa
     this._duration = duration;
     this._finSource = finSource;
     this._placesNumber = placesNumber;
-
-    this._isActive = isActive;
   }
 
   getTemplate() {
+    // prettier-ignore
     return `
-  <li class="edu-progs__item${
-    this._isActive ? ` edu-progs__item--active` : ``
-  }"><article class="edu-prog">
-    <div class="edu-prog__field edu-prog__field--code">${this._code}</div>
-    <div class="edu-prog__field edu-prog__field--speciality">${
-      this._speciality
-    }</div>
-    <div class="edu-prog__field edu-prog__field--qualification">${
-      this._qualification
-    }</div>
-    <div class="edu-prog__field edu-prog__field--edu-form">${
-      this._eduForm
-    }</div>
-    <div class="edu-prog__field edu-prog__field--edu-base-level">${
-      this._baseEduLevel
-    }</div>
-    <div class="edu-prog__field edu-prog__field--duration">${
-      this._duration
-    }</div>
-    <div class="edu-prog__field edu-prog__field--fin-source">${
-      this._finSource
-    }</div>
-    <div class="edu-prog__field edu-prog__field--places-number">${
-      this._placesNumber
-    }</div>
-  </article></li>`.trim();
+    <li class="list__item">
+      <button class="list__btn list__btn--edit" type="button">✏️</button>
+      <article class="edu-prog">
+        <div class="edu-prog__field edu-prog__field--code">${this._code}</div>
+        <div class="edu-prog__field edu-prog__field--speciality">${this._speciality}</div>
+        <div class="edu-prog__field edu-prog__field--qualification">${this._qualification}</div>
+        <div class="edu-prog__field edu-prog__field--edu-form">${this._eduForm}</div>
+        <div class="edu-prog__field edu-prog__field--edu-base-level">${this._baseEduLevel}</div>
+        <div class="edu-prog__field edu-prog__field--duration">${this._duration}</div>
+        <div class="edu-prog__field edu-prog__field--fin-source">${this._finSource}</div>
+        <div class="edu-prog__field edu-prog__field--places-number">${this._placesNumber}</div>
+      </article>
+    </li>`.trim();
   }
 }
 
@@ -15572,7 +15556,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class EduProgsList extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["default"] {
   getTemplate() {
-    return `<ul class="edu-progs__list"></ul>`;
+    return `<ul class="edu-progs__list list"></ul>`;
   }
 }
 
@@ -15902,6 +15886,8 @@ class AbstractListController {
       default:
         throw Error();
     }
+
+    this._onEdit = this._onEdit.bind(this);
   }
 
   _getEntryFromForm() {
@@ -15917,12 +15903,19 @@ class AbstractListController {
     return entry;
   }
 
+  _onEdit(event) {
+    debug(`onEdit`);
+    this._item.mode = _utils__WEBPACK_IMPORTED_MODULE_0__["ModelItemMode"].EDIT;
+    debug(`onEdit, this._item: %O`, this._item);
+  }
+
   bind() {
-    this._view.getElement().addEventListener(`dblclick`, (event) => {
-      debug(`dblclick`);
-      this._item.mode = _utils__WEBPACK_IMPORTED_MODULE_0__["ModelItemMode"].EDIT;
-      debug(`dblclick, this._item: %O`, this._item);
-    });
+    this._view
+      .getElement()
+      .querySelector(`.list__btn--edit`)
+      .addEventListener(`click`, this._onEdit);
+
+    this._view.getElement().addEventListener(`dblclick`, this._onEdit);
 
     this._form
       .getElement()
