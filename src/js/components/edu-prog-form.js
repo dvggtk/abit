@@ -34,7 +34,7 @@ class EduProgForm extends AbstractComponent {
 
   getTemplate() {
     // prettier-ignore
-    return `<li class="edu-progs__item"><form class="edu-prog-form edu-prog-form--mode-${this._formMode} form form--mode-${this._formMode}">
+    return `<li class="list__item"><form class="edu-prog-form edu-prog-form--mode-${this._formMode} form form--mode-${this._formMode}">
     <section class="edu-prog-form__data">
         <div class="edu-prog-form__data-row">
             <label class="edu-prog-form__control edu-prog-form__control--code">

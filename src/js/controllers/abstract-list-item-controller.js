@@ -72,6 +72,8 @@ class AbstractListController {
       default:
         throw Error();
     }
+
+    this._onEdit = this._onEdit.bind(this);
   }
 
   _getEntryFromForm() {
@@ -87,12 +89,19 @@ class AbstractListController {
     return entry;
   }
 
+  _onEdit(event) {
+    debug(`onEdit`);
+    this._item.mode = ModelItemMode.EDIT;
+    debug(`onEdit, this._item: %O`, this._item);
+  }
+
   bind() {
-    this._view.getElement().addEventListener(`dblclick`, (event) => {
-      debug(`dblclick`);
-      this._item.mode = ModelItemMode.EDIT;
-      debug(`dblclick, this._item: %O`, this._item);
-    });
+    this._view
+      .getElement()
+      .querySelector(`.list__btn--edit`)
+      .addEventListener(`click`, this._onEdit);
+
+    this._view.getElement().addEventListener(`dblclick`, this._onEdit);
 
     this._form
       .getElement()

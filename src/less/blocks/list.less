@@ -1,0 +1,40 @@
+.list {
+  position: relative;
+  list-style: none;
+  counter-reset: item;
+  padding: 0;
+}
+
+.list__item {
+  position: relative;
+  padding-left: 50px;
+  border: 1px dotted green;
+  min-height: 60px;
+
+  &::before {
+    counter-increment: item;
+    content: counter(item);
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    bottom: 5px;
+    width: 40px;
+
+    background-color: silver;
+  }
+}
+
+
+.list__btn--edit {
+  position: absolute;
+
+  left: 5px;
+  top: 5px;
+
+  width: 40px;
+}

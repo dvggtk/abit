@@ -57,7 +57,7 @@ class AbitForm extends AbstractComponent {
 
   getTemplate() {
     // prettier-ignore
-    return `<li class="abits-list__item">
+    return `<li class="list__item">
     <article class="abit-form">
       <h3 class="visually-hidden">Форма редактирования абитуриента</h3>
       <form class="form form--mode-${this._formMode}">

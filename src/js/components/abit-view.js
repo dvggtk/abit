@@ -42,7 +42,8 @@ class AbitView extends AbstractComponent {
   }
 
   getTemplate() {
-    return `<li class="abits-list__item">
+    return `<li class="abits-list__item list__item">
+    <button class="list__btn list__btn--edit" type="button">✏️</button>
     <article class="abit">
       <h3 class="visually-hidden">просмотр абитуриента</h3>
       <div class="abit__row">
