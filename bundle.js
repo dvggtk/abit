@@ -17367,7 +17367,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const rng = seedrandom__WEBPACK_IMPORTED_MODULE_2___default()(`1`);
+// FIXME убрать Math.random() после реализации обновления без перезагрузки страницы целиком
+const rng = seedrandom__WEBPACK_IMPORTED_MODULE_2___default()(Math.random());
 
 const getAbits = (n) => Object(_abits__WEBPACK_IMPORTED_MODULE_1__["getAbits"])(rng, n);
 
