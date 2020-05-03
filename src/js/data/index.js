@@ -2,7 +2,8 @@ import eduProgs from "./edu-progs";
 import {getAbits as _getAbits} from "./abits";
 
 import seedrandom from "seedrandom";
-const rng = seedrandom(`1`);
+// FIXME убрать Math.random() после реализации обновления без перезагрузки страницы целиком
+const rng = seedrandom(Math.random());
 
 const getAbits = (n) => _getAbits(rng, n);
 
