@@ -57,14 +57,39 @@
 
 .abit__field--fio {
   margin-right: auto;
+  font-weight: bold;
 }
 
-[data-gender="ж"].abit__field--fio::before {
-  content: "♀"
+[data-gender="ж"].abit__field--fio {
+  position: relative;
+  padding-left: 23px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+
+    background-image: url("../img/female-sign.svg");
+  }
 }
 
-[data-gender="м"].abit__field--fio::before {
-  content: "♂️"
+[data-gender="м"].abit__field--fio {
+  position: relative;
+  padding-left: 23px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+
+    background-image: url("../img/male-sign.svg");
+  }
 }
 
 .abit__field--need-dorm::before {

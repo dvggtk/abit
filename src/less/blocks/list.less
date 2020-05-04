@@ -8,6 +8,7 @@
 .list__item {
   position: relative;
   padding-left: 50px;
+  padding-right: 50px;
   border: 1px dotted green;
   min-height: 60px;
 
@@ -17,7 +18,7 @@
 
     display: flex;
     justify-content: center;
-    align-items: flex-end;
+    align-items: center;
 
     position: absolute;
     top: 5px;
@@ -27,14 +28,25 @@
 
     background-color: silver;
   }
-}
 
+  &::after {
+    content: "";
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    bottom: 5px;
+    width: 40px;
+
+    background-color: silver;
+  }
+}
 
 .list__btn--edit {
   position: absolute;
 
-  left: 5px;
+  right: 5px;
   top: 5px;
 
   width: 40px;
+  z-index: 10;
 }

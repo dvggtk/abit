@@ -1,0 +1,69 @@
+.field {
+
+}
+
+.field--checkbox {
+  height: 30px;
+
+  padding-left: 30px;
+  margin-right: 5px;
+  display: block;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 30px;
+    width: 30px;
+
+    background-color: silver;
+  }
+
+  &[data-checked="true"]::before {
+    background-color: green;
+    color: white;
+  }
+}
+
+.field--edu-cert::before {
+  background-color: transparent;
+  background-image: url(../img/edu-cert-off.svg);
+  background-size: contain;
+}
+.field--edu-cert[data-checked="true"]::before {
+  background-color: transparent;
+  background-image: url(../img/edu-cert-on.svg);
+}
+
+
+.field--medical-cert::before {
+  background-color: transparent;
+  background-image: url(../img/medical-cert-off.svg);
+  background-size: contain;
+}
+.field--medical-cert[data-checked="true"]::before {
+  background-color: transparent;
+  background-image: url(../img/medical-cert-on.svg);
+}
+
+.field--fluoro::before {
+  background-color: transparent;
+  background-image: url(../img/lungs-off.svg);
+  background-size: contain;
+}
+.field--fluoro[data-checked="true"]::before {
+  background-color: transparent;
+  background-image: url(../img/lungs-on.svg);
+}
+
+.field--vaccine::before {
+  background-color: transparent;
+  background-image: url(../img/syringe-off.svg);
+  background-size: contain;
+}
+.field--vaccine[data-checked="true"]::before {
+  background-color: transparent;
+  background-image: url(../img/syringe-on.svg);
+}
