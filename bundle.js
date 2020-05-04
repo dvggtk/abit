@@ -15129,7 +15129,7 @@ class AbitView extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["default
     certScore,
     extraScore,
     totalScore,
-    hasCertOriginal,
+    hasEduCertOriginal,
     hasMedicalCert,
     hasFluoro,
     hasVaccine,
@@ -15148,7 +15148,7 @@ class AbitView extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["default
     this._certScore = certScore;
     this._extraScore = extraScore;
     this._totalScore = totalScore;
-    this._hasCertOriginal = hasCertOriginal;
+    this._hasEduCertOriginal = hasEduCertOriginal;
     this._hasMedicalCert = hasMedicalCert;
     this._hasFluoro = hasFluoro;
     this._hasVaccine = hasVaccine;
@@ -15161,64 +15161,49 @@ class AbitView extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["default
   }
 
   getTemplate() {
+    // prettier-ignore
     return `<li class="abits-list__item list__item">
     <button class="list__btn list__btn--edit" type="button">✏️</button>
     <article class="abit">
       <h3 class="visually-hidden">просмотр абитуриента</h3>
       <div class="abit__row">
         <div class="abit__field abit__field--reg-date">${this._regDate}</div>
-        <div class="abit__field abit__field--fio" data-gender="${
-          this._gender
-        }">${this._fio}</div>
+        <div class="abit__field abit__field--fio" data-gender="${this._gender}">${this._fio}</div>
+        <div class="field-container">
+          <div class="field field--checkbox field--edu-cert" data-checked="${this._hasEduCertOriginal}"><span class="visually-hidden">Подлинник аттестата</span></div>
+          <div class="field field--checkbox field--medical-cert" data-checked="${this._hasMedicalCert}"><span class="visually-hidden">Медицинская справка</span></div>
+          <div class="field field--checkbox field--fluoro" data-checked="${this._hasFluoro}"><span class="visually-hidden">Флюорограмма</span></div>
+          <div class="field field--checkbox field--vaccine" data-checked="${this._hasVaccine}"><span class="visually-hidden">Прививки</span></div>
+        </div>
         <div class="abit__field-container abit__field-container--score">
-          <div class="abit__field abit__field--cert-score">${
-            this._certScore
-          }</div>
-          <div class="abit__field abit__field--extra-score">${
-            this._extraScore
-          }</div>
-          <div class="abit__field abit__field--total-score">${
-            this._totalScore
-          }</div>
+          <div class="abit__field abit__field--cert-score">${this._certScore}</div>
+          <div class="abit__field abit__field--extra-score">${this._extraScore}</div>
+          <div class="abit__field abit__field--total-score">${this._totalScore}</div>
         </div>
       </div>
+<!--
       <div class="abit__row">
-        <div class="abit__field abit__field--has-cert-original">
-          <div class="checkbox" data-checked="${
-            this._hasCertOriginal
-          }"><span class="checkbox__indicator"></span><span>подлинник аттестата</span></div>
+        <div class="abit__field abit__field--has-edu-cert-original">
+          <div class="checkbox" data-checked="${this._hasEduCertOriginal}"><span class="checkbox__indicator"></span><span>подлинник аттестата</span></div>
         </div>
         <div class="abit__field abit__field--has-medical-cert">
-          <div class="checkbox" data-checked="${
-            this._hasMedicalCert
-          }"><span class="checkbox__indicator"></span><span>медицинская справка</span></div>
+          <div class="checkbox" data-checked="${this._hasMedicalCert}"><span class="checkbox__indicator"></span><span>медицинская справка</span></div>
         </div>
         <div class="abit__field abit__field--has-fluoro">
-          <div class="checkbox" data-checked="${
-            this._hasFluoro
-          }"><span class="checkbox__indicator"></span><span>флюорография</span></div>
+          <div class="checkbox" data-checked="${this._hasFluoro}"><span class="checkbox__indicator"></span><span>флюорография</span></div>
         </div>
         <div class="abit__field abit__field--has-vaccine">
-          <div class="checkbox" data-checked="${
-            this._hasVaccine
-          }"><span class="checkbox__indicator"></span><span>прививки</span></div>
+          <div class="checkbox" data-checked="${this._hasVaccine}"><span class="checkbox__indicator"></span><span>прививки</span></div>
         </div>
       </div>
+-->
         <div class="abit-view__row">
-        <div class="abit-view__field abit-view__field--address">${
-          this._address
-        }</div>
-        <div class="abit-view__field abit-view__field--tel"><a href="tel:${
-          this._tel
-        }">${this._tel}</a></div>
+        <div class="abit-view__field abit-view__field--address">${this._address}</div>
+        <div class="abit-view__field abit-view__field--tel"><a href="tel:${this._tel}">${this._tel}</a></div>
       </div>
       <div class="abit__row">
-        <div class="abit__field abit__field--need-dorm">${
-          [`не требуется`, `требуется`, `приоритетное`][this._needDorm]
-        }</div>
-        <div class="abit__field abit__field--school-year">${
-          this._schoolYear
-        }</div>
+        <div class="abit__field abit__field--need-dorm">${[`не требуется`, `требуется`, `приоритетное`][this._needDorm]}</div>
+        <div class="abit__field abit__field--school-year">${this._schoolYear}</div>
         <div class="abit__field abit__field--school">${this._school}</div>
         <div class="abit__field abit__field--memo">${this._memo}</div>
       </div>
