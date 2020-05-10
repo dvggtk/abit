@@ -1,5 +1,5 @@
 import seedrandom from "seedrandom";
-const rng = seedrandom(`1`);
+const rng = seedrandom(Math.random());
 
 import eduProgs from "./edu-progs";
 
