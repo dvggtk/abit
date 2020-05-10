@@ -16574,7 +16574,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var seedrandom__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(seedrandom__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _edu_progs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./edu-progs */ "./src/js/data/edu-progs.js");
 
-const rng = seedrandom__WEBPACK_IMPORTED_MODULE_0___default()(`1`);
+const rng = seedrandom__WEBPACK_IMPORTED_MODULE_0___default()(Math.random());
 
 
 
