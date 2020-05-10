@@ -14928,7 +14928,9 @@ class PouchDBApi extends _abstract_api__WEBPACK_IMPORTED_MODULE_0__["default"] {
   }
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (PouchDBApi);
+const pouchDBApi = new PouchDBApi();
+
+/* harmony default export */ __webpack_exports__["default"] = (pouchDBApi);
 
 
 /***/ }),
@@ -15138,7 +15140,8 @@ class AbitView extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["default
     schoolYear,
     address,
     tel,
-    memo
+    memo,
+    applications
   }) {
     super();
 
@@ -15158,6 +15161,8 @@ class AbitView extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["default
     this._address = address;
     this._tel = tel;
     this._memo = memo;
+
+    this._applications = applications;
   }
 
   getTemplate() {
@@ -15169,16 +15174,16 @@ class AbitView extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["default
       <div class="abit__row">
         <div class="abit__field abit__field--reg-date">${this._regDate}</div>
         <div class="abit__field abit__field--fio" data-gender="${this._gender}">${this._fio}</div>
+        <div class="abit__field-container abit__field-container--score">
+          <div class="abit__field abit__field--cert-score">${this._certScore}</div>
+          <div class="abit__field abit__field--extra-score">${this._extraScore}</div>
+          <div class="abit__field abit__field--total-score">${this._totalScore}</div>
+        </div>
         <div class="field-container">
           <div class="field field--checkbox field--edu-cert" data-checked="${this._hasEduCertOriginal}"><span class="visually-hidden">Подлинник аттестата</span></div>
           <div class="field field--checkbox field--medical-cert" data-checked="${this._hasMedicalCert}"><span class="visually-hidden">Медицинская справка</span></div>
           <div class="field field--checkbox field--fluoro" data-checked="${this._hasFluoro}"><span class="visually-hidden">Флюорограмма</span></div>
           <div class="field field--checkbox field--vaccine" data-checked="${this._hasVaccine}"><span class="visually-hidden">Прививки</span></div>
-        </div>
-        <div class="abit__field-container abit__field-container--score">
-          <div class="abit__field abit__field--cert-score">${this._certScore}</div>
-          <div class="abit__field abit__field--extra-score">${this._extraScore}</div>
-          <div class="abit__field abit__field--total-score">${this._totalScore}</div>
         </div>
       </div>
 <!--
@@ -15308,31 +15313,29 @@ class ApplicationsForm extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__[
   }
 
   getTemplate() {
-    const eduProgs = [`ЗИО`, `СЭЗИС`, `БУ`, `ТОРАТ`, `ПСО`];
-
     const applicationsListItems = this._applications
       .map((application) => {
         return `<li class="applications-list__item">
         <div class="application">
           <label class="application__edu-prog">
-            <select>${eduProgs
-              .map(
-                (eduProg) =>
-                  `<option value="${eduProg}"${
-                    application.eduProg === eduProg ? ` selected` : ``
-                  }>${eduProg}</option>`
-              )
-              .join(``)}
-            </select>
+            <div class="edu-prog-select-container" data-value="${
+              application.eduProg
+            }"></div>
           </label>
           <label class="application__grade">
-            <input size="1" maxlength="1" pattern="[12345]"/>
+            <input size="1" maxlength="1" pattern="[12345]" value="${
+              application.grade
+            }"/>
           </label>
-          <label class="application__hasEduCertOriginal">
-            <input type="checkbox" /><span>приоритет</span>
+          <label class="application__priority">
+            <input type="checkbox" value="priority"${
+              application.priority ? ` checked` : ``
+            }/><span>приоритет</span>
           </label>
           <label class="application__active">
-            <input type="checkbox"/><span>показывать?</span>
+            <input type="checkbox" value="active"${
+              application.active ? ` checked` : ``
+            }/><span>показывать?</span>
           </label>
           <button class="application__btn-delete" type="button">удалить</button>
         </div>
@@ -15345,7 +15348,7 @@ class ApplicationsForm extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__[
       <div class="applications__list-container">
         <ul class="applications-list">${applicationsListItems}</ul>
       </div>
-      <button class="application__btn-add" type="button">добавить заявление</button>
+      <button class="applications__btn-add" type="button">добавить заявление</button>
     </section>`;
   }
 }
@@ -15468,6 +15471,79 @@ class EduProgForm extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["defa
 
 /***/ }),
 
+/***/ "./src/js/components/edu-prog-select.js":
+/*!**********************************************!*\
+  !*** ./src/js/components/edu-prog-select.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _abstract_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract-component */ "./src/js/components/abstract-component.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils */ "./src/js/utils.js");
+const debug = __webpack_require__(/*! debug */ "./node_modules/debug/src/browser.js")("abit:edu-prog-select-controller");
+
+
+
+
+const BASE_EDU_LEVEL_9 = `9 классов`;
+const BASE_EDU_LEVEL_11 = `11 классов`;
+const FULL_TIME = `очная`;
+const DISTANCE = `заочная`;
+
+class EduProgSelect extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["default"] {
+  constructor(eduProgs, selected) {
+    super();
+    this._eduProgs = Object(_utils__WEBPACK_IMPORTED_MODULE_1__["clone"])(eduProgs);
+    this._selected = selected;
+
+    //1 Очные 9 классов
+    this._eduProgs9 = this._eduProgs.filter(
+      (eduProg) => eduProg.baseEduLevel === BASE_EDU_LEVEL_9
+    );
+
+    //2 Очные 11 классов
+    this._eduProgs11fullTime = this._eduProgs.filter(
+      (eduProg) =>
+        eduProg.baseEduLevel === BASE_EDU_LEVEL_11 &&
+        eduProg.eduForm === FULL_TIME
+    );
+
+    //3 Заочные
+    this._eduProgsDistance = this._eduProgs.filter(
+      (eduProg) => eduProg.eduForm === DISTANCE
+    );
+  }
+
+  getTemplate() {
+    const getOptions = (eduProgs) =>
+      eduProgs.reduce((acc, cur) => {
+        return (
+          acc +
+          `<option${cur.code === this._selected ? ` selected` : ``}>${
+            cur.code
+          }</option>`
+        );
+      }, ``);
+
+    // prettier-ignore
+    const html = `
+    <select class="edu-prog-select">
+      <optgroup label="11 классов. Очная">${getOptions(this._eduProgs11fullTime)}</optgroup>
+      <optgroup label="9 классов. Очная">${getOptions(this._eduProgs9)}</optgroup>
+      <optgroup label="Заочная">${getOptions(this._eduProgsDistance)}</optgroup>
+    </select>`.trim();
+
+    return html;
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (EduProgSelect);
+
+
+/***/ }),
+
 /***/ "./src/js/components/edu-prog-view.js":
 /*!********************************************!*\
   !*** ./src/js/components/edu-prog-view.js ***!
@@ -15562,7 +15638,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _abstract_list_item_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract-list-item-controller */ "./src/js/controllers/abstract-list-item-controller.js");
 /* harmony import */ var _components_abit_view__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/abit-view */ "./src/js/components/abit-view.js");
 /* harmony import */ var _components_abit_form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/abit-form */ "./src/js/components/abit-form.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./src/js/utils.js");
+/* harmony import */ var _edu_prog_select_controller__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./edu-prog-select-controller */ "./src/js/controllers/edu-prog-select-controller.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils */ "./src/js/utils.js");
 const debug = __webpack_require__(/*! debug */ "./node_modules/debug/src/browser.js")("abit:abit-controller");
 
 
@@ -15571,23 +15648,60 @@ const debug = __webpack_require__(/*! debug */ "./node_modules/debug/src/browser
 
 
 
+
+
 class AbitController extends _abstract_list_item_controller__WEBPACK_IMPORTED_MODULE_0__["default"] {
-  constructor(container, item) {
+  constructor(ownerListController, container, item) {
     debug(`constructor, item: %O`, item);
 
-    super(container, item, _components_abit_view__WEBPACK_IMPORTED_MODULE_1__["default"], _components_abit_form__WEBPACK_IMPORTED_MODULE_2__["default"]);
+    super(ownerListController, container, item, _components_abit_view__WEBPACK_IMPORTED_MODULE_1__["default"], _components_abit_form__WEBPACK_IMPORTED_MODULE_2__["default"]);
+  }
+
+  initComponents() {
+    super.initComponents();
+
+    const eduProgSelectContainers = this._form
+      .getElement()
+      .querySelectorAll(`.edu-prog-select-container`);
+
+    const eduProgs = this._ownerListController._eduProgsModel.items.map(
+      (el) => el.data
+    );
+
+    for (const selectContainer of eduProgSelectContainers) {
+      const selectController = new _edu_prog_select_controller__WEBPACK_IMPORTED_MODULE_3__["default"](
+        selectContainer,
+        eduProgs,
+        selectContainer.dataset.value
+      );
+    }
   }
 
   _getEntryFromForm() {
     const entry = super._getEntryFromForm();
 
-    //FIXME временная строка
+    const applicationElements = this._form
+      .getElement()
+      .querySelectorAll(`.applications .application`);
+
     entry.applications = [];
+
+    for (const app of applicationElements) {
+      const eduProg = app.querySelector(
+        `.application__edu-prog select.edu-prog-select`
+      ).value;
+      const grade = app.querySelector(`.application__grade input`).value;
+      const priority = app.querySelector(`.application__priority input`)
+        .checked;
+      const active = app.querySelector(`.application__active input`).checked;
+
+      entry.applications.push({eduProg, grade, priority, active});
+    }
 
     function sanitize(entry, fields) {
       for (const field of fields) {
         entry[field] =
-          entry.hasOwnProperty(field) && entry[field] === Object(_utils__WEBPACK_IMPORTED_MODULE_3__["toKebabCase"])(field);
+          entry.hasOwnProperty(field) && entry[field] === Object(_utils__WEBPACK_IMPORTED_MODULE_4__["toKebabCase"])(field);
       }
     }
 
@@ -15598,7 +15712,88 @@ class AbitController extends _abstract_list_item_controller__WEBPACK_IMPORTED_MO
       `hasVaccine`
     ]);
 
+    debug(`entry %O`, entry);
     return entry;
+  }
+
+  bind() {
+    super.bind();
+
+    this._form
+      .getElement()
+      .querySelector(`.applications`)
+      .addEventListener(`click`, (event) => {
+        if (event.target.classList.contains(`application__btn-delete`)) {
+          let li = event.target;
+          while (li.tagName !== `LI`) {
+            li = li.parentElement;
+          }
+          li.remove();
+        }
+      });
+
+    const btnAdd = this._form
+      .getElement()
+      .querySelector(`.applications .applications__btn-add`);
+
+    btnAdd.addEventListener(`click`, (event) => {
+      const application = {
+        eduProg: ``,
+        grade: ``,
+        priority: false,
+        active: true
+      };
+
+      const applicationsList = this._form
+        .getElement()
+        .querySelector(`.applications-list`);
+
+      // FIXME это шаблон дублируется в applications-form
+      const html = `
+      <li class="applications-list__item">
+        <div class="application">
+          <label class="application__edu-prog">
+            <div class="edu-prog-select-container" data-value="${
+              application.eduProg
+            }"></div>
+          </label>
+          <label class="application__grade">
+            <input size="1" maxlength="1" pattern="[12345]" value="${
+              application.grade
+            }"/>
+          </label>
+          <label class="application__priority">
+            <input type="checkbox" value="priority"${
+              application.priority ? ` checked` : ``
+            }/><span>приоритет</span>
+          </label>
+          <label class="application__active">
+            <input type="checkbox" value="active"${
+              application.active ? ` checked` : ``
+            }/><span>показывать?</span>
+          </label>
+          <button class="application__btn-delete" type="button">удалить</button>
+        </div>
+      </li>`.trim();
+
+      const div = document.createElement(`DIV`);
+      div.insertAdjacentHTML(`beforeend`, html);
+      const item = div.firstChild;
+
+      const selectContainer = item.querySelector(`.edu-prog-select-container`);
+
+      const eduProgs = this._ownerListController._eduProgsModel.items.map(
+        (el) => el.data
+      );
+
+      const selectController = new _edu_prog_select_controller__WEBPACK_IMPORTED_MODULE_3__["default"](
+        selectContainer,
+        eduProgs,
+        selectContainer.dataset.value
+      );
+
+      applicationsList.append(item);
+    });
   }
 }
 
@@ -15677,10 +15872,12 @@ const debug = __webpack_require__(/*! debug */ "./node_modules/debug/src/browser
 
 
 class AbitsListController extends _abstract_list_controller__WEBPACK_IMPORTED_MODULE_0__["default"] {
-  constructor(container, model) {
+  constructor(container, model, eduProgsModel) {
     debug(`constructor`);
 
     super(container, model, _components_abits_list__WEBPACK_IMPORTED_MODULE_2__["default"], _controllers_abit_controller__WEBPACK_IMPORTED_MODULE_1__["default"]);
+
+    this._eduProgsModel = eduProgsModel;
   }
 }
 
@@ -15781,8 +15978,11 @@ class ListController {
     debug(`_renderItem, this._ListComponent %O`, this._listComponent);
 
     const itemController = new this._ItemController(
+      this,
       this._listComponent.getElement(),
-      item
+      item,
+      null,
+      null
     );
 
     this._itemControllers.push(itemController);
@@ -15819,13 +16019,14 @@ function getElementIndex(element) {
   }
   return index;
 }
-
-class AbstractListController {
-  constructor(container, item, View, Form) {
+class AbstractListItemController {
+  constructor(ownerListController, container, item, View, Form) {
     debug(`constructor, item: %O`, item);
 
     this._View = View;
     this._Form = Form;
+
+    this._ownerListController = ownerListController;
 
     this._item = item;
     if (!Object.values(_utils__WEBPACK_IMPORTED_MODULE_0__["ModelItemMode"]).includes(this._item.mode)) {
@@ -16003,7 +16204,7 @@ class AbstractListController {
   }
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (AbstractListController);
+/* harmony default export */ __webpack_exports__["default"] = (AbstractListItemController);
 
 
 /***/ }),
@@ -16113,10 +16314,10 @@ const debug = __webpack_require__(/*! debug */ "./node_modules/debug/src/browser
 
 
 class EduProgController extends _abstract_list_item_controller__WEBPACK_IMPORTED_MODULE_0__["default"] {
-  constructor(container, item) {
+  constructor(ownerListController, container, item) {
     debug(`constructor, item: %O`, item);
 
-    super(container, item, _components_edu_prog_view__WEBPACK_IMPORTED_MODULE_1__["default"], _components_edu_prog_form__WEBPACK_IMPORTED_MODULE_2__["default"]);
+    super(ownerListController, container, item, _components_edu_prog_view__WEBPACK_IMPORTED_MODULE_1__["default"], _components_edu_prog_form__WEBPACK_IMPORTED_MODULE_2__["default"]);
   }
 
   bind() {
@@ -16129,6 +16330,43 @@ class EduProgController extends _abstract_list_item_controller__WEBPACK_IMPORTED
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (EduProgController);
+
+
+/***/ }),
+
+/***/ "./src/js/controllers/edu-prog-select-controller.js":
+/*!**********************************************************!*\
+  !*** ./src/js/controllers/edu-prog-select-controller.js ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _components_edu_prog_select__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/edu-prog-select */ "./src/js/components/edu-prog-select.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils */ "./src/js/utils.js");
+const debug = __webpack_require__(/*! debug */ "./node_modules/debug/src/browser.js")("abit:edu-prog-select-controller");
+
+
+
+
+class EduProgSelectController {
+  constructor(container, eduProgs, selected) {
+    this._container = container;
+    this._eduProgs = eduProgs;
+    this._selected = selected;
+
+    this._eduProgSelect = new _components_edu_prog_select__WEBPACK_IMPORTED_MODULE_0__["default"](eduProgs, selected);
+
+    Object(_utils__WEBPACK_IMPORTED_MODULE_1__["render"])(
+      this._container,
+      this._eduProgSelect.getElement(),
+      _utils__WEBPACK_IMPORTED_MODULE_1__["Position"].AFTERBEGIN
+    );
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (EduProgSelectController);
 
 
 /***/ }),
@@ -16370,6 +16608,44 @@ function getApplications(count) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+const eduProgsText = `
+СЭЗИС|08.02.01 Строительство и эксплуатация зданий и сооружений|техник|О|11|2 года 10 месяцев|Б|25
+СЭЗИСк|08.02.01 Строительство и эксплуатация зданий и сооружений|техник|О|11|2 года 10 месяцев|К|5
+СЭЗИС9|08.02.01 Строительство и эксплуатация зданий и сооружений|техник|О|9|3 года 10 месяцев|Б|25
+СЭЗИС9к|08.02.01 Строительство и эксплуатация зданий и сооружений|техник|О|9|3 года 10 месяцев|К|5
+СЭЗИСзк|08.02.01 Строительство и эксплуатация зданий и сооружений|техник|З|11|3 года 10 месяцев|К|20
+ПБ|20.02.04 Пожарная безопасность|техник|О|11|2 года 10 месяцев|Б|50
+ПБк|20.02.04 Пожарная безопасность|техник|О|11|2 года 10 месяцев|К|10
+ПБ9|20.02.04 Пожарная безопасность|техник|О|9|3 года 10 месяцев|Б|25
+ПБ9к|20.02.04 Пожарная безопасность|техник|О|9|3 года 10 месяцев|К|25
+ЗИО|21.02.05 Земельно-имущественные отношения|специалист по земельно-имущественным отношениям|О|11|1 год 10 месяцев|Б|25
+ЗИОк|21.02.05 Земельно-имущественные отношения|специалист по земельно-имущественным отношениям|О|11|1 год 10 месяцев|К|5
+ЗИО9|21.02.05 Земельно-имущественные отношения|специалист по земельно-имущественным отношениям|О|9|2 года 10 месяцев|Б|25
+ЗИО9к|21.02.05 Земельно-имущественные отношения|специалист по земельно-имущественным отношениям|О|9|2 года 10 месяцев|К|25
+ЗИОзк|21.02.05 Земельно-имущественные отношения|специалист по земельно-имущественным отношениям|З|11|2 года 10 месяцев|К|20
+СП9|22.02.06 Сварочное производство|техник|О|9|3 года 10 месяцев|Б|25
+СП9к|22.02.06 Сварочное производство|техник|О|9|3 года 10 месяцев|К|5
+ТОРАТ|23.02.03 Техническое обслуживание и ремонт автомобильного транспорта|техник|О|11|2 года 10 месяцев|Б|25
+ТОРАТк|23.02.03 Техническое обслуживание и ремонт автомобильного транспорта|техник|О|11|2 года 10 месяцев|К|5
+ТОРАТ9|23.02.03 Техническое обслуживание и ремонт автомобильного транспорта|техник|О|9|3 года 10 месяцев|Б|50
+ТОРАТ9к|23.02.03 Техническое обслуживание и ремонт автомобильного транспорта|техник|О|9|3 года 10 месяцев|К|10
+ТОРАТзк|23.02.03 Техническое обслуживание и ремонт автомобильного транспорта|техник|З|11|3 года 10 месяцев|К|20
+БУ|38.02.01 Экономика и бухгалтерский учет|бухгалтер|О|11|1 год 10 месяцев|Б|25
+БУк|38.02.01 Экономика и бухгалтерский учет|бухгалтер|О|11|1 год 10 месяцев|К|5
+БУзк|38.02.01 Экономика и бухгалтерский учет|бухгалтер|З|11|2 года 10 месяцев|К|20
+СР|39.02.01 Социальная работа|специалист по социальное работе|О|11|1 год 10 месяцев|Б|25
+СРк|39.02.01 Социальная работа|специалист по социальное работе|О|11|1 год 10 месяцев|К|5
+СР9|39.02.01 Социальная работа|специалист по социальное работе|О|9|2 года 10 месяцев|Б|25
+СР9к|39.02.01 Социальная работа|специалист по социальное работе|О|9|2 года 10 месяцев|К|5
+СРзк|39.02.01 Социальная работа|специалист по социальное работе|З|11|2 года 10 месяцев|К|20
+ПСО|40.02.01 Право и организация социального обеспечения|юрист|О|11|1 год 10 месяцев|Б|50
+ПСОк|40.02.01 Право и организация социального обеспечения|юрист|О|11|1 год 10 месяцев|К|10
+ПСО9|40.02.01 Право и организация социального обеспечения|юрист|О|9|2 года 10 месяцев|Б|25
+ПСО9к|40.02.01 Право и организация социального обеспечения|юрист|О|9|2 года 10 месяцев|К|25
+ПСОз|40.02.01 Право и организация социального обеспечения|юрист|З|11|2 года 10 месяцев|Б|20
+ПСОзк|40.02.01 Право и организация социального обеспечения|юрист|З|11|2 года 10 месяцев|К|15
+`;
+
 const eduProgFieldNames = [
   `code`, // код образовательной программы
   `speciality`, // специальность
@@ -16381,115 +16657,34 @@ const eduProgFieldNames = [
   `placesNumber` // число мест
 ];
 
-const eduProgs = [
-  [
-    `СЭЗИС`,
-    `08.02.01 Строительство и эксплуатация зданий и сооружений`,
-    `техник`,
-    `очная`,
-    `11 классов`,
-    `2 года 10 месяцев`,
-    `бюджет`,
-    `25`
-  ],
-  [
-    `СЭЗИСк`,
-    `08.02.01 Строительство и эксплуатация зданий и сооружений`,
-    `техник`,
-    `очная`,
-    `11 классов`,
-    `2 года 10 месяцев`,
-    `внебюджет`,
-    `5`
-  ],
-  [
-    `СЭЗИС9`,
-    `08.02.01 Строительство и эксплуатация зданий и сооружений`,
-    `техник`,
-    `очная`,
-    `11 классов`,
-    `2 года 10 месяцев`,
-    `бюджет`,
-    `25`
-  ],
-  [
-    `СЭЗИС9к`,
-    `08.02.01 Строительство и эксплуатация зданий и сооружений`,
-    `техник`,
-    `очная`,
-    `11 классов`,
-    `2 года 10 месяцев`,
-    `внебюджет`,
-    `5`
-  ],
-  [
-    `СЭЗИСзк`,
-    `08.02.01 Строительство и эксплуатация зданий и сооружений`,
-    `техник`,
-    `заочная`,
-    `11 классов`,
-    `2 года 10 месяцев`,
-    `внебюджет`,
-    `20`
-  ],
-  [
-    `ЗИО`,
-    `21.02.05 Земельно-имущественные отношения`,
-    `специалист по земельно-имущественным отношениям`,
-    `очная`,
-    `11 классов`,
-    `1 год 10 месяцев`,
-    `бюджет`,
-    `25`
-  ],
-  [
-    `ЗИОк`,
-    `21.02.05 Земельно-имущественные отношения`,
-    `специалист по земельно-имущественным отношениям`,
-    `очная`,
-    `11 классов`,
-    `1 год 10 месяцев`,
-    `внебюджет`,
-    `5`
-  ],
-  [
-    `ЗИО9`,
-    `21.02.05 Земельно-имущественные отношения`,
-    `специалист по земельно-имущественным отношениям`,
-    `очная`,
-    `9 классов`,
-    `2 года 10 месяцев`,
-    `бюджет`,
-    `25`
-  ],
-  [
-    `ЗИО9к`,
-    `21.02.05 Земельно-имущественные отношения`,
-    `специалист по земельно-имущественным отношениям`,
-    `очная`,
-    `9 классов`,
-    `2 года 10 месяцев`,
-    `внебюджет`,
-    `5`
-  ],
-  [
-    `ЗИОзк`,
-    `21.02.05 Земельно-имущественные отношения`,
-    `специалист по земельно-имущественным отношениям`,
-    `заочная`,
-    `11 классов`,
-    `2 года 10 месяцев`,
-    `внебюджет`,
-    `20`
-  ]
-].map((eduProg) =>
-  eduProgFieldNames.reduce((acc, cur, idx) => {
-    acc[cur] = eduProg[idx];
-    return acc;
-  }, {})
-);
+const eduProgLines = eduProgsText.split(`\n`).filter((line) => line.length > 0);
+const eduProgArrays = eduProgLines.map((line) => line.split(`|`));
+const eduProgRows = eduProgArrays.map((eduProgArray) => {
+  const eduProgRow = eduProgFieldNames.reduce((acc, cur, idx) => {
+    let eduProgElement = eduProgArray[idx];
+    if (cur === `eduForm`) {
+      eduProgElement = {О: "очная", З: "заочная"}[
+        eduProgElement.toUpperCase().trim()
+      ];
+    }
+    if (cur === `baseEduLevel`) {
+      eduProgElement = {"9": "9 классов", "11": "11 классов"}[
+        eduProgElement.trim()
+      ];
+    }
+    if (cur === `finSource`) {
+      eduProgElement = {Б: "бюджет", К: "внебюджет"}[
+        eduProgElement.toUpperCase().trim()
+      ];
+    }
 
-/* harmony default export */ __webpack_exports__["default"] = (eduProgs);
+    acc[cur] = eduProgElement;
+    return acc;
+  }, {});
+  return eduProgRow;
+});
+
+/* harmony default export */ __webpack_exports__["default"] = (eduProgRows);
 
 
 /***/ }),
@@ -17575,8 +17770,6 @@ const eduProgsListContainer = document.querySelector(
 );
 const abitsListContainer = document.querySelector(`.abits__list-container`);
 
-const api = new _api_pouchdb_api__WEBPACK_IMPORTED_MODULE_2__["default"]();
-
 const modelsInit = async (models) => {
   const modelPromises = models.map((model) => {
     return new Promise((resolve, reject) => {
@@ -17590,11 +17783,11 @@ const modelsInit = async (models) => {
   return Promise.all(modelPromises);
 };
 
-api.init((err) => {
+_api_pouchdb_api__WEBPACK_IMPORTED_MODULE_2__["default"].init((err) => {
   if (err) return console.error(err);
 
-  const eduProgsModel = new _models_edu_progs_model__WEBPACK_IMPORTED_MODULE_0__["default"](api);
-  const abitsModel = new _models_abits_model__WEBPACK_IMPORTED_MODULE_1__["default"](api);
+  const eduProgsModel = new _models_edu_progs_model__WEBPACK_IMPORTED_MODULE_0__["default"](_api_pouchdb_api__WEBPACK_IMPORTED_MODULE_2__["default"]);
+  const abitsModel = new _models_abits_model__WEBPACK_IMPORTED_MODULE_1__["default"](_api_pouchdb_api__WEBPACK_IMPORTED_MODULE_2__["default"]);
 
   (async () => {
     const res = await modelsInit([eduProgsModel, abitsModel]);
@@ -17609,13 +17802,14 @@ api.init((err) => {
 
     const abitsListController = new _controllers_abits_list_controller__WEBPACK_IMPORTED_MODULE_4__["default"](
       abitsListContainer,
-      abitsModel
+      abitsModel,
+      eduProgsModel
     );
     abitsListController.init();
 
     const abitsFilterController = new _controllers_abits_filter_controller__WEBPACK_IMPORTED_MODULE_5__["default"](abitsModel);
 
-    const debugPanelController = new _controllers_debug_panel_controller__WEBPACK_IMPORTED_MODULE_6__["default"](api);
+    const debugPanelController = new _controllers_debug_panel_controller__WEBPACK_IMPORTED_MODULE_6__["default"](_api_pouchdb_api__WEBPACK_IMPORTED_MODULE_2__["default"]);
   })().catch((err) => console.error(err));
 });
 
@@ -18110,8 +18304,7 @@ const Position = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
   AFTEREND: `afterend`,
-  BEFOREBEGIN: `beforebegin`,
-  REPLACE: `replace`
+  BEFOREBEGIN: `beforebegin`
 };
 
 const Key = {

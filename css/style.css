@@ -467,6 +467,9 @@ input[type="radio"].visually-hidden {
 .edu-prog-form__input--places-number {
   text-align: end;
 }
+.edu-prog-select-container {
+  display: inline-block;
+}
 .abit {
   display: flex;
   flex-direction: column;
