@@ -46,8 +46,7 @@ const Position = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
   AFTEREND: `afterend`,
-  BEFOREBEGIN: `beforebegin`,
-  REPLACE: `replace`
+  BEFOREBEGIN: `beforebegin`
 };
 
 const Key = {
