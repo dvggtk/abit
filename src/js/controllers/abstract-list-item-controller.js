@@ -20,13 +20,14 @@ function getElementIndex(element) {
   }
   return index;
 }
-
-class AbstractListController {
-  constructor(container, item, View, Form) {
+class AbstractListItemController {
+  constructor(ownerListController, container, item, View, Form) {
     debug(`constructor, item: %O`, item);
 
     this._View = View;
     this._Form = Form;
+
+    this._ownerListController = ownerListController;
 
     this._item = item;
     if (!Object.values(ModelItemMode).includes(this._item.mode)) {
@@ -204,4 +205,4 @@ class AbstractListController {
   }
 }
 
-export default AbstractListController;
+export default AbstractListItemController;

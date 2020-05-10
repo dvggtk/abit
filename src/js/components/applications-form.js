@@ -12,22 +12,12 @@ class ApplicationsForm extends AbstractComponent {
   }
 
   getTemplate() {
-    const eduProgs = [`ЗИО`, `СЭЗИС`, `БУ`, `ТОРАТ`, `ПСО`];
-
     const applicationsListItems = this._applications
       .map((application) => {
         return `<li class="applications-list__item">
         <div class="application">
           <label class="application__edu-prog">
-            <select>${eduProgs
-              .map(
-                (eduProg) =>
-                  `<option value="${eduProg}"${
-                    application.eduProg === eduProg ? ` selected` : ``
-                  }>${eduProg}</option>`
-              )
-              .join(``)}
-            </select>
+            <div class="edu-prog-select-container"></div>
           </label>
           <label class="application__grade">
             <input size="1" maxlength="1" pattern="[12345]"/>

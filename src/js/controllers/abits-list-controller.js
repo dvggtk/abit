@@ -5,10 +5,12 @@ import AbitController from "../controllers/abit-controller";
 import AbitsListComponent from "../components/abits-list";
 
 class AbitsListController extends ListController {
-  constructor(container, model) {
+  constructor(container, model, eduProgsModel) {
     debug(`constructor`);
 
     super(container, model, AbitsListComponent, AbitController);
+
+    this._eduProgsModel = eduProgsModel;
   }
 }
 

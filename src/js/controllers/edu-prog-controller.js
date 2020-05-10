@@ -1,6 +1,6 @@
 const debug = require("debug")("abit:edu-prog-controller");
 
-import ListController from "./abstract-list-item-controller";
+import ListItemController from "./abstract-list-item-controller";
 import EduProgView from "../components/edu-prog-view";
 import EduProgForm from "../components/edu-prog-form";
 import {
@@ -13,11 +13,11 @@ import {
   ModelItemMode
 } from "../utils";
 
-class EduProgController extends ListController {
-  constructor(container, item) {
+class EduProgController extends ListItemController {
+  constructor(ownerListController, container, item) {
     debug(`constructor, item: %O`, item);
 
-    super(container, item, EduProgView, EduProgForm);
+    super(ownerListController, container, item, EduProgView, EduProgForm);
   }
 
   bind() {

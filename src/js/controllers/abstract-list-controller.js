@@ -89,8 +89,11 @@ class ListController {
     debug(`_renderItem, this._ListComponent %O`, this._listComponent);
 
     const itemController = new this._ItemController(
+      this,
       this._listComponent.getElement(),
-      item
+      item,
+      null,
+      null
     );
 
     this._itemControllers.push(itemController);
