@@ -1,3 +1,5 @@
+const debug = require("debug")("abit:edu-prog-select-controller");
+
 import AbstractComponent from "./abstract-component";
 import {clone} from "../utils";
 
@@ -32,14 +34,14 @@ class EduProgSelect extends AbstractComponent {
 
   getTemplate() {
     const getOptions = (eduProgs) =>
-      eduProgs.reduce(
-        (acc, cur) =>
+      eduProgs.reduce((acc, cur) => {
+        return (
           acc +
           `<option${cur.code === this._selected ? ` selected` : ``}>${
             cur.code
-          }</option>`,
-        ``
-      );
+          }</option>`
+        );
+      }, ``);
 
     // prettier-ignore
     const html = `

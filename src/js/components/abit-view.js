@@ -19,7 +19,8 @@ class AbitView extends AbstractComponent {
     schoolYear,
     address,
     tel,
-    memo
+    memo,
+    applications
   }) {
     super();
 
@@ -39,6 +40,8 @@ class AbitView extends AbstractComponent {
     this._address = address;
     this._tel = tel;
     this._memo = memo;
+
+    this._applications = applications;
   }
 
   getTemplate() {
