@@ -175,4 +175,6 @@ class PouchDBApi extends AbstractApi {
   }
 }
 
-export default PouchDBApi;
+const pouchDBApi = new PouchDBApi();
+
+export default pouchDBApi;

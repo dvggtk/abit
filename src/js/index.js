@@ -5,7 +5,7 @@ console.log(`localStorage.debug = "${localStorage.debug}"`);
 
 import EduProgsModel from "./models/edu-progs-model";
 import AbitsModel from "./models/abits-model";
-import DBApi from "./api/pouchdb-api";
+import api from "./api/pouchdb-api";
 import EduProgsListController from "./controllers/edu-progs-list-controller";
 import AbitsListController from "./controllers/abits-list-controller";
 import AbitsFilterController from "./controllers/abits-filter-controller";
@@ -15,8 +15,6 @@ const eduProgsListContainer = document.querySelector(
   `.edu-progs__list-container`
 );
 const abitsListContainer = document.querySelector(`.abits__list-container`);
-
-const api = new DBApi();
 
 const modelsInit = async (models) => {
   const modelPromises = models.map((model) => {
@@ -50,7 +48,8 @@ api.init((err) => {
 
     const abitsListController = new AbitsListController(
       abitsListContainer,
-      abitsModel
+      abitsModel,
+      eduProgsModel
     );
     abitsListController.init();
 
