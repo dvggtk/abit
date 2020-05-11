@@ -57,7 +57,7 @@ class AbitsFilterController {
 
   bind() {
     const fioElement = this._element.querySelector(`.abits__filter-fio`);
-    fioElement.addEventListener(`input`, this._onFioChange);
+    fioElement && fioElement.addEventListener(`input`, this._onFioChange);
 
     const eduProgElement = this._element.querySelector(`.edu-prog-select`);
     eduProgElement.addEventListener(`change`, this._onEduProgChange);
