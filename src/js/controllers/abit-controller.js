@@ -17,6 +17,9 @@ class AbitController extends ListItemController {
 
   initComponents() {
     super.initComponents();
+    if (this._item.deleted) return;
+
+    debug(`initComponents, this._form %O`, this._form);
 
     const eduProgSelectContainers = this._form
       .getElement()
@@ -130,7 +133,7 @@ class AbitController extends ListItemController {
               application.active ? ` checked` : ``
             }/><span>показывать?</span>
           </label>
-          <button class="application__btn-delete" type="button">удалить</button>
+          <button class="application__btn-delete" type="button"><span class="visually-hidden">удалить<span></button>
         </div>
       </li>`.trim();
 

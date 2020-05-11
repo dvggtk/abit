@@ -91,6 +91,15 @@ class AbitView extends AbstractComponent {
         <div class="abit__field abit__field--school">${this._school}</div>
         <div class="abit__field abit__field--memo">${this._memo}</div>
       </div>
+      <div class="abit__row">
+        ${this._applications.map(app => {
+          return `
+          <div class="application-view${app.priority ? ` application-view--priority` : ``}${!app.active ? ` application-view--disabled` : ``}">
+            <div class="application-view__edu-prog">${app.eduProg}</div>
+            <div class="application-view__grade">${app.grade}</div>
+          </div>`.trim()
+        }).join(``)}
+      </div>
     </article>
   </li>`;
   }

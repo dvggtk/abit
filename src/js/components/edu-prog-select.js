@@ -46,6 +46,7 @@ class EduProgSelect extends AbstractComponent {
     // prettier-ignore
     const html = `
     <select class="edu-prog-select">
+      <option></option>
       <optgroup label="11 классов. Очная">${getOptions(this._eduProgs11fullTime)}</optgroup>
       <optgroup label="9 классов. Очная">${getOptions(this._eduProgs9)}</optgroup>
       <optgroup label="Заочная">${getOptions(this._eduProgsDistance)}</optgroup>

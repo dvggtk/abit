@@ -1,5 +1,36 @@
 .application {
+  display: flex;
+  flex-direction: row;
   width: fit-content;
   margin: 0 auto;
   padding: 3px;
+  align-items: center;
+}
+
+.application > * + * {
+  margin-left: 10px;
+}
+
+.application__btn-delete {
+  display: block;
+  position: relative;
+  border: none;
+  padding: 0;
+  padding-left: 1em;
+  margin-left: 1em;
+  height: 1em;
+  background-color: transparent;
+  cursor: pointer;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 1em;
+    height: 1em;
+    background-image: url(../img/btn-delete.svg);
+    background-size: 1em 1em;
+  }
 }

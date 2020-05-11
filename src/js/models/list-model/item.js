@@ -22,7 +22,8 @@ class Item {
   }
 
   get index() {
-    return this._listModel._items.indexOf(this);
+    // именно .items, а не ._items
+    return this._listModel.items.indexOf(this);
   }
 
   get deleted() {

@@ -53,7 +53,10 @@ api.init((err) => {
     );
     abitsListController.init();
 
-    const abitsFilterController = new AbitsFilterController(abitsModel);
+    const abitsFilterController = new AbitsFilterController(
+      abitsModel,
+      eduProgsModel
+    );
 
     const debugPanelController = new DebugPanelController(api);
   })().catch((err) => console.error(err));

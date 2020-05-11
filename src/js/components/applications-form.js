@@ -36,7 +36,7 @@ class ApplicationsForm extends AbstractComponent {
               application.active ? ` checked` : ``
             }/><span>показывать?</span>
           </label>
-          <button class="application__btn-delete" type="button">удалить</button>
+          <button class="application__btn-delete" type="button"><span class="visually-hidden">удалить<span></button>
         </div>
       </li>`;
       })
