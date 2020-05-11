@@ -15212,6 +15212,15 @@ class AbitView extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["default
         <div class="abit__field abit__field--school">${this._school}</div>
         <div class="abit__field abit__field--memo">${this._memo}</div>
       </div>
+      <div class="abit__row">
+        ${this._applications.map(app => {
+          return `
+          <div class="application-view${app.priority ? ` application-view--priority` : ``}${!app.active ? ` application-view--disabled` : ``}">
+            <div class="application-view__edu-prog">${app.eduProg}</div>
+            <div class="application-view__grade">${app.grade}</div>
+          </div>`.trim()
+        }).join(``)}
+      </div>
     </article>
   </li>`;
   }
@@ -15236,7 +15245,11 @@ __webpack_require__.r(__webpack_exports__);
 
 class AbitsList extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["default"] {
   getTemplate() {
-    return `<ul class="abits-list list"></ul>`;
+    return `
+    <div>
+      <button type="button" class="abits__btn-add list-btn-add">Добавить абитуриента</button>
+      <ul class="abits-list list"></ul>
+    </div>`.trim();
   }
 }
 
@@ -15337,7 +15350,7 @@ class ApplicationsForm extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__[
               application.active ? ` checked` : ``
             }/><span>показывать?</span>
           </label>
-          <button class="application__btn-delete" type="button">удалить</button>
+          <button class="application__btn-delete" type="button"><span class="visually-hidden">удалить<span></button>
         </div>
       </li>`;
       })
@@ -15530,6 +15543,7 @@ class EduProgSelect extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["de
     // prettier-ignore
     const html = `
     <select class="edu-prog-select">
+      <option></option>
       <optgroup label="11 классов. Очная">${getOptions(this._eduProgs11fullTime)}</optgroup>
       <optgroup label="9 классов. Очная">${getOptions(this._eduProgs9)}</optgroup>
       <optgroup label="Заочная">${getOptions(this._eduProgsDistance)}</optgroup>
@@ -15617,7 +15631,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class EduProgsList extends _abstract_component__WEBPACK_IMPORTED_MODULE_0__["default"] {
   getTemplate() {
-    return `<ul class="edu-progs__list list"></ul>`;
+    return `<div><button type="button" class="edu-progs__btn-add list-btn-add">Добавить образовательную программу</button><ul class="edu-progs__list list"></ul></div>`;
   }
 }
 
@@ -15659,6 +15673,9 @@ class AbitController extends _abstract_list_item_controller__WEBPACK_IMPORTED_MO
 
   initComponents() {
     super.initComponents();
+    if (this._item.deleted) return;
+
+    debug(`initComponents, this._form %O`, this._form);
 
     const eduProgSelectContainers = this._form
       .getElement()
@@ -15772,7 +15789,7 @@ class AbitController extends _abstract_list_item_controller__WEBPACK_IMPORTED_MO
               application.active ? ` checked` : ``
             }/><span>показывать?</span>
           </label>
-          <button class="application__btn-delete" type="button">удалить</button>
+          <button class="application__btn-delete" type="button"><span class="visually-hidden">удалить<span></button>
         </div>
       </li>`.trim();
 
@@ -15811,20 +15828,38 @@ class AbitController extends _abstract_list_item_controller__WEBPACK_IMPORTED_MO
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _edu_prog_select_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./edu-prog-select-controller */ "./src/js/controllers/edu-prog-select-controller.js");
 const debug = __webpack_require__(/*! debug */ "./node_modules/debug/src/browser.js")("abit:abits-filter-controller");
 
+
+
 class AbitsFilterController {
-  constructor(model) {
+  constructor(abitsModel, eduProgsModel) {
     debug(`constructor`);
 
-    this._model = model;
+    this._abitsModel = abitsModel;
+    this._eduProgsModel = eduProgsModel;
+
     this._onFioChange = this._onFioChange.bind(this);
+    this._onEduProgChange = this._onEduProgChange.bind(this);
 
     this.init();
   }
 
   init() {
     this._element = document.querySelector(`.abits__filter-panel`);
+
+    const eduProgSelectContainer = this._element.querySelector(
+      `.edu-prog-select-container`
+    );
+
+    const eduProgs = this._eduProgsModel.items.map((el) => el.data);
+
+    const selectController = new _edu_prog_select_controller__WEBPACK_IMPORTED_MODULE_0__["default"](
+      eduProgSelectContainer,
+      eduProgs,
+      ``
+    );
 
     this.bind();
   }
@@ -15833,14 +15868,30 @@ class AbitsFilterController {
     debug(`_onFioChange`);
     const filterFio = event.target.value.toLowerCase();
 
-    this._model.filterFn = ({data}) => {
+    this._abitsModel.filterFn = ({data}) => {
       return data.fio.toLowerCase().startsWith(filterFio);
     };
   }
 
+  _onEduProgChange(event) {
+    debug(`_onEduProgChange, event %O`, event);
+
+    const eduProgCode = event.target.value;
+    if (eduProgCode) {
+      this._abitsModel.filterFn = ({data}) => {
+        return data.applications.some((app) => app.eduProg === eduProgCode);
+      };
+    } else {
+      this._abitsModel.filterFn = () => true;
+    }
+  }
+
   bind() {
     const fioElement = this._element.querySelector(`.abits__filter-fio`);
-    fioElement.addEventListener(`input`, this._onFioChange);
+    fioElement && fioElement.addEventListener(`input`, this._onFioChange);
+
+    const eduProgElement = this._element.querySelector(`.edu-prog-select`);
+    eduProgElement.addEventListener(`change`, this._onEduProgChange);
   }
 
   unbind() {
@@ -15960,9 +16011,22 @@ class ListController {
     };
   }
 
+  bind() {
+    const btnAddElement = this._listComponent
+      .getElement()
+      .querySelector(`.list-btn-add`);
+
+    btnAddElement.addEventListener(`click`, (event) => {
+      debug(`list-btn-add`);
+      this._model.createItem();
+    });
+  }
+
   _renderList() {
     Object(_utils__WEBPACK_IMPORTED_MODULE_0__["unrender"])(this._listComponent.getElement());
     this._listComponent.removeElement();
+
+    this.bind();
 
     Object(_utils__WEBPACK_IMPORTED_MODULE_0__["render"])(
       this._container,
@@ -15977,9 +16041,14 @@ class ListController {
   _renderItem(item) {
     debug(`_renderItem, this._ListComponent %O`, this._listComponent);
 
+    let listElement = this._listComponent.getElement();
+    if (!listElement.classList.contains(`list`)) {
+      listElement = listElement.querySelector(`.list`);
+    }
+
     const itemController = new this._ItemController(
       this,
-      this._listComponent.getElement(),
+      listElement,
       item,
       null,
       null
@@ -16021,7 +16090,7 @@ function getElementIndex(element) {
 }
 class AbstractListItemController {
   constructor(ownerListController, container, item, View, Form) {
-    debug(`constructor, item: %O`, item);
+    // debug(`constructor, item: %O`, item);
 
     this._View = View;
     this._Form = Form;
@@ -16167,7 +16236,7 @@ class AbstractListItemController {
     const oldElement = this._element;
     this.initComponents();
 
-    if (this._deleted) {
+    if (this._deleted || !this._item.visible) {
       Object(_utils__WEBPACK_IMPORTED_MODULE_0__["unrender"])(oldElement);
       return;
     }
@@ -16177,6 +16246,7 @@ class AbstractListItemController {
     oldElement.replaceWith(this._element);
 
     const elementIndex = getElementIndex(this._element);
+    debug(`elementIndex %d`, elementIndex);
     if (elementIndex !== this._item.index) {
       const baseElement = this._container.children[this._item.index];
       baseElement.before(this._element);
@@ -17807,7 +17877,10 @@ _api_pouchdb_api__WEBPACK_IMPORTED_MODULE_2__["default"].init((err) => {
     );
     abitsListController.init();
 
-    const abitsFilterController = new _controllers_abits_filter_controller__WEBPACK_IMPORTED_MODULE_5__["default"](abitsModel);
+    const abitsFilterController = new _controllers_abits_filter_controller__WEBPACK_IMPORTED_MODULE_5__["default"](
+      abitsModel,
+      eduProgsModel
+    );
 
     const debugPanelController = new _controllers_debug_panel_controller__WEBPACK_IMPORTED_MODULE_6__["default"](_api_pouchdb_api__WEBPACK_IMPORTED_MODULE_2__["default"]);
   })().catch((err) => console.error(err));
@@ -17988,11 +18061,16 @@ class Item {
   }
 
   get index() {
-    return this._listModel._items.indexOf(this);
+    // именно .items, а не ._items
+    return this._listModel.items.indexOf(this);
   }
 
   get deleted() {
     return Boolean(this._deleted);
+  }
+
+  get visible() {
+    return this._listModel._isItemVisible(this);
   }
 
   set mode(newMode) {
@@ -18175,6 +18253,8 @@ class ListModel extends _abstract_model__WEBPACK_IMPORTED_MODULE_0__["default"] 
     this.type = null;
 
     this._filterFn = (item) => true;
+
+    this._isItemVisible = this._isItemVisible.bind(this);
   }
 
   get items() {
@@ -18182,12 +18262,27 @@ class ListModel extends _abstract_model__WEBPACK_IMPORTED_MODULE_0__["default"] 
       `get items, _filterFn(_items[0]): %O`,
       this._filterFn(this._items[0])
     );
-    return this._items.filter(this._filterFn);
+    return this._items.filter(this._isItemVisible);
+  }
+
+  _isItemVisible(item) {
+    return item._mode === _utils__WEBPACK_IMPORTED_MODULE_1__["ModelItemMode"].ADD || this._filterFn(item);
   }
 
   set filterFn(fn) {
     debug(`set filterFn`);
+
+    for (const item of this._items) {
+      if (item._mode === _utils__WEBPACK_IMPORTED_MODULE_1__["ModelItemMode"].EDIT) {
+        item._mode = _utils__WEBPACK_IMPORTED_MODULE_1__["ModelItemMode"].VIEW;
+      }
+      if (item._mode === _utils__WEBPACK_IMPORTED_MODULE_1__["ModelItemMode"].ADD) {
+        item._deleteSelf();
+      }
+    }
+
     this._filterFn = fn;
+
     this.onChangeView(null);
   }
 
@@ -18213,15 +18308,31 @@ class ListModel extends _abstract_model__WEBPACK_IMPORTED_MODULE_0__["default"] 
   }
 
   createItem(newData, newIdx) {
-    const idx = newIdx === null ? 0 : newIdx;
+    const idx = !newIdx ? 0 : newIdx;
 
     const data = newData ? Object(_utils__WEBPACK_IMPORTED_MODULE_1__["clone"])(newData) : Object(_utils__WEBPACK_IMPORTED_MODULE_1__["clone"])(this._defaultItemData);
     if (this._type !== null) {
       data.type = this._type;
     }
+
+    const changedModeItems = [];
+    for (const item of this._items) {
+      if (item._mode === _utils__WEBPACK_IMPORTED_MODULE_1__["ModelItemMode"].EDIT) {
+        item._mode = _utils__WEBPACK_IMPORTED_MODULE_1__["ModelItemMode"].VIEW;
+        changedModeItems.push(item);
+      }
+      if (item._mode === _utils__WEBPACK_IMPORTED_MODULE_1__["ModelItemMode"].ADD) {
+        item._deleteSelf();
+        changedModeItems.push(item);
+      }
+    }
+    this.onItemChangeMode(changedModeItems);
+
     const newItem = new _item__WEBPACK_IMPORTED_MODULE_2__["default"]({listModel: this, mode: _utils__WEBPACK_IMPORTED_MODULE_1__["ModelItemMode"].ADD, data});
 
     this._items.splice(idx, 0, newItem);
+
+    this.onChangeView(newItem);
 
     return newItem;
   }

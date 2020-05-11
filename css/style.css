@@ -605,19 +605,86 @@ input[type="radio"].visually-hidden {
 .abit-view__field--need-dorm::before {
   content: "🏨 ";
 }
+.abits__btn-add {
+  border: none;
+  border-bottom: 1px dashed silver;
+  padding: 0;
+  background-color: transparent;
+  cursor: pointer;
+  margin-top: 5px;
+}
 .application {
+  display: flex;
+  flex-direction: row;
   width: fit-content;
   margin: 0 auto;
   padding: 3px;
+  align-items: center;
+}
+.application > * + * {
+  margin-left: 10px;
+}
+.application__btn-delete {
+  display: block;
+  position: relative;
+  border: none;
+  padding: 0;
+  padding-left: 1em;
+  margin-left: 1em;
+  height: 1em;
+  background-color: transparent;
+  cursor: pointer;
+}
+.application__btn-delete::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  width: 1em;
+  height: 1em;
+  background-image: url(../img/btn-delete.svg);
+  background-size: 1em 1em;
 }
 .applications {
-  border: 1px solid green;
   width: fit-content;
 }
+.applications__btn-add {
+  background-color: transparent;
+  padding: 0;
+  margin-top: 0.5em;
+  border: none;
+  cursor: pointer;
+  border-bottom: 1px dotted black;
+}
 .applications-list {
-  background-color: pink;
   list-style: none;
   padding: 0;
+}
+.applications-list__item + .applications-list__item {
+  border-top: 1px dashed silver;
+}
+.application-view {
+  display: inline-flex;
+  flex-direction: row;
+  background-color: honeydew;
+  padding: 5px;
+  border-radius: 25%;
+}
+.application-view__grade {
+  margin-left: 0.5ch;
+}
+.application-view__grade::before {
+  content: "(";
+}
+.application-view__grade::after {
+  content: ")";
+}
+.application-view--priority {
+  font-weight: bold;
+}
+.application-view--disabled {
+  text-decoration: line-through;
 }
 .debug-panel {
   position: fixed;
