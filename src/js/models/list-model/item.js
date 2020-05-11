@@ -30,6 +30,10 @@ class Item {
     return Boolean(this._deleted);
   }
 
+  get visible() {
+    return this._listModel._isItemVisible(this);
+  }
+
   set mode(newMode) {
     if (!Object.values(ModelItemMode).includes(newMode)) {
       throw Error();

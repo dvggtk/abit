@@ -22,6 +22,8 @@ class ListModel extends AbstractModel {
     this.type = null;
 
     this._filterFn = (item) => true;
+
+    this._isItemVisible = this._isItemVisible.bind(this);
   }
 
   get items() {
@@ -29,12 +31,27 @@ class ListModel extends AbstractModel {
       `get items, _filterFn(_items[0]): %O`,
       this._filterFn(this._items[0])
     );
-    return this._items.filter(this._filterFn);
+    return this._items.filter(this._isItemVisible);
+  }
+
+  _isItemVisible(item) {
+    return item._mode === ModelItemMode.ADD || this._filterFn(item);
   }
 
   set filterFn(fn) {
     debug(`set filterFn`);
+
+    for (const item of this._items) {
+      if (item._mode === ModelItemMode.EDIT) {
+        item._mode = ModelItemMode.VIEW;
+      }
+      if (item._mode === ModelItemMode.ADD) {
+        item._deleteSelf();
+      }
+    }
+
     this._filterFn = fn;
+
     this.onChangeView(null);
   }
 
@@ -60,15 +77,31 @@ class ListModel extends AbstractModel {
   }
 
   createItem(newData, newIdx) {
-    const idx = newIdx === null ? 0 : newIdx;
+    const idx = !newIdx ? 0 : newIdx;
 
     const data = newData ? clone(newData) : clone(this._defaultItemData);
     if (this._type !== null) {
       data.type = this._type;
     }
+
+    const changedModeItems = [];
+    for (const item of this._items) {
+      if (item._mode === ModelItemMode.EDIT) {
+        item._mode = ModelItemMode.VIEW;
+        changedModeItems.push(item);
+      }
+      if (item._mode === ModelItemMode.ADD) {
+        item._deleteSelf();
+        changedModeItems.push(item);
+      }
+    }
+    this.onItemChangeMode(changedModeItems);
+
     const newItem = new Item({listModel: this, mode: ModelItemMode.ADD, data});
 
     this._items.splice(idx, 0, newItem);
+
+    this.onChangeView(newItem);
 
     return newItem;
   }

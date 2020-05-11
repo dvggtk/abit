@@ -22,7 +22,7 @@ function getElementIndex(element) {
 }
 class AbstractListItemController {
   constructor(ownerListController, container, item, View, Form) {
-    debug(`constructor, item: %O`, item);
+    // debug(`constructor, item: %O`, item);
 
     this._View = View;
     this._Form = Form;
@@ -168,7 +168,7 @@ class AbstractListItemController {
     const oldElement = this._element;
     this.initComponents();
 
-    if (this._deleted) {
+    if (this._deleted || !this._item.visible) {
       unrender(oldElement);
       return;
     }
@@ -178,6 +178,7 @@ class AbstractListItemController {
     oldElement.replaceWith(this._element);
 
     const elementIndex = getElementIndex(this._element);
+    debug(`elementIndex %d`, elementIndex);
     if (elementIndex !== this._item.index) {
       const baseElement = this._container.children[this._item.index];
       baseElement.before(this._element);

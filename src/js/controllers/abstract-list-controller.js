@@ -71,9 +71,22 @@ class ListController {
     };
   }
 
+  bind() {
+    const btnAddElement = this._listComponent
+      .getElement()
+      .querySelector(`.list-btn-add`);
+
+    btnAddElement.addEventListener(`click`, (event) => {
+      debug(`list-btn-add`);
+      this._model.createItem();
+    });
+  }
+
   _renderList() {
     unrender(this._listComponent.getElement());
     this._listComponent.removeElement();
+
+    this.bind();
 
     render(
       this._container,
@@ -88,9 +101,14 @@ class ListController {
   _renderItem(item) {
     debug(`_renderItem, this._ListComponent %O`, this._listComponent);
 
+    let listElement = this._listComponent.getElement();
+    if (!listElement.classList.contains(`list`)) {
+      listElement = listElement.querySelector(`.list`);
+    }
+
     const itemController = new this._ItemController(
       this,
-      this._listComponent.getElement(),
+      listElement,
       item,
       null,
       null
