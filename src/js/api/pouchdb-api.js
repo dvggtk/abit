@@ -71,6 +71,33 @@ class PouchDBApi extends AbstractApi {
       {
         this._db = new PouchDB(`abit`);
 
+        /* синхронизация pouchdb
+
+        var sync = PouchDB.sync("abit", "http://localhost:4000/abit", {
+          live: true,
+          retry: true
+        })
+          .on("change", function (info) {
+            // handle change
+            console.log(`sync change`, info);
+          })
+          .on("paused", function (err) {
+            // replication paused (e.g. replication up to date, user went offline)
+          })
+          .on("active", function () {
+            // replicate resumed (e.g. new changes replicating, user went back online)
+          })
+          .on("denied", function (err) {
+            // a document failed to replicate (e.g. due to permissions)
+          })
+          .on("complete", function (info) {
+            // handle complete
+          })
+          .on("error", function (err) {
+            // handle error
+          });
+        */
+
         const info = await this._db.info();
         debug(`db.info %o`, info);
 
