@@ -70,6 +70,7 @@ function draggableEnable(listEle) {
     draggingEle.style.position = "fixed";
     draggingEle.style.top = `${e.pageY - y}px`;
     draggingEle.style.left = `${e.pageX - x}px`;
+    draggingEle.style.zIndex = `999`;
 
     // The current order
     // prevEle
@@ -110,6 +111,7 @@ function draggableEnable(listEle) {
     draggingEle.style.removeProperty("top");
     draggingEle.style.removeProperty("left");
     draggingEle.style.removeProperty("position");
+    draggingEle.style.removeProperty("zIndex");
 
     x = null;
     y = null;
