@@ -6,6 +6,8 @@ import AbitForm from "../components/abit-form";
 
 import EduProgSelectController from "./edu-prog-select-controller";
 
+import {draggableEnable} from "../lib/draggable";
+
 import {toKebabCase} from "../utils";
 
 class AbitController extends ListItemController {
@@ -156,6 +158,9 @@ class AbitController extends ListItemController {
 
       applicationsList.append(item);
     });
+
+    const appList = this._form.getElement().querySelector(`.applications-list`);
+    draggableEnable(appList);
   }
 }
 

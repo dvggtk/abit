@@ -1,7 +1,33 @@
 .applications-list {
   list-style: none;
   padding: 0;
+  counter-reset: item;
 }
+
+.applications-list__item {
+  user-select: none; // for draggable
+
+  padding-left: 20px;
+  position: relative;
+
+  &::before:active {
+    cursor: grabbing;
+  }
+
+  &::before {
+    counter-increment: item;
+    content: counter(item);
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 100%;
+    transform: translateY(-50%);
+
+    cursor: grab;
+  }
+}
+
 
 .applications-list__item + .applications-list__item {
   border-top: 1px dashed silver;
