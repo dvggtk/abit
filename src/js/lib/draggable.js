@@ -36,8 +36,11 @@ function draggableEnable(listEle) {
 
   const mouseDownHandler = function (e) {
     debug(`mouseDownHandler, e.target=%O`, e.target);
+
     let ele = e.target;
     if (ele.tagName !== `LI`) return;
+
+    event.preventDefault(); // предотвратить запуск выделения (действие браузера)
 
     draggingEle = ele;
     debug(`mouseDownHandler, draggingEle=%O`, draggingEle);
