@@ -54,9 +54,10 @@ class AbitController extends ListItemController {
       const grade = app.querySelector(`.application__grade input`).value;
       const priority = app.querySelector(`.application__priority input`)
         .checked;
-      const active = app.querySelector(`.application__active input`).checked;
+      const disabled = app.querySelector(`.application__disabled input`)
+        .checked;
 
-      entry.applications.push({eduProg, grade, priority, active});
+      entry.applications.push({eduProg, grade, priority, disabled});
     }
 
     function sanitize(entry, fields) {
@@ -102,7 +103,7 @@ class AbitController extends ListItemController {
         eduProg: ``,
         grade: ``,
         priority: false,
-        active: true
+        disabled: false
       };
 
       const applicationsList = this._form
@@ -128,10 +129,10 @@ class AbitController extends ListItemController {
               application.priority ? ` checked` : ``
             }/><span>приоритет</span>
           </label>
-          <label class="application__active">
-            <input type="checkbox" value="active"${
-              application.active ? ` checked` : ``
-            }/><span>показывать?</span>
+          <label class="application__disabled">
+            <input type="checkbox" value="disabled"${
+              application.disabled ? ` checked` : ``
+            }/><span>спрятать</span>
           </label>
           <button class="application__btn-delete" type="button"><span class="visually-hidden">удалить<span></button>
         </div>

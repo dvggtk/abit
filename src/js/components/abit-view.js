@@ -94,7 +94,7 @@ class AbitView extends AbstractComponent {
       <div class="abit__row">
         ${this._applications.map(app => {
           return `
-          <div class="application-view${app.priority ? ` application-view--priority` : ``}${!app.active ? ` application-view--disabled` : ``}">
+          <div class="application-view${app.priority ? ` application-view--priority` : ``}${app.disabled ? ` application-view--disabled` : ``}">
             <div class="application-view__edu-prog">${app.eduProg}</div>
             <div class="application-view__grade">${app.grade}</div>
           </div>`.trim()

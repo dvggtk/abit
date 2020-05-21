@@ -12,7 +12,7 @@ function getApplications(count) {
       eduProg: eduProgCodes[Math.floor(rng() * eduProgCodes.length)],
       grade: Math.floor(rng() * 5) + 1,
       priority: false,
-      active: true
+      disabled: false
     };
     applications.push(application);
   }
