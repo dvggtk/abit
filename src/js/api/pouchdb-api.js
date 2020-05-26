@@ -71,9 +71,9 @@ class PouchDBApi extends AbstractApi {
       {
         this._db = new PouchDB(`abit`);
 
-        /* синхронизация pouchdb
+        const remoteDbUrl = window.location.origin + `/db`;
 
-        var sync = PouchDB.sync("abit", "http://localhost:4000/abit", {
+        var sync = PouchDB.sync("abit", `${remoteDbUrl}/abit`, {
           live: true,
           retry: true
         })
@@ -96,7 +96,6 @@ class PouchDBApi extends AbstractApi {
           .on("error", function (err) {
             // handle error
           });
-        */
 
         const info = await this._db.info();
         debug(`db.info %o`, info);
