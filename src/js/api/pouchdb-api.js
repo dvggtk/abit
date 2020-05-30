@@ -71,11 +71,11 @@ class PouchDBApi extends AbstractApi {
       {
         this._db = new PouchDB(`abit`);
 
+        const retrySync = window.location.hostname !== `localhost`;
         const remoteDbUrl = window.location.origin + `/db`;
-
         var sync = PouchDB.sync("abit", `${remoteDbUrl}/abit`, {
           live: true,
-          retry: true
+          retry: retrySync
         })
           .on("change", function (info) {
             // handle change
@@ -156,6 +156,29 @@ class PouchDBApi extends AbstractApi {
 
       callback(null, res);
     });
+  }
+  backup(callback) {
+    const sanitizeDoc = (doc) => {
+      const newDoc = Object.create(null);
+      for (const k in doc)
+        if (doc.hasOwnProperty(k)) {
+          if (k === `_rev`) continue;
+          newDoc[k] = doc[k];
+        }
+      return newDoc;
+    };
+
+    (async () => {
+      const eduProgs = (
+        await this._db.query(`eduProgs`, {include_docs: true})
+      ).rows.map((row) => sanitizeDoc(row.doc));
+
+      const abits = (
+        await this._db.query(`abits`, {include_docs: true})
+      ).rows.map((row) => sanitizeDoc(row.doc));
+
+      callback(null, {eduProgs, abits});
+    })().catch((err) => callback(err));
   }
 
   getEduProgs(callback) {

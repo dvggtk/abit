@@ -22,6 +22,10 @@ class AbstractApi {
     debug(`delete`);
     return callback(null);
   }
+  backup(callback) {
+    debug(`backup`);
+    return callback(null);
+  }
 }
 
 export default AbstractApi;

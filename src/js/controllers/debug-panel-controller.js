@@ -1,5 +1,6 @@
 const debug = require("debug")("abit:debug-panel-controller");
-
+const FileSaver = require("file-saver");
+const {format} = require("date-fns");
 class DebugPanelController {
   constructor(api) {
     this._api = api;
@@ -62,6 +63,24 @@ class DebugPanelController {
       this._api.addFakeEduProgs((err) => {
         if (err) return console.error(err);
         window.location.reload();
+      });
+      return;
+    }
+
+    if (event.target.classList.contains(`debug-panel__btn--backup`)) {
+      this._api.backup((err, res) => {
+        if (err) return console.error(err);
+        const json = JSON.stringify(res, null, 4);
+        const datemark = format(new Date(), `yyyyMMddhhmmss`);
+        console.log(`---------`, datemark);
+        const filename = `abit-${datemark}.json`;
+
+        var blob = new Blob([json], {
+          type: "application/json;charset=utf-8"
+        });
+        FileSaver.saveAs(blob, filename);
+
+        console.log(`backup`, res);
       });
       return;
     }
