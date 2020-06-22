@@ -1,5 +1,7 @@
 const debug = require("debug")("abit:fake-data/abit");
 
+import {format} from "date-fns";
+
 import {getApplications} from "./applications";
 import {getFio} from "./fio";
 import schools from "./schools";
@@ -23,7 +25,7 @@ const randomDate = (rng, fromDate, toDate) => {
   const rd = new Date(d1);
   rd.setDate(rd.getDate() + days);
 
-  return rd.toISOString().slice(0, 10);
+  return format(rd, "dd.MM.yyyy");
 };
 
 function getAbits(rng, n) {

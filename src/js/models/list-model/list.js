@@ -22,6 +22,7 @@ class ListModel extends AbstractModel {
     this.type = null;
 
     this._filterFn = (item) => true;
+    this._compareFn = (item1, item2) => item1._timestamp - item2._timestamp;
 
     this._isItemVisible = this._isItemVisible.bind(this);
   }
@@ -55,6 +56,25 @@ class ListModel extends AbstractModel {
     this.onChangeView(null);
   }
 
+  set compareFn(fn) {
+    debug(`set compareFn`);
+
+    for (const item of this._items) {
+      if (item._mode === ModelItemMode.EDIT) {
+        item._mode = ModelItemMode.VIEW;
+      }
+      if (item._mode === ModelItemMode.ADD) {
+        item._deleteSelf();
+      }
+    }
+
+    this._compareFn = fn;
+
+    this._items.sort(this._compareFn);
+
+    this.onChangeView(null);
+  }
+
   init(callback) {
     throw Error(`abstarct method invoked`);
   }
@@ -72,6 +92,9 @@ class ListModel extends AbstractModel {
           data
         });
       });
+
+      this._items.sort(this._compareFn);
+
       this._currenItemIdx = 0;
     }
   }

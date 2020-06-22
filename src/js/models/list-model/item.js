@@ -12,6 +12,8 @@ class Item {
     this._isActive = false;
     this._mode = mode;
     this._data = data;
+
+    this._timestamp = performance.now();
   }
 
   _deleteSelf() {
