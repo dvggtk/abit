@@ -1,11 +1,45 @@
-/* eslint-disable*/
 const debug = require(`debug`)(`draggable`);
+
+let saveMouseDownHandler = null;
+
+// Swap two nodes
+function swap(nodeA, nodeB) {
+  const nextSiblingA = nodeA.nextSibling;
+  const nextSiblingB = nodeB.nextSibling;
+
+  if (nextSiblingA === nodeB) {
+    nodeA.before(nodeB);
+    return;
+  }
+
+  if (nextSiblingB === nodeA) {
+    nodeB.before(nodeA);
+    return;
+  }
+
+  if (nextSiblingB === null) {
+    if (nextSiblingA === null) throw new Error("Halt");
+
+    nodeB.before(nodeA);
+    nextSiblingA.before(nodeB);
+    return;
+  }
+
+  nodeA.before(nodeB);
+  nextSiblingB.before(nodeA);
+}
+
+// Check if `nodeA` is above `nodeB`
+function isAbove(nodeA, nodeB) {
+  // Get the bounding rectangle of nodes
+  const rectA = nodeA.getBoundingClientRect();
+  const rectB = nodeB.getBoundingClientRect();
+
+  return rectA.top + rectA.height / 2 < rectB.top + rectB.height / 2;
+}
 
 // https://github.com/phuoc-ng/html-dom/blob/master/demo/drag-and-drop-element-in-a-list/index.html
 function draggableEnable(listEle) {
-  // Query the list element
-  const list = document.querySelector("#list");
-
   let draggingEle;
   let placeholder;
   let isDraggingStarted = false;
@@ -14,34 +48,13 @@ function draggableEnable(listEle) {
   let x = 0;
   let y = 0;
 
-  // Swap two nodes
-  const swap = function (nodeA, nodeB) {
-    const parentA = nodeA.parentNode;
-    const siblingA = nodeA.nextSibling === nodeB ? nodeA : nodeA.nextSibling;
-
-    // Move `nodeA` to before the `nodeB`
-    nodeB.parentNode.insertBefore(nodeA, nodeB);
-
-    // Move `nodeB` to before the sibling of `nodeA`
-    siblingA.before(nodeB);
-  };
-
-  // Check if `nodeA` is above `nodeB`
-  const isAbove = function (nodeA, nodeB) {
-    // Get the bounding rectangle of nodes
-    const rectA = nodeA.getBoundingClientRect();
-    const rectB = nodeB.getBoundingClientRect();
-
-    return rectA.top + rectA.height / 2 < rectB.top + rectB.height / 2;
-  };
-
-  const mouseDownHandler = function (e) {
+  const mouseDownHandler = (e) => {
     debug(`mouseDownHandler, e.target=%O`, e.target);
 
     const ele = e.target;
     if (ele.tagName !== `LI`) return;
 
-    event.preventDefault(); // предотвратить запуск выделения (действие браузера)
+    e.preventDefault(); // предотвратить запуск выделения (действие браузера)
 
     draggingEle = ele;
     debug(`mouseDownHandler, draggingEle=%O`, draggingEle);
@@ -56,7 +69,7 @@ function draggableEnable(listEle) {
     document.addEventListener("mouseup", mouseUpHandler);
   };
 
-  const mouseMoveHandler = function (e) {
+  const mouseMoveHandler = (e) => {
     const draggingRect = draggingEle.getBoundingClientRect();
 
     if (!isDraggingStarted) {
@@ -108,9 +121,10 @@ function draggableEnable(listEle) {
     }
   };
 
-  const mouseUpHandler = function () {
+  const mouseUpHandler = () => {
     // Remove the placeholder
-    placeholder && placeholder.parentNode.removeChild(placeholder);
+    // eslint-disable-next-line no-unused-expressions
+    placeholder && placeholder.remove();
 
     draggingEle.style.removeProperty("top");
     draggingEle.style.removeProperty("left");
@@ -129,10 +143,11 @@ function draggableEnable(listEle) {
   };
 
   listEle.addEventListener(`mousedown`, mouseDownHandler);
+  saveMouseDownHandler = mouseDownHandler;
 }
 
 function draggableDisable(listEle) {
-  listEle.removeEventListener(`mousedown`, mouseDownHandler);
+  listEle.removeEventListener(`mousedown`, saveMouseDownHandler);
 }
 
 export {draggableEnable, draggableDisable};
