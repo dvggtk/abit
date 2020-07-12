@@ -1,7 +1,8 @@
-const debug = require("debug")("abit:edu-prog-select-controller");
-
 import EduProgSelect from "../components/edu-prog-select";
-import {render, unrender, Position} from "../utils";
+import {render, /* unrender */ Position} from "../utils";
+
+// eslint-disable-next-line no-unused-vars
+const debug = require("debug")("abit:edu-prog-select-controller");
 
 class EduProgSelectController {
   constructor(container, eduProgs, selected) {

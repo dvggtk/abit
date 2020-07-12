@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 const debug = require("debug")("abit:api");
 
 class AbstractApi {
@@ -14,14 +15,17 @@ class AbstractApi {
     debug(`create`);
     return callback(null, newData);
   }
+
   update(oldData, newData, callback) {
     debug(`update`);
     return callback(null, newData);
   }
+
   delete(oldData, callback) {
     debug(`delete`);
     return callback(null);
   }
+
   backup(callback) {
     debug(`backup`);
     return callback(null);

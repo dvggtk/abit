@@ -1,6 +1,7 @@
-const debug = require("debug")("abit:abit-view");
-
 import AbstractComponent from "./abstract-component";
+
+// eslint-disable-next-line no-unused-vars
+const debug = require("debug")("abit:abit-view");
 
 class AbitView extends AbstractComponent {
   constructor({

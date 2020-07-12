@@ -1,8 +1,4 @@
-if (!localStorage.debug) {
-  localStorage.debug = `abit:*`;
-}
-console.log(`localStorage.debug = "${localStorage.debug}"`);
-
+/* eslint-disable no-console */
 import EduProgsModel from "./models/edu-progs-model";
 import AbitsModel from "./models/abits-model";
 import api from "./api/pouchdb-api";
@@ -10,6 +6,11 @@ import EduProgsListController from "./controllers/edu-progs-list-controller";
 import AbitsListController from "./controllers/abits-list-controller";
 import AbitsFilterController from "./controllers/abits-filter-controller";
 import DebugPanelController from "./controllers/debug-panel-controller";
+
+if (!localStorage.debug) {
+  localStorage.debug = `abit:*`;
+}
+console.log(`localStorage.debug = "${localStorage.debug}"`);
 
 const eduProgsListContainer = document.querySelector(
   `.edu-progs__list-container`
@@ -21,7 +22,7 @@ const modelsInit = async (models) => {
     return new Promise((resolve, reject) => {
       model.init((err, res) => {
         if (err) return reject(err);
-        resolve(res);
+        return resolve(res);
       });
     });
   });
@@ -59,5 +60,9 @@ api.init((err) => {
     );
 
     const debugPanelController = new DebugPanelController(api);
-  })().catch((err) => console.error(err));
+
+    return {abitsFilterController, debugPanelController};
+  })().catch((error) => console.error(error));
+
+  return 0;
 });

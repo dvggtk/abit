@@ -1,24 +1,28 @@
-const debug = require("debug")("abit:pouchdb-api");
-
-import AbstractApi from "./abstract-api";
+/* eslint-disable no-console */
+/* eslint-disable no-underscore-dangle */
 import PouchDB from "pouchdb";
-import {eduProgs, getAbits} from "../data";
 import {
-  diff,
-  addedDiff,
-  deletedDiff,
-  updatedDiff,
-  detailedDiff
+  diff
+  // addedDiff,
+  // deletedDiff,
+  // updatedDiff,
+  // detailedDiff
 } from "deep-object-diff";
+import AbstractApi from "./abstract-api";
+import {eduProgs, getAbits} from "../data";
+
+const debug = require("debug")("abit:pouchdb-api");
 
 const createEduProgsView = (db) => {
   debug(`createEduProgsView`);
+  // eslint-disable-next-line no-shadow
   const eduProgs = {
     _id: "_design/eduProgs",
     views: {
       eduProgs: {
         map: function mapFun(doc) {
           if (doc.type === `edu-prog`) {
+            // eslint-disable-next-line no-undef
             emit(doc.code, null);
           }
         }.toString()
@@ -37,6 +41,7 @@ const createAbitsView = (db) => {
       abits: {
         map: function mapFun(doc) {
           if (doc.type === `abit`) {
+            // eslint-disable-next-line no-undef
             emit(doc.fio, null);
           }
         }.toString()
@@ -61,63 +66,66 @@ class PouchDBApi extends AbstractApi {
       this._db = new PouchDB(`abit`);
 
       callback(null);
-    })().catch((err) => callback(err));
+    })().catch((error) => callback(error));
   }
 
   init(callback) {
     debug(`init`);
 
     (async () => {
-      {
-        this._db = new PouchDB(`abit`);
+      this._db = new PouchDB(`abit`);
 
-        const retrySync = window.location.hostname !== `localhost`;
-        const remoteDbUrl = window.location.origin + `/db`;
-        var sync = PouchDB.sync("abit", `${remoteDbUrl}/abit`, {
-          live: true,
-          retry: retrySync
+      const retrySync = window.location.hostname !== `localhost`;
+      const remoteDbUrl = `${window.location.origin}/db`;
+      // eslint-disable-next-line no-unused-vars
+      const sync = PouchDB.sync("abit", `${remoteDbUrl}/abit`, {
+        live: true,
+        retry: retrySync
+      })
+        .on("change", (info) => {
+          // handle change
+          console.log(`sync change`, info);
         })
-          .on("change", function (info) {
-            // handle change
-            console.log(`sync change`, info);
-          })
-          .on("paused", function (err) {
-            // replication paused (e.g. replication up to date, user went offline)
-          })
-          .on("active", function () {
-            // replicate resumed (e.g. new changes replicating, user went back online)
-          })
-          .on("denied", function (err) {
-            // a document failed to replicate (e.g. due to permissions)
-          })
-          .on("complete", function (info) {
-            // handle complete
-          })
-          .on("error", function (err) {
-            // handle error
-          });
+        .on("paused", (err) => {
+          if (err) console.error(err.message);
+          // replication paused (e.g. replication up to date, user went offline)
+        })
+        .on("active", () => {
+          // replicate resumed (e.g. new changes replicating, user went back online)
+        })
+        .on("denied", (err) => {
+          if (err) console.error(err.message);
+          // a document failed to replicate (e.g. due to permissions)
+        })
+        .on("complete", (info) => {
+          console.log("sync complete", info);
+          // handle complete
+        })
+        .on("error", (err) => {
+          if (err) console.error(err);
+          // handle error
+        });
 
-        const info = await this._db.info();
-        debug(`db.info %o`, info);
+      const info = await this._db.info();
+      debug(`db.info %o`, info);
 
-        if (info.doc_count === 0) {
-          debug(`пустая база данных, создаю view`);
-          await Promise.all([
-            createAbitsView(this._db),
-            createEduProgsView(this._db)
-          ]);
-        }
-
-        debug(
-          `await eduProgs: %o`,
-          await this._db.query(`eduProgs`, {include_docs: true})
-        );
-
-        debug("abits: %o", await this._db.query(`abits`, {include_docs: true}));
-
-        callback(null);
+      if (info.doc_count === 0) {
+        debug(`пустая база данных, создаю view`);
+        await Promise.all([
+          createAbitsView(this._db),
+          createEduProgsView(this._db)
+        ]);
       }
-    })().catch((err) => callback(err));
+
+      debug(
+        `await eduProgs: %o`,
+        await this._db.query(`eduProgs`, {include_docs: true})
+      );
+
+      debug("abits: %o", await this._db.query(`abits`, {include_docs: true}));
+
+      callback(null);
+    })().catch((error) => callback(error));
   }
 
   create(newData, callback) {
@@ -126,12 +134,13 @@ class PouchDBApi extends AbstractApi {
       if (err) return callback(err);
 
       const data = Object.assign(newData, {_id: res.id, _rev: res.rev});
-      callback(null, data);
+      return callback(null, data);
     });
   }
+
   update(oldData, newData, callback) {
     this._db.put(
-      Object.assign({_id: oldData._id, _rev: oldData._rev}, newData),
+      {_id: oldData._id, _rev: oldData._rev, ...newData},
       (err, res) => {
         if (err) return callback(err);
 
@@ -148,27 +157,35 @@ class PouchDBApi extends AbstractApi {
       }
     );
   }
+
   delete(oldData, callback) {
     debug(`delete %O`, oldData);
 
     this._db.remove(oldData, (err, res) => {
       if (err) return callback(err);
 
-      callback(null, res);
+      return callback(null, res);
     });
   }
+
   backup(callback) {
+    // eslint-disable-next-line unicorn/consistent-function-scoping
     const sanitizeDoc = (doc) => {
       const newDoc = Object.create(null);
-      for (const k in doc)
+      // eslint-disable-next-line no-restricted-syntax
+      for (const k in doc) {
+        // eslint-disable-next-line no-prototype-builtins
         if (doc.hasOwnProperty(k)) {
+          // eslint-disable-next-line no-continue
           if (k === `_rev`) continue;
           newDoc[k] = doc[k];
         }
+      }
       return newDoc;
     };
 
     (async () => {
+      // eslint-disable-next-line no-shadow
       const eduProgs = (
         await this._db.query(`eduProgs`, {include_docs: true})
       ).rows.map((row) => sanitizeDoc(row.doc));
@@ -178,49 +195,48 @@ class PouchDBApi extends AbstractApi {
       ).rows.map((row) => sanitizeDoc(row.doc));
 
       callback(null, {eduProgs, abits});
-    })().catch((err) => callback(err));
+    })().catch((error) => callback(error));
   }
 
   getEduProgs(callback) {
-    this._db.query(`eduProgs`, {include_docs: true}, function (err, res) {
+    this._db.query(`eduProgs`, {include_docs: true}, (err, res) => {
       debug(`getEduProgs: \n%o \n%o`, err, res);
       if (err) return callback(err);
 
+      // eslint-disable-next-line no-shadow
       const eduProgs = res.rows.map((row) => row.doc);
-      callback(null, eduProgs);
+      return callback(null, eduProgs);
     });
   }
 
   getAbits(callback) {
-    this._db.query(`abits`, {include_docs: true}, function (err, res) {
+    this._db.query(`abits`, {include_docs: true}, (err, res) => {
       debug(`abits: \n%o \n%o`, err, res);
       if (err) return callback(err);
 
       const abits = res.rows.map((row) => row.doc);
-      callback(null, abits);
+      return callback(null, abits);
     });
   }
 
   addFakeAbits(count, callback) {
     (async () => {
-      const abits = getAbits(count).map((el) =>
-        Object.assign({type: `abit`}, el)
-      );
+      const abits = getAbits(count).map((el) => ({type: `abit`, ...el}));
 
       await this._db.bulkDocs(abits);
 
       callback(null);
-    })().catch((err) => callback(err));
+    })().catch((error) => callback(error));
   }
 
   addFakeEduProgs(callback) {
     (async () => {
       await this._db.bulkDocs(
-        eduProgs.map((el) => Object.assign({type: `edu-prog`}, el))
+        eduProgs.map((el) => ({type: `edu-prog`, ...el}))
       );
 
       callback(null);
-    })().catch((err) => callback(err));
+    })().catch((error) => callback(error));
   }
 }
 

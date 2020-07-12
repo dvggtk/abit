@@ -1,6 +1,6 @@
-const debug = require("debug")("abit:abits-model");
-
 import ListModel from "./list-model";
+
+const debug = require("debug")("abit:abits-model");
 
 class AbitsModel extends ListModel {
   constructor(api) {
@@ -34,7 +34,7 @@ class AbitsModel extends ListModel {
       if (err) return callback(err);
 
       this.bulkCreate(res);
-      callback(null, res);
+      return callback(null, res);
     });
   }
 }

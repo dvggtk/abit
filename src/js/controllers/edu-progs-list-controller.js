@@ -1,8 +1,8 @@
-const debug = require("debug")("abit:edu-progs-list-controller");
-
 import ListController from "./abstract-list-controller";
-import EduProgController from "../controllers/edu-prog-controller";
+import EduProgController from "./edu-prog-controller";
 import EduProgsListComponent from "../components/edu-progs-list";
+
+const debug = require("debug")("abit:edu-progs-list-controller");
 
 class EduProgsListController extends ListController {
   constructor(container, model) {

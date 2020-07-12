@@ -1,9 +1,10 @@
+/* eslint-disable*/
 const debug = require(`debug`)(`draggable`);
 
 // https://github.com/phuoc-ng/html-dom/blob/master/demo/drag-and-drop-element-in-a-list/index.html
 function draggableEnable(listEle) {
   // Query the list element
-  const list = document.getElementById("list");
+  const list = document.querySelector("#list");
 
   let draggingEle;
   let placeholder;
@@ -22,7 +23,7 @@ function draggableEnable(listEle) {
     nodeB.parentNode.insertBefore(nodeA, nodeB);
 
     // Move `nodeB` to before the sibling of `nodeA`
-    parentA.insertBefore(nodeB, siblingA);
+    siblingA.before(nodeB);
   };
 
   // Check if `nodeA` is above `nodeB`
@@ -37,7 +38,7 @@ function draggableEnable(listEle) {
   const mouseDownHandler = function (e) {
     debug(`mouseDownHandler, e.target=%O`, e.target);
 
-    let ele = e.target;
+    const ele = e.target;
     if (ele.tagName !== `LI`) return;
 
     event.preventDefault(); // предотвратить запуск выделения (действие браузера)

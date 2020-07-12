@@ -23,8 +23,9 @@ class AbstractComponent {
     this._element = null;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   getTemplate() {
-    throw Error(`Abstract method not implemented`);
+    throw new Error(`Abstract method not implemented`);
   }
 }
 

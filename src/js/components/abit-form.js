@@ -1,9 +1,10 @@
-const debug = require("debug")("abit:abit-form");
-
 import AbstractComponent from "./abstract-component";
 import {ModelItemMode} from "../utils";
 
 import ApplicationsForm from "./applications-form";
+
+// eslint-disable-next-line no-unused-vars
+const debug = require("debug")("abit:abit-form");
 
 class AbitForm extends AbstractComponent {
   constructor(data, mode) {
@@ -48,7 +49,7 @@ class AbitForm extends AbstractComponent {
     this._applications = applications;
 
     if (![ModelItemMode.EDIT, ModelItemMode.ADD].includes(mode)) {
-      throw Error();
+      throw new Error("halt");
     }
     this._formMode = mode.toLowerCase();
 
@@ -119,9 +120,9 @@ class AbitForm extends AbstractComponent {
           <div class="form__data-row">
             <label class="form__control form__control--need-dorm"><span class="form__label form__label--need-dorm">Общежитие</span>
               <select class="form__select form__select--need-dorm" name="need-dorm">
-                <option value="0"${this._needDorm == 0 ? ` selected="selected"` : ``}>не требуется</option>
-                <option value="1"${this._needDorm == 1 ? ` selected="selected"` : ``}>требуется</option>
-                <option value="2"${this._needDorm == 2 ? ` selected="selected"` : ``}>приоритетное</option>
+                <option value="0"${Number(this._needDorm) === 0 ? ` selected="selected"` : ``}>не требуется</option>
+                <option value="1"${Number(this._needDorm) === 1 ? ` selected="selected"` : ``}>требуется</option>
+                <option value="2"${Number(this._needDorm) === 2 ? ` selected="selected"` : ``}>приоритетное</option>
               </select>
             </label>
             <label class="form__control form__control--school-year"><span class="form__label form__label--school-year">Год окончания школы</span>

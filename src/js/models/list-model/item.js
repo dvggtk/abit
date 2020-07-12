@@ -1,11 +1,11 @@
-const debug = require("debug")("abit:list-model/item");
+import {ModelItemMode} from "../../utils";
 
-import {clone, ModelItemMode} from "../../utils";
+const debug = require("debug")("abit:list-model/item");
 
 class Item {
   constructor({listModel, mode, data}) {
     if (!Object.values(ModelItemMode).includes(mode)) {
-      throw Error();
+      throw new Error("Halt");
     }
     this._listModel = listModel;
 
@@ -38,7 +38,7 @@ class Item {
 
   set mode(newMode) {
     if (!Object.values(ModelItemMode).includes(newMode)) {
-      throw Error();
+      throw new Error("Halt");
     }
 
     const itemsChangeMode = [];
@@ -48,6 +48,7 @@ class Item {
         item._deleteSelf();
         itemsChangeMode.push(item);
       } else if (item._mode === ModelItemMode.EDIT) {
+        // eslint-disable-next-line no-param-reassign
         item._mode = ModelItemMode.VIEW;
         itemsChangeMode.push(item);
       }
@@ -58,32 +59,38 @@ class Item {
       itemsChangeMode.push(this);
     }
 
-    const removeDuplicates = (a) => Array.from(new Set(a));
+    // eslint-disable-next-line unicorn/consistent-function-scoping
+    const removeDuplicates = (a) => [...new Set(a)];
 
     if (itemsChangeMode.length > 0) {
       this._listModel.onItemChangeMode(removeDuplicates(itemsChangeMode));
     }
   }
+
   get mode() {
     return this._mode;
   }
 
+  // eslint-disable-next-line no-unused-vars
   setData(newData, callback) {
+    // eslint-disable-next-line no-unused-vars
     const oldData = this._data;
 
     this._data = newData;
   }
+
   get data() {
     return this._data;
   }
 
   set isActive(newState) {
     if (typeof newState !== `boolean`) {
-      throw Error();
+      throw new TypeError("Halt");
     }
 
-    //FIXME переделать, сейчас неправильно перерисовывает, не снимает метку активности
+    // FIXME переделать, сейчас неправильно перерисовывает, не снимает метку активности
     this._listModel._items.forEach((item) => {
+      // eslint-disable-next-line no-param-reassign
       item._isActive = false;
     });
 
@@ -91,6 +98,7 @@ class Item {
 
     this._listModel.onChangeView(this);
   }
+
   get isActive() {
     return this._isActive;
   }
@@ -109,10 +117,10 @@ class Item {
   submit(newData, callback) {
     let newDataWithTypeIfExists;
     if (this._listModel._type !== null) {
-      newDataWithTypeIfExists = Object.assign(
-        {type: this._listModel._type},
-        newData
-      );
+      newDataWithTypeIfExists = {
+        type: this._listModel._type,
+        ...newData
+      };
     } else {
       newDataWithTypeIfExists = newData;
     }
@@ -128,7 +136,7 @@ class Item {
           this._mode = ModelItemMode.VIEW;
 
           this._listModel.onChangeView(this);
-          callback(null);
+          return callback(null);
         }
       );
     } else if (this._mode === ModelItemMode.ADD) {
@@ -139,7 +147,7 @@ class Item {
         this._mode = ModelItemMode.VIEW;
 
         this._listModel.onChangeView(this);
-        callback(null);
+        return callback(null);
       });
     }
   }
@@ -147,6 +155,8 @@ class Item {
   clone() {
     debug(`clone, item %O`, this);
     const changedModeItems = [];
+
+    // eslint-disable-next-line no-restricted-syntax
     for (const item of this._listModel._items) {
       if (item._mode !== ModelItemMode.VIEW) {
         item._mode = ModelItemMode.VIEW;
@@ -170,7 +180,7 @@ class Item {
       this._deleteSelf();
 
       this._listModel.onChangeView(this);
-      callback(null);
+      return callback(null);
     });
   }
 }

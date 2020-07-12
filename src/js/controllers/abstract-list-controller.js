@@ -1,15 +1,15 @@
-const debug = require("debug")("abit:abstract-list-controller");
-
 import {
   render,
   unrender,
-  Position,
-  Key,
-  ModelItemMode,
-  ShowMode,
-  toCamelCase,
-  clone
+  Position
+  // Key,
+  // ModelItemMode,
+  // ShowMode,
+  // toCamelCase,
+  // clone
 } from "../utils";
+
+const debug = require("debug")("abit:abstract-list-controller");
 
 class ListController {
   constructor(container, model, ListComponent, ItemController) {
@@ -27,7 +27,7 @@ class ListController {
   }
 
   _refreshListItems(items) {
-    if (!items) throw Error();
+    if (!items) throw new Error("Halt");
 
     const refreshItem = (item) => {
       const foundItemController = this._itemControllers.find(
@@ -44,7 +44,7 @@ class ListController {
     };
 
     if (Array.isArray(items)) {
-      items.forEach(refreshItem);
+      items.forEach((item) => refreshItem(item));
     } else {
       refreshItem(items);
     }
@@ -76,7 +76,7 @@ class ListController {
       .getElement()
       .querySelector(`.list-btn-add`);
 
-    btnAddElement.addEventListener(`click`, (event) => {
+    btnAddElement.addEventListener(`click`, () => {
       debug(`list-btn-add`);
       this._model.createItem();
     });

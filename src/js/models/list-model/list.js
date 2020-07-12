@@ -1,8 +1,8 @@
-const debug = require("debug")("abit:list-model/list");
-
 import AbstractModel from "../abstract-model";
 import {clone, ModelItemMode} from "../../utils";
 import Item from "./item";
+
+const debug = require("debug")("abit:list-model/list");
 
 const nop = () => {};
 
@@ -21,7 +21,9 @@ class ListModel extends AbstractModel {
 
     this.type = null;
 
+    // eslint-disable-next-line no-unused-vars
     this._filterFn = (item) => true;
+
     this._compareFn = (item1, item2) => item1._timestamp - item2._timestamp;
 
     this._isItemVisible = this._isItemVisible.bind(this);
@@ -32,7 +34,7 @@ class ListModel extends AbstractModel {
       `get items, _filterFn(_items[0]): %O`,
       this._filterFn(this._items[0])
     );
-    return this._items.filter(this._isItemVisible);
+    return this._items.filter((item) => this._isItemVisible(item));
   }
 
   _isItemVisible(item) {
@@ -42,6 +44,7 @@ class ListModel extends AbstractModel {
   set filterFn(fn) {
     debug(`set filterFn`);
 
+    // eslint-disable-next-line no-restricted-syntax
     for (const item of this._items) {
       if (item._mode === ModelItemMode.EDIT) {
         item._mode = ModelItemMode.VIEW;
@@ -59,6 +62,7 @@ class ListModel extends AbstractModel {
   set compareFn(fn) {
     debug(`set compareFn`);
 
+    // eslint-disable-next-line no-restricted-syntax
     for (const item of this._items) {
       if (item._mode === ModelItemMode.EDIT) {
         item._mode = ModelItemMode.VIEW;
@@ -75,8 +79,9 @@ class ListModel extends AbstractModel {
     this.onChangeView(null);
   }
 
-  init(callback) {
-    throw Error(`abstarct method invoked`);
+  // eslint-disable-next-line class-methods-use-this
+  init() {
+    throw new Error(`abstarct method invoked`);
   }
 
   bulkCreate(itemDataArray) {
@@ -108,6 +113,7 @@ class ListModel extends AbstractModel {
     }
 
     const changedModeItems = [];
+    // eslint-disable-next-line no-restricted-syntax
     for (const item of this._items) {
       if (item._mode === ModelItemMode.EDIT) {
         item._mode = ModelItemMode.VIEW;

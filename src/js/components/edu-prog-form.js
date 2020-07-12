@@ -26,7 +26,7 @@ class EduProgForm extends AbstractComponent {
     this._placesNumber = placesNumber;
 
     if (![ModelItemMode.EDIT, ModelItemMode.ADD].includes(mode)) {
-      throw Error();
+      throw new Error("Halt");
     }
 
     this._formMode = mode.toLowerCase();

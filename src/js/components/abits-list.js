@@ -1,6 +1,7 @@
 import AbstractComponent from "./abstract-component";
 
 class AbitsList extends AbstractComponent {
+  // eslint-disable-next-line class-methods-use-this
   getTemplate() {
     return `
     <div>

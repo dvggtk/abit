@@ -1,5 +1,4 @@
-const debug = require("debug")("abit:abit-controller");
-
+/* eslint-disable no-restricted-syntax */
 import ListItemController from "./abstract-list-item-controller";
 import AbitView from "../components/abit-view";
 import AbitForm from "../components/abit-form";
@@ -9,6 +8,8 @@ import EduProgSelectController from "./edu-prog-select-controller";
 import {draggableEnable} from "../lib/draggable";
 
 import {toKebabCase} from "../utils";
+
+const debug = require("debug")("abit:abit-controller");
 
 class AbitController extends ListItemController {
   constructor(ownerListController, container, item) {
@@ -31,8 +32,10 @@ class AbitController extends ListItemController {
       (el) => el.data
     );
 
+    // eslint-disable-next-line no-restricted-syntax
     for (const selectContainer of eduProgSelectContainers) {
-      const selectController = new EduProgSelectController(
+      // eslint-disable-next-line no-new
+      new EduProgSelectController(
         selectContainer,
         eduProgs,
         selectContainer.dataset.value
@@ -49,6 +52,7 @@ class AbitController extends ListItemController {
 
     entry.applications = [];
 
+    // eslint-disable-next-line no-restricted-syntax
     for (const app of applicationElements) {
       const eduProg = app.querySelector(
         `.application__edu-prog select.edu-prog-select`
@@ -62,9 +66,12 @@ class AbitController extends ListItemController {
       entry.applications.push({eduProg, grade, priority, disabled});
     }
 
+    // eslint-disable-next-line
     function sanitize(entry, fields) {
       for (const field of fields) {
+        // eslint-disable-next-line no-param-reassign
         entry[field] =
+          // eslint-disable-next-line no-prototype-builtins
           entry.hasOwnProperty(field) && entry[field] === toKebabCase(field);
       }
     }
@@ -100,7 +107,7 @@ class AbitController extends ListItemController {
       .getElement()
       .querySelector(`.applications .applications__btn-add`);
 
-    btnAdd.addEventListener(`click`, (event) => {
+    btnAdd.addEventListener(`click`, () => {
       const application = {
         eduProg: ``,
         grade: ``,
@@ -150,7 +157,8 @@ class AbitController extends ListItemController {
         (el) => el.data
       );
 
-      const selectController = new EduProgSelectController(
+      // eslint-disable-next-line no-new
+      new EduProgSelectController(
         selectContainer,
         eduProgs,
         selectContainer.dataset.value

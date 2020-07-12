@@ -1,6 +1,6 @@
-const debug = require("debug")("abit:edu-progs-model");
-
 import ListModel from "./list-model";
+
+const debug = require("debug")("abit:edu-progs-model");
 
 class EduProgsModel extends ListModel {
   constructor(api) {
@@ -25,7 +25,7 @@ class EduProgsModel extends ListModel {
       if (err) return callback(err);
 
       this.bulkCreate(res);
-      callback(null, res);
+      return callback(null, res);
     });
   }
 }

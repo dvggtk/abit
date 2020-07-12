@@ -1,7 +1,8 @@
-const debug = require("debug")("abit:edu-prog-select-controller");
-
 import AbstractComponent from "./abstract-component";
 import {clone} from "../utils";
+
+// eslint-disable-next-line no-unused-vars
+const debug = require("debug")("abit:edu-prog-select-controller");
 
 const BASE_EDU_LEVEL_9 = `9 классов`;
 const BASE_EDU_LEVEL_11 = `11 классов`;
@@ -14,19 +15,19 @@ class EduProgSelect extends AbstractComponent {
     this._eduProgs = clone(eduProgs);
     this._selected = selected;
 
-    //1 Очные 9 классов
+    // 1 Очные 9 классов
     this._eduProgs9 = this._eduProgs.filter(
       (eduProg) => eduProg.baseEduLevel === BASE_EDU_LEVEL_9
     );
 
-    //2 Очные 11 классов
+    // 2 Очные 11 классов
     this._eduProgs11fullTime = this._eduProgs.filter(
       (eduProg) =>
         eduProg.baseEduLevel === BASE_EDU_LEVEL_11 &&
         eduProg.eduForm === FULL_TIME
     );
 
-    //3 Заочные
+    // 3 Заочные
     this._eduProgsDistance = this._eduProgs.filter(
       (eduProg) => eduProg.eduForm === DISTANCE
     );
@@ -34,13 +35,11 @@ class EduProgSelect extends AbstractComponent {
 
   getTemplate() {
     const getOptions = (eduProgs) =>
+      // eslint-disable-next-line unicorn/no-reduce
       eduProgs.reduce((acc, cur) => {
-        return (
-          acc +
-          `<option${cur.code === this._selected ? ` selected` : ``}>${
-            cur.code
-          }</option>`
-        );
+        return `${acc}<option${
+          cur.code === this._selected ? ` selected` : ``
+        }>${cur.code}</option>`;
       }, ``);
 
     // prettier-ignore

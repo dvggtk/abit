@@ -7,11 +7,13 @@ import femaleMiddleNames from "./female-middle-names";
 import femaleLastNames from "./female-last-names";
 
 function getFio(rng, gender) {
-  if (!/^[мж]$/.test(gender)) {
-    throw Error(`неизвестный пол: ${gender}`);
+  if (!/^[жм]$/.test(gender)) {
+    throw new Error(`неизвестный пол: ${gender}`);
   }
 
-  let lastname, firstname, middlename;
+  let lastname;
+  let firstname;
+  let middlename;
   switch (gender) {
     case `м`:
       lastname = maleLastNames[Math.floor(rng() * maleLastNames.length)];
@@ -24,9 +26,12 @@ function getFio(rng, gender) {
       middlename =
         femaleMiddleNames[Math.floor(rng() * femaleMiddleNames.length)];
       break;
+    default:
+      throw new Error("Halt");
   }
 
-  return lastname + ` ` + firstname + ` ` + middlename;
+  return `${lastname} ${firstname} ${middlename}`;
 }
 
+// eslint-disable-next-line import/prefer-default-export
 export {getFio};

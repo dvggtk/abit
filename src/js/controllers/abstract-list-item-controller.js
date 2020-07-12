@@ -1,21 +1,22 @@
-const debug = require("debug")("abit:abstract-list-item-controller");
-
+/* eslint-disable no-console */
 import {
   render,
   unrender,
   Position,
-  Key,
+  // Key,
   toCamelCase,
-  toKebabCase,
-  clone,
+  // toKebabCase,
+  // clone,
   ModelItemMode
 } from "../utils";
+
+const debug = require("debug")("abit:abstract-list-item-controller");
 
 function getElementIndex(element) {
   let el = element;
   let index = 0;
   while (el.previousElementSibling) {
-    index++;
+    index += 1;
     el = el.previousElementSibling;
   }
   return index;
@@ -31,7 +32,7 @@ class AbstractListItemController {
 
     this._item = item;
     if (!Object.values(ModelItemMode).includes(this._item.mode)) {
-      throw Error();
+      throw new Error("Halt");
     }
 
     this._container = container;
@@ -71,7 +72,7 @@ class AbstractListItemController {
         this._element = this._form.getElement();
         break;
       default:
-        throw Error();
+        throw new Error("Halt");
     }
 
     this._onEdit = this._onEdit.bind(this);
@@ -82,7 +83,9 @@ class AbstractListItemController {
       this._form.getElement().querySelector(`form`)
     );
 
-    const entry = Array.from(formData.entries()).reduce((acc, cur) => {
+    // eslint-disable-next-line unicorn/no-reduce
+    const entry = [...formData.entries()].reduce((acc, cur) => {
+      // eslint-disable-next-line prefer-destructuring
       acc[toCamelCase(cur[0])] = cur[1];
       return acc;
     }, {});
@@ -90,7 +93,7 @@ class AbstractListItemController {
     return entry;
   }
 
-  _onEdit(event) {
+  _onEdit() {
     debug(`onEdit`);
     this._item.mode = ModelItemMode.EDIT;
     debug(`onEdit, this._item: %O`, this._item);
@@ -107,12 +110,12 @@ class AbstractListItemController {
     this._form
       .getElement()
       .querySelector(`form`)
-      .addEventListener(`submit`, (e) => {
+      .addEventListener(`submit`, (event) => {
         debug(`submit`);
         event.preventDefault();
 
         this._form.getElement().style.backgroundColor = `tomato`;
-        7;
+
         const entry = this._getEntryFromForm();
         debug(`submitted entry %o`, entry);
 
@@ -123,6 +126,7 @@ class AbstractListItemController {
           }
 
           this.unbind();
+          return 0;
         });
       });
 
@@ -145,6 +149,7 @@ class AbstractListItemController {
               return console.error(err.message);
             }
             this.unbind();
+            return 0;
           });
         });
 
@@ -159,6 +164,7 @@ class AbstractListItemController {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   unbind() {}
 
   refresh() {
@@ -190,7 +196,7 @@ class AbstractListItemController {
     this.bind();
 
     if (index !== undefined) {
-      if (!Number.isInteger(index)) throw Error();
+      if (!Number.isInteger(index)) throw new Error("Halt");
 
       render(this._container, this._element, Position.BEFOREEND);
       return;

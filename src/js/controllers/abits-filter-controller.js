@@ -1,6 +1,7 @@
-const debug = require("debug")("abit:abits-filter-controller");
-
+/* eslint-disable class-methods-use-this */
 import EduProgSelectController from "./edu-prog-select-controller";
+
+const debug = require("debug")("abit:abits-filter-controller");
 
 class AbitsFilterController {
   constructor(abitsModel, eduProgsModel) {
@@ -25,11 +26,8 @@ class AbitsFilterController {
 
     const eduProgs = this._eduProgsModel.items.map((el) => el.data);
 
-    const selectController = new EduProgSelectController(
-      eduProgSelectContainer,
-      eduProgs,
-      ``
-    );
+    // eslint-disable-next-line no-new
+    new EduProgSelectController(eduProgSelectContainer, eduProgs, ``);
 
     this.bind();
   }
@@ -59,16 +57,17 @@ class AbitsFilterController {
   _onSortOrderChange(event) {
     debug(`_onSortOrderChange, event %O`, event);
 
+    // eslint-disable-next-line unicorn/consistent-function-scoping
     const parseDate = (dateValue) => {
-      const re = /(\d{1,2})[.,-\\\/](\d{1,2})[.,-\\\/](\d{4}|\d{1,2})/;
+      const re = /(\d{1,2})[,-\\](\d{1,2})[,-\\](\d{4}|\d{1,2})/;
       const match = String(dateValue).match(re);
       if (match === null) return null;
 
       const [, dd, mm, yyyy] = String(dateValue).match(re);
-      const date = parseInt(dd);
-      const month = parseInt(mm);
-      let year = parseInt(yyyy);
-      if (year < 100) year = year + 2000;
+      const date = Number.parseInt(dd, 10);
+      const month = Number.parseInt(mm, 10);
+      let year = Number.parseInt(yyyy, 10);
+      if (year < 100) year += 2000;
 
       return new Date(year, month, date);
     };
@@ -130,6 +129,7 @@ class AbitsFilterController {
 
   bind() {
     const fioElement = this._element.querySelector(`.abits__filter-fio`);
+    // eslint-disable-next-line no-unused-expressions
     fioElement && fioElement.addEventListener(`input`, this._onFioChange);
 
     const eduProgElement = this._element.querySelector(`.edu-prog-select`);
@@ -140,7 +140,8 @@ class AbitsFilterController {
   }
 
   unbind() {
-    fioElement.removeEventListener(this._onFioChange);
+    // FIXME error не удаляются listeners, что должно приводтить к утечке памяти
+    // fioElement.removeEventListener(this._onFioChange);
   }
 }
 

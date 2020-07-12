@@ -1,5 +1,3 @@
-const debug = require("debug")("abit:fake-data/abit");
-
 import {format} from "date-fns";
 
 import {getApplications} from "./applications";
@@ -8,6 +6,9 @@ import schools from "./schools";
 import addresses from "./addresses";
 import telCodes from "./tel-codes";
 import memos from "./memos";
+
+// eslint-disable-next-line no-unused-vars
+const debug = require("debug")("abit:fake-data/abit");
 
 const randomDate = (rng, fromDate, toDate) => {
   const d1 = new Date(fromDate);
@@ -30,7 +31,7 @@ const randomDate = (rng, fromDate, toDate) => {
 
 function getAbits(rng, n) {
   const abits = [];
-  for (let i = 0; i < n; i++) {
+  for (let i = 0; i < n; i += 1) {
     const gender = rng() < 0.35 ? `ж` : `м`;
     const fio = getFio(rng, gender);
     let certScore = Math.floor((rng() * 5 + 1) * 1e4) * 1e-4;
@@ -51,10 +52,9 @@ function getAbits(rng, n) {
       hasVaccine: rng() < 0.7, // наличие прививок
       needDorm: Math.floor(rng() * 3), // требуется общежитие
       address: addresses[Math.floor(rng() * addresses.length)], // адрес
-      tel:
-        `8` +
-        telCodes[Math.floor(rng() * telCodes.length)] +
-        `0000000`.replace(/0/g, () => String(Math.floor(rng() * 10))), // телефон
+      tel: `8${
+        telCodes[Math.floor(rng() * telCodes.length)]
+      }${`0000000`.replace(/0/g, () => String(Math.floor(rng() * 10)))}`, // телефон
       school: schools[Math.floor(rng() * schools.length)], // школа
       schoolYear: 2020 - Math.floor(rng() + 0.1) - Math.floor(rng() + 0.1), // год окончания школы
       memo: rng() < 0.5 ? memos[Math.floor(rng() * memos.length)] : ``
@@ -72,4 +72,5 @@ function getAbits(rng, n) {
   return abits;
 }
 
+// eslint-disable-next-line import/prefer-default-export
 export {getAbits};

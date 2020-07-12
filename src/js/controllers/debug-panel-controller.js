@@ -1,6 +1,8 @@
+/* eslint-disable no-console */
 const debug = require("debug")("abit:debug-panel-controller");
 const FileSaver = require("file-saver");
 const {format} = require("date-fns");
+
 class DebugPanelController {
   constructor(api) {
     this._api = api;
@@ -11,8 +13,10 @@ class DebugPanelController {
 
     this.bind();
   }
+
   bind() {
     this._bindedElements = [];
+    // eslint-disable-next-line no-restricted-syntax
     for (const el of this._element.querySelectorAll(`.debug-panel__btn`)) {
       el.addEventListener(`click`, this._btnOnClick);
       this._bindedElements.push(el);
@@ -31,6 +35,7 @@ class DebugPanelController {
   }
 
   unbind() {
+    // eslint-disable-next-line no-restricted-syntax
     for (const el of this._bindedElements) {
       el.removeEventListener(this._btnOnClick);
     }
@@ -46,7 +51,9 @@ class DebugPanelController {
       this._api.clear((err) => {
         if (err) return console.error(err);
         window.location.reload();
+        return 0;
       });
+
       return;
     }
 
@@ -55,7 +62,9 @@ class DebugPanelController {
       this._api.addFakeAbits(count, (err) => {
         if (err) return console.error(err);
         window.location.reload();
+        return 0;
       });
+
       return;
     }
 
@@ -63,6 +72,7 @@ class DebugPanelController {
       this._api.addFakeEduProgs((err) => {
         if (err) return console.error(err);
         window.location.reload();
+        return 0;
       });
       return;
     }
@@ -75,14 +85,15 @@ class DebugPanelController {
         console.log(`---------`, datemark);
         const filename = `abit-${datemark}.json`;
 
-        var blob = new Blob([json], {
+        const blob = new Blob([json], {
           type: "application/json;charset=utf-8"
         });
         FileSaver.saveAs(blob, filename);
 
         console.log(`backup`, res);
+
+        return 0;
       });
-      return;
     }
   }
 }

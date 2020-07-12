@@ -50,6 +50,7 @@ const eduProgFieldNames = [
 const eduProgLines = eduProgsText.split(`\n`).filter((line) => line.length > 0);
 const eduProgArrays = eduProgLines.map((line) => line.split(`|`));
 const eduProgRows = eduProgArrays.map((eduProgArray) => {
+  // eslint-disable-next-line unicorn/no-reduce
   const eduProgRow = eduProgFieldNames.reduce((acc, cur, idx) => {
     let eduProgElement = eduProgArray[idx];
     if (cur === `eduForm`) {

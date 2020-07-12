@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-constructor */
 import AbstractApi from "./abstract-api";
 
 class EduProgApi extends AbstractApi {
@@ -8,9 +10,11 @@ class EduProgApi extends AbstractApi {
   create(newData, callback) {
     return callback(null, newData);
   }
+
   update(oldData, newData, callback) {
     return callback(null, newData);
   }
+
   delete(oldData, callback) {
     return callback(null);
   }

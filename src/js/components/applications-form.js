@@ -1,10 +1,11 @@
-const debug = require("debug")("abit:applications-form");
-
 import AbstractComponent from "./abstract-component";
+
+// eslint-disable-next-line no-unused-vars
+const debug = require("debug")("abit:applications-form");
 
 class ApplicationsForm extends AbstractComponent {
   constructor(applications) {
-    if (!applications) throw Error();
+    if (!applications) throw new Error("Halt");
 
     super();
 
