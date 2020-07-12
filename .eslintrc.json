@@ -1,0 +1,27 @@
+{
+  "plugins": [
+    "prettier",
+    "unicorn"
+  ],
+  "extends": [
+    "airbnb-base",
+    "plugin:unicorn/recommended",
+    "plugin:prettier/recommended",
+    "prettier",
+    "prettier/unicorn"
+  ],
+  "env": {
+    "es2020": true,
+    "browser": true
+  },
+  "rules": {
+    "unicorn/prevent-abbreviations": "off",
+    "no-underscore-dangle": ["off", { "allowAfterThis": true, "enforceInMethodNames": true }],
+    "prettier/prettier": ["error", {
+     "endOfLine":"auto"
+   }],
+   "no-console": "warn",
+   "unicorn/no-null": "off",
+   "unicorn/no-abusive-eslint-disable": "off"
+  }
+}
